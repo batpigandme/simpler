@@ -29,4 +29,6 @@
 * [Advanced (and optional) tips and tricks](advanced/advanced.md)
     * [Structuring projects](advanced/structuring.md)
     * [Writing reliable code](advanced/reliable.md)
+    * [GitHub and code review](advanced/github.md)
+    * [Testing and staging](advanced/testing.md)
 
