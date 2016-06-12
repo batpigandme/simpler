@@ -1,12 +1,7 @@
 # Summary
 
-* [Introduction](README.md)
-* An introduction to R as a language, its history, and its structure;
-* A basic guide to RStudio and online help resources for questions, bugs or commentary;
-* Importing data into R from databases or flat files;
-* Cleaning and reshaping that data with tidyr, dplyr, stringi, lubridate and related tools;
-* Shiny as a data visualisation platform;
-* Miscellaneous more-advanced tips and tricks on running Shiny in a reliable manner.
+* [Summary](README.md)
+* [About the author](author.md)
 * [Introduction to R](introduction_to_r/introduction.md)
     * [R's History](introduction_to_r/history.md)
     * [Basic Operations](introduction_to_r/basic_operations.md)
