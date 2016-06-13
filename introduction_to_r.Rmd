@@ -1,0 +1,48 @@
+# (PART) Introduction to R {-}
+
+# Background
+
+## A brief history of splines
+
+## The breadth of R
+
+## The R community
+
+# Getting set up
+
+## Installation
+To get started with R, you're going to need...well, R!
+
+If you're on Windows you can get R [here](https://cran.r-project.org/bin/windows/base/); if you're on a mac, you can download it [here](https://cran.r-project.org/bin/macosx/). For Linux users (specifically Ubuntu users, or people on other, Debian-based distributions) open the terminal and type:
+
+```{r, eval=FALSE}
+sudo apt-get -y install r-base
+```
+
+This requires the password to your computer's administrator account; if you don't have it, you'll need to get the system administrator to install R.
+
+Once you've got R, you'll also need RStudio - an Integrated Development Environment (IDE) for R that we'll be covering shortly. RStudio can be obtained [here](https://www.rstudio.com/products/rstudio/download/).
+
+After that, you'll need a few R packages (more on those later) that are used in this tutorial. Open RStudio, now that you've installed it, and go to the window in the bottom left marked "console". Type:
+
+```{r, eval=FALSE}
+install.packages("readr",
+                 "dplyr",
+                 "tidyr",
+                 "shinydashboard",
+                 "magrittr")
+```
+
+## Using RStudio
+
+You should now have RStudio; great! That's going to be your primary 
+
+# The language
+
+## Basic operations in R
+
+## Objects
+
+## Functions
+
+## Packages

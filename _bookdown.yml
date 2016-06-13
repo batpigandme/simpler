@@ -1,0 +1,4 @@
+book_filename: "bookdown-demo"
+chapter_name: "Chapter "
+rmd_files: ["index.Rmd", "introduction_to_r.Rmd", "data_import.Rmd",
+            "data_cleaning.Rmd", "shiny.Rmd", "advanced.Rmd"]

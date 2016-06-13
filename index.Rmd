@@ -1,0 +1,15 @@
+--- 
+title: "Starting Out with R and Shiny"
+author: "Oliver Keyes"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+output: bookdown::gitbook
+documentclass: book
+bibliography: packages.bib
+biblio-style: apalike
+link-citations: yes
+github-repo: ironholds/simpler
+description: "This is a minimal example of using the bookdown package to write a book. The output format for this example is bookdown::gitbook."
+---
+
+# Preamble
