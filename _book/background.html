@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Starting Out with R and Shiny</title>
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+  <meta name="description" content="This is a booklike set of lesson plans on starting out with R, with the goal of writing Shiny dashboards.">
+  <meta name="generator" content="bookdown 0.0.72 and GitBook 2.6.7">
+
+  <meta property="og:title" content="Starting Out with R and Shiny" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This is a booklike set of lesson plans on starting out with R, with the goal of writing Shiny dashboards." />
+  <meta name="github-repo" content="ironholds/simpler" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Starting Out with R and Shiny" />
+  
+  <meta name="twitter:description" content="This is a booklike set of lesson plans on starting out with R, with the goal of writing Shiny dashboards." />
+  
+
+<meta name="author" content="Oliver Keyes">
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="index.html">
+<link rel="next" href="getting-set-up.html">
+
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">A Minimal Book Example</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preamble</a></li>
+<li class="part"><span><b>Introduction to R</b></span></li>
+<li class="chapter" data-level="1" data-path="background.html"><a href="background.html"><i class="fa fa-check"></i><b>1</b> Background</a><ul>
+<li class="chapter" data-level="1.1" data-path="background.html"><a href="background.html#a-brief-history-of-splines"><i class="fa fa-check"></i><b>1.1</b> A brief history of splines</a></li>
+<li class="chapter" data-level="1.2" data-path="background.html"><a href="background.html#why-r-succeeds"><i class="fa fa-check"></i><b>1.2</b> Why R succeeds</a></li>
+<li class="chapter" data-level="1.3" data-path="background.html"><a href="background.html#the-r-community"><i class="fa fa-check"></i><b>1.3</b> The R community</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="getting-set-up.html"><a href="getting-set-up.html"><i class="fa fa-check"></i><b>2</b> Getting set up</a><ul>
+<li class="chapter" data-level="2.1" data-path="getting-set-up.html"><a href="getting-set-up.html#installation"><i class="fa fa-check"></i><b>2.1</b> Installation</a></li>
+<li class="chapter" data-level="2.2" data-path="getting-set-up.html"><a href="getting-set-up.html#using-rstudio"><i class="fa fa-check"></i><b>2.2</b> Using RStudio</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="the-language.html"><a href="the-language.html"><i class="fa fa-check"></i><b>3</b> The language</a><ul>
+<li class="chapter" data-level="3.1" data-path="the-language.html"><a href="the-language.html#basic-operations-in-r"><i class="fa fa-check"></i><b>3.1</b> Basic operations in R</a></li>
+<li class="chapter" data-level="3.2" data-path="the-language.html"><a href="the-language.html#objects"><i class="fa fa-check"></i><b>3.2</b> Objects</a></li>
+<li class="chapter" data-level="3.3" data-path="the-language.html"><a href="the-language.html#functions"><i class="fa fa-check"></i><b>3.3</b> Functions</a></li>
+<li class="chapter" data-level="3.4" data-path="the-language.html"><a href="the-language.html#packages"><i class="fa fa-check"></i><b>3.4</b> Packages</a></li>
+</ul></li>
+<li class="part"><span><b>Data Import and Export</b></span></li>
+<li class="chapter" data-level="4" data-path="reading-data-from-files.html"><a href="reading-data-from-files.html"><i class="fa fa-check"></i><b>4</b> Reading data from files</a><ul>
+<li class="chapter" data-level="4.1" data-path="reading-data-from-files.html"><a href="reading-data-from-files.html#csv-tsv"><i class="fa fa-check"></i><b>4.1</b> CSV &amp; TSV</a></li>
+<li class="chapter" data-level="4.2" data-path="reading-data-from-files.html"><a href="reading-data-from-files.html#excel"><i class="fa fa-check"></i><b>4.2</b> Excel</a></li>
+<li class="chapter" data-level="4.3" data-path="reading-data-from-files.html"><a href="reading-data-from-files.html#other-types"><i class="fa fa-check"></i><b>4.3</b> Other types</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="reading-data-from-databases.html"><a href="reading-data-from-databases.html"><i class="fa fa-check"></i><b>5</b> Reading data from databases</a></li>
+<li class="chapter" data-level="6" data-path="exporting-data.html"><a href="exporting-data.html"><i class="fa fa-check"></i><b>6</b> Exporting data</a></li>
+<li class="part"><span><b>Cleaning Data</b></span></li>
+<li class="chapter" data-level="7" data-path="reshaping-data.html"><a href="reshaping-data.html"><i class="fa fa-check"></i><b>7</b> Reshaping data</a></li>
+<li class="chapter" data-level="8" data-path="data-manipulation.html"><a href="data-manipulation.html"><i class="fa fa-check"></i><b>8</b> Data manipulation</a></li>
+<li class="chapter" data-level="9" data-path="text-cleaning.html"><a href="text-cleaning.html"><i class="fa fa-check"></i><b>9</b> Text-cleaning</a></li>
+<li class="chapter" data-level="10" data-path="dates-and-times.html"><a href="dates-and-times.html"><i class="fa fa-check"></i><b>10</b> Dates and times</a></li>
+<li class="part"><span><b>Shiny</b></span></li>
+<li class="chapter" data-level="11" data-path="building-your-first-app.html"><a href="building-your-first-app.html"><i class="fa fa-check"></i><b>11</b> Building your first app</a></li>
+<li class="chapter" data-level="12" data-path="user-interface-design.html"><a href="user-interface-design.html"><i class="fa fa-check"></i><b>12</b> User Interface design</a></li>
+<li class="chapter" data-level="13" data-path="custom-inputs-and-outputs.html"><a href="custom-inputs-and-outputs.html"><i class="fa fa-check"></i><b>13</b> Custom inputs and outputs</a></li>
+<li class="chapter" data-level="14" data-path="reactive-expressions.html"><a href="reactive-expressions.html"><i class="fa fa-check"></i><b>14</b> Reactive expressions</a></li>
+<li class="chapter" data-level="15" data-path="shiny-dashboarding.html"><a href="shiny-dashboarding.html"><i class="fa fa-check"></i><b>15</b> Shiny dashboarding</a></li>
+<li class="part"><span><b>Advanced</b></span></li>
+<li class="chapter" data-level="16" data-path="code-style.html"><a href="code-style.html"><i class="fa fa-check"></i><b>16</b> Code style</a></li>
+<li class="chapter" data-level="17" data-path="version-control.html"><a href="version-control.html"><i class="fa fa-check"></i><b>17</b> Version control</a></li>
+<li class="chapter" data-level="18" data-path="testing-and-staging.html"><a href="testing-and-staging.html"><i class="fa fa-check"></i><b>18</b> Testing and staging</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Starting Out with R and Shiny</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="background" class="section level1">
+<h1><span class="header-section-number">Chapter 1</span> Background</h1>
+<div id="a-brief-history-of-splines" class="section level2">
+<h2><span class="header-section-number">1.1</span> A brief history of splines</h2>
+<p>The R programming language started off at the University of Auckland, where two statistics professors - Ross Ihaka and Robert Gentleman - found themselves somewhat perturbed by the state of statistical programming. There were a lot of statistical languages and environments out there, but most of the ones they had access to were commercial, requiring you to pay to use them.</p>
+<p>In the end they decided to write something themselves, and they called it R (first because it’s the first letter in both of their names and second, I hypothesise, because after you’ve written an entire programming language with one other person you probably don’t have the energy left to come up with a fancy name). It was initially used just by the two of them in teaching courses at Auckland, and student complaints were the main source of improvements.</p>
+<p>In June 1995, though, everything changed when they released the source code of the language online - and did so under a free license, which let other people reuse the code and crucially <em>modify</em> the code. People began submitting their own improvements, new features, and bug fixes, and the language grew and grew. By 2012 it was the most commonly used data science language - a status it continues to maintain to this day.<a href="http://www.kdnuggets.com/2015/05/poll-r-rapidminer-python-big-data-spark.html">ref</a></p>
+</div>
+<div id="why-r-succeeds" class="section level2">
+<h2><span class="header-section-number">1.2</span> Why R succeeds</h2>
+<p>R didn’t become popular in a vacuum; there are a lot of other solutions for data analysis out there, some commercial (SAS, SPSS) and some open source (MATLAB, Python, Julia). Despite that, R consistently outstrips them in popularity, and there are a few reasons for that.</p>
+<p><strong><em>R was written by statisticians</em></strong>. A lot of programming languages (including statistical ones) are written, unsurprisingly, by programmers - and this is great from a software engineering standpoint. R, however, was written by statisticians, and while this means the language looks slightly strange compared to more “proper” programming languages, it means that it’s designed from the ground up to handle the things that statisticians and scientists need.</p>
+<p>The primary data formats are tabular, just like the results from scientific experiments tend to be; the language has not only arithmetic support, but also significance tests, general modelling functions and matrix mathematics built in.</p>
+<p><strong><em>R was written by a community</em></strong>. As well as the base language, which is the work of many hands, there’s also an entire ecosystem of add-ons (which we’ll cover later). Put simply: if there’s something statistical you need to do, and it isn’t in R itself, it’s almost <em>certainly</em> in an add-on - one that you can obtain, use and include in your work completely free of charge. 3. <em>R can do pretty much everything</em>.</p>
+<p>It’s primarily a statistical language, but it’s not <em>just</em> a statistical language. You can do data analysis in it, sure. You can also visualise the results of that analysis in a thousand different ways. Or write reports based on it that turn out as LaTeX, PDFs, HTML, Markdown. or build dynamic, web-hosted visualisations and dashboards and interactive platforms to display your work. Heck, you can even build websites in it; I did just to see if I could, and it took 40 lines of code. Although in that specific case, while you <em>could</em> use R, I would strongly recommend you <em>don’t</em>.</p>
+<p>The point, though, is that while R is primarily about statistics, it’s a language that covers pretty much every step of handling data, from reading it in and cleaning it up to showing your results to the world.</p>
+<p><strong><em>R can interact with pretty much everything</em></strong>. That’s a <em>slight</em> exaggeration, but only slight. Suppose someone gives you code written in C? R can interact with that. FORTRAN? Yep. C++? Absolutely! And while we’re at it, you can link R into Python, JavaScript, Java, Scala, and a whole host of others. This means that on the off-chance you encounter something you really need to do that isn’t in R, you can integrate it in pretty easily.</p>
+<p>There are a lot of other fascinating and wonderful features (some of which we’ll cover later on!) but those are the main ones, and why after writing thousands upon thousands of lines of R in the last few years, I’m still so in love with it.</p>
+</div>
+<div id="the-r-community" class="section level2">
+<h2><span class="header-section-number">1.3</span> The R community</h2>
+<p>One of the things I touched on above - as a reason R is such a powerful and popular environment - is the community. A big benefit is the expertise that community has: for example, the R add-on for neural networks was written by Brian Ripley, a British statistician who quite literally wrote the book on neural networks, and having the person who <em>invented</em> the methodology implement it gives you a pretty strong claim to the implementation being reliable.</p>
+<p>But another benefit is simply that, while there are dragons in some corners, the community generally consists of people who love expanding what the language can do and how friendly to new users it is - and they practise what they preach! And there are a lot of R programmers, and a lot of places to get help, support, suggestions and pointers. Some venues worth keeping in mind, in case you run into a problem and need some assistance, are:</p>
+<ol style="list-style-type: decimal">
+<li><a href="http://stackoverflow.com/questions/tagged/r">R on StackOverflow</a>;</li>
+<li><a href="https://www.r-project.org/mail.html">R’s official mailing lists</a>, and;</li>
+<li>the <a href="http://webchat.freenode.net/?channels=#R">R IRC channel</a>.</li>
+</ol>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="getting-set-up.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
+
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"facebook": true,
+"twitter": true,
+"google": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/rstudio/bookdown-demo/edit/master/introduction_to_r.Rmd",
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

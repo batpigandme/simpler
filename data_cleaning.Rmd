@@ -1,9 +1,9 @@
 # (PART) Cleaning Data {-}
 
-## Reshaping data
+# Reshaping data
 
-## Data manipulation
+# Data manipulation
 
-## Text-cleaning
+# Text-cleaning
 
-## Dates and times
+# Dates and times

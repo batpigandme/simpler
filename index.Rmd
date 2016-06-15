@@ -1,7 +1,6 @@
 --- 
 title: "Starting Out with R and Shiny"
 author: "Oliver Keyes"
-date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
 output: bookdown::gitbook
 documentclass: book
@@ -12,8 +11,7 @@ github-repo: ironholds/simpler
 description: "This is a booklike set of lesson plans on starting out with R, with the goal of writing Shiny dashboards."
 ---
 
-# Preamble
-
+# Preamble {-}
 Welcome to *Starting Out with R and Shiny*, a guide to learning basic R and ending up with the ability to put together [Shiny dashboards](https://rstudio.github.io/shinydashboard/) - online, R-based dashboards and visualisations.
 
 This set of documentation is being written for a set of lectures in Springfield, IL, and is primarily aimed at those attendees - it will hopefully be useful to others too. It contains (or will contain):
