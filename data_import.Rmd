@@ -146,7 +146,14 @@ So we now know:
 3. How to modify those columns, and create new ones;
 4. How vectorisation works.
 
+Let's move on to everyone's favourite business data format: Microsoft Excel!
+
 ## Excel
+
+As you know, Microsoft Excel was so named because it represented a tremendous amount of effort (Excel) being pushed into a business model centred on producing eyewatering data formats (Microsoft). The result, unsurprisingly, is a paragon of eye-wateringly awfully formatted data.
+
+Despite this it's widely used in a business context, so we should learn how to read those files into R. If we can read them into R, we can close Excel and never use it again, and isn't that everyone's dream?
+
 
 ## Other types
 
