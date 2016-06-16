@@ -172,12 +172,13 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(readr)</code></pre></div>
 <p>So, what’s this code doing? First, <code>library</code>; that’s a function, which is a self-contained chunk of code that’s packaged and made available so you can use it as many times as you want without having to write the code out entirely each time. <code>readr</code> is the input provided to <code>library</code>. So it works out as <code>do_this_thing(to_this_thing)</code>.</p>
 <p>The <code>library</code> function loads <em>packages</em> - the add-ons I was talking about earlier - so you can refer to the code they contain when you’re working. In this case it’s loading <code>readr</code>, a package specifically designed for reading in and writing out a wide range of file formats, including CSVs and TSVs.</p>
+<p>When you see a function name, you can usually access documentation about it; remember the <code>help</code> pane I mentioned earlier? If you type the function name into the console, preceded by <code>?</code>, the help pane will pop up with documentation for that function - what it’s used for, what values it accepts, and generally how it works.</p>
 <p>So we have our file-reading code. Now let’s read in the file, with:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">patient_data &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="dt">file =</span> <span class="st">&quot;https://www.ironholds.org/resources/misc/patient_data.csv&quot;</span>)</code></pre></div>
 <p>Let’s break down what’s going on in that code, going from right to left. First we have a piece of text - a URL, in fact - in quote marks. The quote marks identify the text as a <code>string</code>; something that R should treat just as text, not as code to be executed. Then we have that URL being associated with “file”, the entire thing wrapped in parentheses, preceded by <code>read_csv</code> which, as we’ve seen from loading the <code>readr</code> package, is a function call.</p>
 <p>So what we have is a call to run <code>read_csv</code>, with the “file” argument being that URL - so it’s reading a CSV from that URL! The argument, as the name <code>file</code> suggests, doesn’t have to be a URL; it can also be a file on your local computer.</p>
-<p>Then we shift left and run into <code>&lt;-</code>. That’s R’s <em>assignment operator</em>; it assigns the results of whatever code is on the right of the operator, to a name on the left of it (in this case, <code>patient_data</code>). So the code, in plain English, is “read in the CSV at this URL and assign the contents of it to the name <code>patient_data</code>”. The result (the output of code, tied to a name) is an <em>object</em>.</p>
-<p>You can see the contents of an object just by typing its name into the console, but that prints the entire thing, and this dataset is rather large; instead, let’s use the <code>head</code> function, which just prints the top few rows (the head of the data):</p>
+<p>Then we shift left and run into <code>&lt;-</code>. That’s R’s <em>assignment operator</em>; it assigns the results of whatever code is on the right of the operator, to a name on the left of it (in this case, <code>patient_data</code>). So the code, in plain English, is “read in the CSV at this URL and assign the contents of it to the name <code>patient_data</code>”. If the file was a TSV, the process would look exactly the same; you’d just use <code>read_tsv</code> instead of <code>read_csv</code>.</p>
+<p>We call the result (the output of code, tied to a name) an <em>object</em>. You can see the contents of an object just by typing its name into the console, but that shows the entire thing, and this dataset is rather large; instead, let’s use the <code>head</code> function, which just shows the top few rows (the head of the data):</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(patient_data)
 
 
@@ -241,6 +242,14 @@ Classes ‘tbl_df’, ‘tbl’ and &#39;data.frame&#39;:   23578 obs. of  8 var
  $ count          : int  62 124 140 243 411 415 486 961 7743 788 ...
  $ percentage     : num  2.66e-06 5.32e-06 6.01e-06 1.04e-05 1.76e-05 ...</code></pre>
 <p>No drag and drop necessary; the <code>patient_data</code> data frame has a new column, <code>percentage</code>, which contains (for each row) the <code>count</code> divided by the total count for the entire dataset, which we retrieved with <code>sum</code>.</p>
+<p>So we now know:</p>
+<ol style="list-style-type: decimal">
+<li>How to read data into R from CSV files (and TSV files!);</li>
+<li>How to examine the structure of an R object;</li>
+<li>How do access individual columns of a data frame;</li>
+<li>How to modify those columns, and create new ones;</li>
+<li>How vectorisation works.</li>
+</ol>
 </div>
 <div id="excel" class="section level2">
 <h2><span class="header-section-number">4.2</span> Excel</h2>
