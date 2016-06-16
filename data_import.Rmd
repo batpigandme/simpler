@@ -1,5 +1,7 @@
 # (PART) Data Import and Export {-}
 
+# Tutorial format
+
 From hereonin we're going to be focusing on using R, rather than the history, community and everything else. One approach to teaching a programming language is to step through the different rules in how the language is constructed, what the different keywords are, any strange quirks it has, and all the rest - and this can be really helpful for people who are *already* programmers.
 
 That isn't guaranteed, though, and so the rest of this book is divided up into individual, practical applications of the language, combined with explanations of what's going on in each piece so that you can learn the structure of the language through doing.
@@ -8,7 +10,8 @@ So, going forward, you'll see something that looks like the following; I'll intr
 
 
 ```{r, eval=FALSE}
-There'll be a chunk of code, in a shaded box just like this one, which will achieve the step I was talking about
+There'll be a chunk of code, in a shaded box just like this one,
+which will achieve the step I was talking about
 ```
 
 After that will be an explanation of that chunk of code, and what each bit is doing and how everything in it works. If you're the sort of person who instead wants to jump into the nitty-gritty of the language, I recommend Hadley Wickham's *[Advanced R Programming](http://adv-r.had.co.nz/Data-structures.html)* (specifically the data structures section) to get a handle for the general workings of R, and then coming back here to learn the applications.
@@ -36,27 +39,45 @@ The `library` function loads *packages* - the add-ons I was talking about earlie
 So we have our file-reading code. Now let's read in the file, with:
 
 ```{r, eval=FALSE}
-medical_data <- read_csv("https://www.ironholds.org/misc/medical_data.csv")
+patient_data <- read_csv(file = "https://www.ironholds.org/resources/misc/patient_data.csv")
 ```
 
-Let's break down what's going on in that code, going from right to left. First we have a piece of text - a URL, in fact - in quote marks. The quote marks identify the text as a `string`; something that R should treat just as text, not as code to be executed.
+Let's break down what's going on in that code, going from right to left. First we have a piece of text - a URL, in fact - in quote marks. The quote marks identify the text as a `string`; something that R should treat just as text, not as code to be executed. Then we have that URL being associated with "file", the entire thing wrapped in parentheses, preceded by `read_csv` which, as we've seen from loading the `readr` package, is a function call.
 
-That URL is wrapped in parentheses, preceded by `read_csv`: as we've seen from loading the `readr` package, that's a function call. So we have a call to run `read_csv`, with the URL as an argument. What it's doing is reading in a CSV, from that URL!
+So what we have is a call to run `read_csv`, with the "file" argument being that URL - so it's reading a CSV from that URL! The argument, as the name `file` suggests, doesn't have to be a URL; it can also be a file on your local computer.
 
-Then we shift left and run into `<-`. That's R's *assignment operator*; it assigns the results of whatever code is on the right of the operator, to a name on the left of it (in this case, `medical_data`). So the code, in plain English, is "read in the CSV at this URL and assign the contents of it to the name `medical_data`". The result (the output of code, tied to a name) is an *object*.
+Then we shift left and run into `<-`. That's R's *assignment operator*; it assigns the results of whatever code is on the right of the operator, to a name on the left of it (in this case, `patient_data`). So the code, in plain English, is "read in the CSV at this URL and assign the contents of it to the name `patient_data`". The result (the output of code, tied to a name) is an *object*.
 
-We can take a look at the structure of an object just by typing its name into the console. Let's do that now:
+You can see the contents of an object just by typing its name into the console, but that prints the entire thing, and this dataset is rather large; instead, let's use the `head` function, which just prints the top few rows (the head of the data):
 
 ```{r, eval=FALSE}
-medical_data
+head(patient_data)
+
+
+  year facility_number    facility_name county_name type_of_control age_group count
+1 2009          010735 ALAMEDA HOSPITAL     ALAMEDA        District     10-19    62
+2 2009          010735 ALAMEDA HOSPITAL     ALAMEDA        District     20-29   124
+3 2009          010735 ALAMEDA HOSPITAL     ALAMEDA        District     30-39   140
+4 2009          010735 ALAMEDA HOSPITAL     ALAMEDA        District     40-49   243
+5 2009          010735 ALAMEDA HOSPITAL     ALAMEDA        District     50-59   411
+6 2009          010735 ALAMEDA HOSPITAL     ALAMEDA        District     60-69   415
 ```
 
-As you can see, it's tabular, just like the CSV - columns of values, rows of observations. What you're looking at is a "data frame", the most common type of object in R: it's designed to hold tabular data, since tabular data is what most statisticians and data scientists rely on.
+As you can see, it's tabular, just like the CSV - columns of values, rows of observations, and row numbers (from 1 to 6). What you're looking at is a "data frame", the most common type of object in R: it's designed to hold tabular data, since tabular data is what most statisticians and data scientists rely on.
 
 We can get a more detailed look at it with the `str` function (which means "structure" and does exactly what it says on the tin):
 
 ```{r, eval=FALSE}
-str(medical_data)
+str(patient_data)
+
+Classes ‘tbl_df’, ‘tbl’ and 'data.frame':	23578 obs. of  7 variables:
+ $ year           : int  2009 2009 2009 2009 2009 2009 2009 2009 2009 2009 ...
+ $ facility_number: chr  "010735" "010735" "010735" "010735" ...
+ $ facility_name  : chr  "ALAMEDA HOSPITAL" "ALAMEDA HOSPITAL" "ALAMEDA HOSPITAL" "ALAMEDA HOSPITAL" ...
+ $ county_name    : chr  "ALAMEDA" "ALAMEDA" "ALAMEDA" "ALAMEDA" ...
+ $ type_of_control: chr  "District" "District" "District" "District" ...
+ $ age_group      : chr  "10-19" "20-29" "30-39" "40-49" ...
+ $ count          : int  62 124 140 243 411 415 486 961 7743 788 ...
 ```
 
 ## Excel

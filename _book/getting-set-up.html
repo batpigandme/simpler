@@ -33,7 +33,7 @@
   
   
 <link rel="prev" href="background.html">
-<link rel="next" href="the-language.html">
+<link rel="next" href="tutorial-format.html">
 
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -100,7 +100,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
       <nav role="navigation">
 
 <ul class="summary">
-<li><a href="./">A Minimal Book Example</a></li>
+<li><a href="https://github.com/ironholds/simpler">Starting Out with R and Shiny</a></li>
 
 <li class="divider"></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preamble</a></li>
@@ -114,13 +114,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="2.1" data-path="getting-set-up.html"><a href="getting-set-up.html#installation"><i class="fa fa-check"></i><b>2.1</b> Installation</a></li>
 <li class="chapter" data-level="2.2" data-path="getting-set-up.html"><a href="getting-set-up.html#using-rstudio"><i class="fa fa-check"></i><b>2.2</b> Using RStudio</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="the-language.html"><a href="the-language.html"><i class="fa fa-check"></i><b>3</b> The language</a><ul>
-<li class="chapter" data-level="3.1" data-path="the-language.html"><a href="the-language.html#basic-operations-in-r"><i class="fa fa-check"></i><b>3.1</b> Basic operations in R</a></li>
-<li class="chapter" data-level="3.2" data-path="the-language.html"><a href="the-language.html#objects"><i class="fa fa-check"></i><b>3.2</b> Objects</a></li>
-<li class="chapter" data-level="3.3" data-path="the-language.html"><a href="the-language.html#functions"><i class="fa fa-check"></i><b>3.3</b> Functions</a></li>
-<li class="chapter" data-level="3.4" data-path="the-language.html"><a href="the-language.html#packages"><i class="fa fa-check"></i><b>3.4</b> Packages</a></li>
-</ul></li>
 <li class="part"><span><b>Data Import and Export</b></span></li>
+<li class="chapter" data-level="3" data-path="tutorial-format.html"><a href="tutorial-format.html"><i class="fa fa-check"></i><b>3</b> Tutorial format</a></li>
 <li class="chapter" data-level="4" data-path="reading-data-from-files.html"><a href="reading-data-from-files.html"><i class="fa fa-check"></i><b>4</b> Reading data from files</a><ul>
 <li class="chapter" data-level="4.1" data-path="reading-data-from-files.html"><a href="reading-data-from-files.html#csv-tsv"><i class="fa fa-check"></i><b>4.1</b> CSV &amp; TSV</a></li>
 <li class="chapter" data-level="4.2" data-path="reading-data-from-files.html"><a href="reading-data-from-files.html#excel"><i class="fa fa-check"></i><b>4.2</b> Excel</a></li>
@@ -178,19 +173,32 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
                  <span class="st">&quot;tidyr&quot;</span>,
                  <span class="st">&quot;shinydashboard&quot;</span>,
                  <span class="st">&quot;magrittr&quot;</span>)</code></pre></div>
+<p>(Don’t worry about what this means right now; we’ll get to it later)</p>
 </div>
 <div id="using-rstudio" class="section level2">
 <h2><span class="header-section-number">2.2</span> Using RStudio</h2>
-<p>You should now have RStudio; great! That’s going to be your primary</p>
+<p>You should now have RStudio; that’s going to be your primary interface for writing R in. Let’s briefly step through the important bits of the program that you should be paying attention to.</p>
+<p>When you open it up there should be three different panes, nestled inside the program, looking something like this:</p>
+<div class="figure">
+<img src="rstudio_main.png" alt="" />
+
+</div>
+<p>Let’s step through each of them in turn. Going clockwise, we first have the <em>console</em>: this is a window into which you can type R commands, and see the output - we’ll be using that a lot. Next over, we’ve got a pane with two tabs; “Environment” (the default) and “History”. “Environment” contains a listing of everything you create during your R tinkering, while “History” provides, well, a history, of the commands you’ve typed into the console: that way if you need to re-run something, you can find it easily.</p>
+<p>And, last but not least down in the bottom left, we have “Files” (which shows your filesystem, so you can find R scripts you’ve already saved or datasets you want to read in) , “Plots”, which will contain any visualisations you generate so that you can prototype them, “Packages”, which lists all the R add-ons on your system (and which are loaded), and “Help”, which shows any documentation you request.</p>
+<p>In practice, another tab will open up when you have an R script open, where the top of “console” is now, and this will contain whatever file(s) you’re editing. For now, though, let’s focus on the console.</p>
+
 </div>
 </div>
+
+
+
             </section>
 
           </div>
         </div>
       </div>
 <a href="background.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="the-language.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
+<a href="tutorial-format.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
 
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/lunr.js"></script>
@@ -217,7 +225,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/rstudio/bookdown-demo/edit/master/introduction_to_r.Rmd",
+"link": "https://github.com/ironholds/simpler",
 "text": null
 },
 "download": null,

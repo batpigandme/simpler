@@ -73,6 +73,7 @@ You should now have RStudio; that's going to be your primary interface for writi
 
 When you open it up there should be three different panes, nestled inside the program, looking something like this:
 
+![](rstudio_main.png)
 
 Let's step through each of them in turn. Going clockwise, we first have the *console*: this is a window into which you can type R commands, and see the output - we'll be using that a lot. Next over, we've got a pane with two tabs; "Environment" (the default) and "History". "Environment" contains a listing of everything you create during your R tinkering, while "History" provides, well, a history, of the commands you've typed into the console: that way if you need to re-run something, you can find it easily.
 
