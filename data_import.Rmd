@@ -8,7 +8,6 @@ That isn't guaranteed, though, and so the rest of this book is divided up into i
 
 So, going forward, you'll see something that looks like the following; I'll introduce a concept, or a step in analysing data, and talk about why it's important. And then, after a colon, because I flagrantly abuse both the colon and semicolon:
 
-
 ```{r, eval=FALSE}
 There'll be a chunk of code, in a shaded box just like this one,
 which will achieve the step I was talking about
@@ -79,6 +78,63 @@ Classes ‘tbl_df’, ‘tbl’ and 'data.frame':	23578 obs. of  7 variables:
  $ age_group      : chr  "10-19" "20-29" "30-39" "40-49" ...
  $ count          : int  62 124 140 243 411 415 486 961 7743 788 ...
 ```
+
+There's a lot going on here, so let's break it down:
+
+1. First, "classes"; this is analogous to the object type. We don't have to dig into exactly how the system works (although feel free to ask me about it via email or do further research); the important thing to note is that one of the classes is `data.frame`, identifying this as, well, a data frame!
+2. We then have "23578 obs. of 7 variables"; there are 23,578 rows, and 7 columns. You can get these bits of information distinctly, through the `nrow` and `ncol` functions.
+3. We then have a sort of flipped version of the `head` output - showing columns from left to right. There are the column names (`year`, `facility_number`, `facility_name`), examples of the entries in those columns, and then these little strings "int" and "chr". These represents the "type" of the column - the type of data it can contain. `int` columns contain whole numbers; `chr` (or "character") columns contain strings. Other common types to see are `logical` (or `logi`), which contains true and false values, and `numeric`/`num` columns, which contain non-whole numbers.
+
+So now we have our data read into R. It's not quite perfect, though; the `facility_number` column is meant to be, well, a column of numbers, but according to `str` it's actually a character column. This offers us an opportunity to explore modifying data frames, and switching between types.
+
+Let's cover both at once. One of the reasons data frames are powerful is that you can access, change and use individual columns, as well as the data frame as a whole; this is done by calling, instead of `data_frame_name`, `data_frame_name$column_name`. Distinctly from that, it is possible to change the type of an object in R (the process is known as `coercing`), which can be very useful; depending on what you're doing, you might want to store a value as a different type. Coersion is done with the `as` functions; `as.numeric` to turn something into a numeric value, `as.integer` for an integer, and then `as.logical` and `as.character` for those respective types.
+
+Let's use both techniques now, to clear up that `facility_number` column:
+
+```{r, eval=FALSE}
+patient_data$facility_number <- as.integer(patient_data$facility_number)
+
+str(patient_data)
+
+Classes ‘tbl_df’, ‘tbl’ and 'data.frame':	23578 obs. of  7 variables:
+ $ year           : int  2009 2009 2009 2009 2009 2009 2009 2009 2009 2009 ...
+ $ facility_number: int  10735 10735 10735 10735 10735 10735 10735 10735 10739 10739 ...
+ $ facility_name  : chr  "ALAMEDA HOSPITAL" "ALAMEDA HOSPITAL" "ALAMEDA HOSPITAL" "ALAMEDA HOSPITAL" ...
+ $ county_name    : chr  "ALAMEDA" "ALAMEDA" "ALAMEDA" "ALAMEDA" ...
+ $ type_of_control: chr  "District" "District" "District" "District" ...
+ $ age_group      : chr  "10-19" "20-29" "30-39" "40-49" ...
+ $ count          : int  62 124 140 243 411 415 486 961 7743 788 ...
+```
+
+As you can see, `facility_number` is now an integer column, which lets us (amongst other things) do maths with it if we so choose - tremendously useful.
+
+We can also add new columns to data frames using a similar technique, and take advantage of a feature of R called "vectorisation". The easiest way to think about it is Excel-related. You have your Excel spreadsheet, and you create a formula in one cell to add up all the values in that row. You want to do that for every row, so you drag the formula down the column and it copies the formula out, ending up with something like:
+
+```
+A1 + A2
+B1 + B2
+C1 + C2
+```
+
+Vectorisation is just that - except it's automated. No dragging and dropping required! Most R functions automatically work on entire columns of data, and work when you have a column on one side but only a single value on the other. Let's combine that with data frame modification to work out the *percentage* of the total count of patients in each row:
+
+```
+patient_data$percentage <- patient_data$count / sum(patient_data$count)
+
+str(patient_data)
+
+Classes ‘tbl_df’, ‘tbl’ and 'data.frame':	23578 obs. of  8 variables:
+ $ year           : int  2009 2009 2009 2009 2009 2009 2009 2009 2009 2009 ...
+ $ facility_number: int  10735 10735 10735 10735 10735 10735 10735 10735 10739 10739 ...
+ $ facility_name  : chr  "ALAMEDA HOSPITAL" "ALAMEDA HOSPITAL" "ALAMEDA HOSPITAL" "ALAMEDA HOSPITAL" ...
+ $ county_name    : chr  "ALAMEDA" "ALAMEDA" "ALAMEDA" "ALAMEDA" ...
+ $ type_of_control: chr  "District" "District" "District" "District" ...
+ $ age_group      : chr  "10-19" "20-29" "30-39" "40-49" ...
+ $ count          : int  62 124 140 243 411 415 486 961 7743 788 ...
+ $ percentage     : num  2.66e-06 5.32e-06 6.01e-06 1.04e-05 1.76e-05 ...
+```
+
+No drag and drop necessary; the `patient_data` data frame has a new column, `percentage`, which contains (for each row) the `count` divided by the total count for the entire dataset, which we retrieved with `sum`.
 
 ## Excel
 
