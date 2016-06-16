@@ -76,15 +76,6 @@ When you open it up there should be three different panes, nestled inside the pr
 
 Let's step through each of them in turn. Going clockwise, we first have the *console*: this is a window into which you can type R commands, and see the output - we'll be using that a lot. Next over, we've got a pane with two tabs; "Environment" (the default) and "History". "Environment" contains a listing of everything you create during your R tinkering, while "History" provides, well, a history, of the commands you've typed into the console: that way if you need to re-run something, you can find it easily.
 
-And, last but not least down in the bottom left, we have "Files" (which shows your filesystem, so you can find R scripts you've already saved or datasets you want to read in) , "Plots", which will contain any visualisations you generate so that you can prototype them, "Packages", which lists all the R add-ons on your system (and which are loaded), and "Help", which shows any documentation you ask for about 
+And, last but not least down in the bottom left, we have "Files" (which shows your filesystem, so you can find R scripts you've already saved or datasets you want to read in) , "Plots", which will contain any visualisations you generate so that you can prototype them, "Packages", which lists all the R add-ons on your system (and which are loaded), and "Help", which shows any documentation you request.
 
-# The language
-
-## Basic operations in R
-
-
-## Objects
-
-## Functions
-
-## Packages
+In practice, another tab will open up when you have an R script open, where the top of "console" is now, and this will contain whatever file(s) you're editing. For now, though, let's focus on the console.

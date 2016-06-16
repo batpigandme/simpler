@@ -14,7 +14,7 @@ description: "This is a booklike set of lesson plans on starting out with R, wit
 # Preamble {-}
 Welcome to *Starting Out with R and Shiny*, a guide to learning basic R and ending up with the ability to put together [Shiny dashboards](https://rstudio.github.io/shinydashboard/) - online, R-based dashboards and visualisations.
 
-This set of documentation is being written for a set of lectures in Springfield, IL, and is primarily aimed at those attendees - it will hopefully be useful to others too. It contains (or will contain):
+This set of documentation is being written for a set of lectures in Springfield, IL, and is primarily aimed at attendees, but it will hopefully be useful to others too. It contains (or will contain):
 
 1. An introduction to R as a language, its history, and its structure;
 2. A basic guide to RStudio and online help resources for questions, bugs or commentary;
