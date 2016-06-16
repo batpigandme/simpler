@@ -61,6 +61,7 @@ After that, you'll need a few R packages (more on those later) that are used in 
 install.packages("readr",
                  "dplyr",
                  "tidyr",
+                 "readxl",
                  "shinydashboard",
                  "magrittr")
 ```
