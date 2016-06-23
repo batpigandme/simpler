@@ -84,14 +84,14 @@ Classes ‘tbl_df’, ‘tbl’ and 'data.frame':	23578 obs. of  7 variables:
 There's a lot going on here, so let's break it down:
 
 1. First, "classes"; this is analogous to the object type. We don't have to dig into exactly how the system works (although feel free to ask me about it via email or do further research); the important thing to note is that one of the classes is `data.frame`, identifying this as, well, a data frame!
-2. We then have "23578 obs. of 7 variables"; there are 23,578 rows, and 7 columns. You can get these bits of information distinctly, through the `nrow` and `ncol` functions.
-3. We then have a sort of flipped version of the `head` output - showing columns from left to right. There are the column names (`year`, `facility_number`, `facility_name`), examples of the entries in those columns, and then these little strings "int" and "chr". These represents the "type" of the column - the type of data it can contain. `int` columns contain whole numbers; `chr` (or "character") columns contain strings. Other common types to see are `logical` (or `logi`), which contains true and false values, and `numeric`/`num` columns, which contain non-whole numbers.
+2. We then have "23578 obs. of 7 variables"; there are 23,578 rows, and 7 columns (which, in R, are known as `vectors` - more on those later). You can get these bits of information distinctly, through the `nrow` and `ncol` functions.
+3. We then have a sort of flipped version of the `head` output - showing each vector, from the first to the last, down. There are the vector names (`year`, `facility_number`, `facility_name`), examples of the entries in those columns, and then these little strings "int" and "chr". These represents the "type" of the column - the type of data it can contain. `int` vectors contain whole numbers; `chr` (or "character") vectors contain strings. Other common types to see are `logical` (or `logi`), which contains true and false values, and `numeric`/`num` columns, which contain non-whole numbers.
 
-So now we have our data read into R. It's not quite perfect, though; the `facility_number` column is meant to be, well, a column of numbers, but according to `str` it's actually a character column. This offers us an opportunity to explore modifying data frames, and switching between types.
+So now we have our data read into R. It's not quite perfect, though; the `facility_number` vector is meant to be, well, a column of numbers, but according to `str` it's actually a character vector. This offers us an opportunity to explore modifying data frames, and switching between types.
 
-Let's cover both at once. One of the reasons data frames are powerful is that you can access, change and use individual columns, as well as the data frame as a whole; this is done by calling, instead of `data_frame_name`, `data_frame_name$column_name`. Distinctly from that, it is possible to change the type of an object in R (the process is known as `coercing`), which can be very useful; depending on what you're doing, you might want to store a value as a different type. Coersion is done with the `as` functions; `as.numeric` to turn something into a numeric value, `as.integer` for an integer, and then `as.logical` and `as.character` for those respective types.
+Let's cover both at once. One of the reasons data frames are powerful is that you can access, change and use individual vectors, as well as the data frame as a whole; this is done by calling, instead of `data_frame_name`, `data_frame_name$column_name`. Distinctly from that, it is possible to change the type of an object in R (the process is known as `coercing`), which can be very useful; depending on what you're doing, you might want to store a value as a different type. Coersion is done with the `as` functions; `as.numeric` to turn something into a numeric value, `as.integer` for an integer, and then `as.logical` and `as.character` for those respective types.
 
-Let's use both techniques now, to clear up that `facility_number` column:
+Let's use both techniques now, to clear up that `facility_number` vector:
 
 ```{r, eval=FALSE}
 patient_data$facility_number <- as.integer(patient_data$facility_number)
@@ -108,9 +108,9 @@ Classes ‘tbl_df’, ‘tbl’ and 'data.frame':	23578 obs. of  7 variables:
  $ count          : int  62 124 140 243 411 415 486 961 7743 788 ...
 ```
 
-As you can see, `facility_number` is now an integer column, which lets us (amongst other things) do maths with it if we so choose - tremendously useful.
+As you can see, `facility_number` is now an integer vector, which lets us (amongst other things) do maths with it if we so choose - tremendously useful.
 
-We can also add new columns to data frames using a similar technique, and take advantage of a feature of R called "vectorisation". The easiest way to think about it is Excel-related. You have your Excel spreadsheet, and you create a formula in one cell to add up all the values in that row. You want to do that for every row, so you drag the formula down the column and it copies the formula out, ending up with something like:
+We can also add new vectors to data frames using a similar technique, and take advantage of a feature of R called "vectorisation". The easiest way to think about it is Excel-related. You have your Excel spreadsheet, and you create a formula in one cell to add up all the values in that row. You want to do that for every row, so you drag the formula down the column and it copies the formula out, ending up with something like:
 
 ```
 A1 + A2
@@ -118,9 +118,9 @@ B1 + B2
 C1 + C2
 ```
 
-Vectorisation is just that - except it's automated. No dragging and dropping required! Most R functions automatically work on entire columns of data, and work when you have a column on one side but only a single value on the other. Let's combine that with data frame modification to work out the *percentage* of the total count of patients in each row:
+Vectorisation is just that - except it's automated. No dragging and dropping required! Most R functions automatically work on entire vectors of data, and work when you have a vectors on one side but only a single value on the other. Let's combine that with data frame modification to work out the *percentage* of the total count of patients in each row:
 
-```
+```{r, eval=FALSE}
 patient_data$percentage <- patient_data$count / sum(patient_data$count)
 
 str(patient_data)
@@ -152,10 +152,81 @@ Let's move on to everyone's favourite business data format: Microsoft Excel!
 
 Microsoft Excel is widely used in a business context, and correspondingly the data it outputs (`.xls` and `.xlsx` files) are widely distributed. We should learn how to read them into R, which is a big step in shifting away from Excel-based workflows and ensures that you can consume data from more traditional sources without running into format incompatibilities.
 
-For this we'll need another R package 
+For this we'll need another R package, `readxl`, which does just that - reads in Excel files. Let's load it and read in a file that the package ships with (which we can find with the `system.file` function):
 
+```{r, eval=FALSE}
+library(readxl)
+excel_data <- read_excel(path = system.file("extdata/datasets.xlsx", package = "readxl"))
+head(excel_data)
 
-## Other types
+  Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+1          5.1         3.5          1.4         0.2  setosa
+2          4.9         3.0          1.4         0.2  setosa
+3          4.7         3.2          1.3         0.2  setosa
+4          4.6         3.1          1.5         0.2  setosa
+5          5.0         3.6          1.4         0.2  setosa
+6          5.4         3.9          1.7         0.4  setosa
+```
+
+It's another data frame - as expected, since excel spreadsheets are tabular just like CSV files are. One important note - Excel spreadsheets can contain multiple sheets, *each* of them a table. How do we handle that?
+
+If you look at the documentation for `read_excel`, you'll see a `sheet` argument, which you can use to specify which sheet to read in. The `excel_sheets` function, meanwhile, gets you how many sheets an Excel file has. So we can combine them to work out how many sheets we're looking at, and then read in that many.
+
+But what happens when you have to write code that reads in a variety of different files, some with different numbers of sheets? How do we write code that doesn't mind how many sheets there are? How do we store the results of that code?
+
+A few new concepts and pieces of R, for this question. First-off is how we're going to store the results. We're looking at an unknown number of sheets, which means an unknown number of data frames. Luckily, data frames can be stored as components of a single object, just like vectors are components of data frames. That means instead of having an unknown number of objects, we just have one.
+
+For that kind of storage, we're going to introduce a new object type in R: `lists`. Lists can have any length you want, and contain pretty much any object you want, too, which makes them extremely powerful. You can construct and use them with, or without names.
+
+```{r, eval=FALSE}
+
+# A list without names
+nameless_list <- list(2, 3)
+
+# A list with names
+named_list <- list(first_object = 2, second_object = 3)
+```
+
+The difference is how you get objects inside the list, or change those objects: if the list has names, you can use the `$` character we use with data frame contents. If it doesn't, you have to use indices - getting the Nth element of the object by pointing to `[[N]]`. Taking the list examples we created above:
+
+```{r, eval=FALSE}
+nameless_list[[1]]
+[1] 2
+
+named_list$first_object
+[1] 2
+```
+
+So now we know how to store the results. But how do we get them?
+
+First, we need to have a way of automatically knowing how many sheets there are. We can do that with another `readxl` function, `excel_sheets`, which lists all the sheets in an Excel file:
+
+```{r, eval=FALSE}
+sheet_names <- excel_sheets(path = system.file("extdata/datasets.xlsx", package = "readxl"))
+sheet_names
+
+[1] "iris"     "mtcars"   "chickwts" "quakes"
+```
+
+Then we need a way of taking that vector of sheet names, and, for each one, reading in that sheet, and storing all the results in a list. The answer is the `lapply` function.
+
+`lapply` takes a list (or vector), `X` and, for each element of `X`, performs a specified operation using it. The results of each operation on each element is then returned in a list. Perfect! So what we want is:
+
+```{r, eval=FALSE}
+sheet_names <- excel_sheets(path = system.file("extdata/datasets.xlsx", package = "readxl"))
+all_sheets <- lapply(X = sheet_names, FUN = read_excel,
+                     path = system.file("extdata/datasets.xlsx", package = "readxl"))
+```
+
+If you run `str` on the results of that, what you *should* see is that `all_sheets` is a list, containing 4 data frames, all of which contain a pile of columns and rows just like our example at the beginning. These data frames can be extracted using the indices operation; `all_sheets[[1]]` gets you the first sheet, and so on, and so forth.
+
+So now we've learned how to read in Excel files. We've also learned:
+
+1. What lists are (and how they can be used to store a variety of objects);
+2. How to apply a function to each element of a list (or vector);
+3. How to get the results of that application.
+
+## Other files
 
 # Reading data from databases
 
