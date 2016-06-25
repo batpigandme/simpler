@@ -32,8 +32,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="code-style.html">
-<link rel="next" href="testing-and-staging.html">
+<link rel="prev" href="getting-set-up.html">
+<link rel="next" href="reading-data-from-files.html">
 
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -88,7 +88,6 @@ code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* Com
 code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 </style>
 
-<link rel="stylesheet" href="style.css" type="text/css" />
 </head>
 
 <body>
@@ -100,9 +99,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
       <nav role="navigation">
 
 <ul class="summary">
-<li><a href="https://github.com/ironholds/simpler">Starting Out with R and Shiny</a></li>
-
-<li class="divider"></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preamble</a></li>
 <li class="part"><span><b>Introduction to R</b></span></li>
 <li class="chapter" data-level="1" data-path="background.html"><a href="background.html"><i class="fa fa-check"></i><b>1</b> Background</a><ul>
@@ -138,9 +134,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="16" data-path="code-style.html"><a href="code-style.html"><i class="fa fa-check"></i><b>16</b> Code style</a></li>
 <li class="chapter" data-level="17" data-path="version-control.html"><a href="version-control.html"><i class="fa fa-check"></i><b>17</b> Version control</a></li>
 <li class="chapter" data-level="18" data-path="testing-and-staging.html"><a href="testing-and-staging.html"><i class="fa fa-check"></i><b>18</b> Testing and staging</a></li>
-<li class="divider"></li>
-<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
-
 </ul>
 
       </nav>
@@ -158,16 +151,22 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="version-control" class="section level1">
-<h1><span class="header-section-number">Chapter 17</span> Version control</h1>
+<div id="tutorial-format" class="section level1">
+<h1><span class="header-section-number">Chapter 3</span> Tutorial format</h1>
+<p>From hereonin we’re going to be focusing on using R, rather than the history, community and everything else. One approach to teaching a programming language is to step through the different rules in how the language is constructed, what the different keywords are, any strange quirks it has, and all the rest - and this can be really helpful for people who are <em>already</em> programmers.</p>
+<p>That isn’t guaranteed, though, and so the rest of this book is divided up into individual, practical applications of the language, combined with explanations of what’s going on in each piece so that you can learn the structure of the language through doing.</p>
+<p>So, going forward, you’ll see something that looks like the following; I’ll introduce a concept, or a step in analysing data, and talk about why it’s important. And then, after a colon, because I flagrantly abuse both the colon and semicolon:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">There<span class="st">&#39;ll be a chunk of code, in a shaded box just like this one,</span>
+<span class="st">which will achieve the step I was talking about</span></code></pre></div>
+<p>After that will be an explanation of that chunk of code, and what each bit is doing and how everything in it works. If you’re the sort of person who instead wants to jump into the nitty-gritty of the language, I recommend Hadley Wickham’s <em><a href="http://adv-r.had.co.nz/Data-structures.html">Advanced R Programming</a></em> (specifically the data structures section) to get a handle for the general workings of R, and then coming back here to learn the applications.</p>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="code-style.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="testing-and-staging.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
+<a href="getting-set-up.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="reading-data-from-files.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
 
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/lunr.js"></script>
@@ -194,7 +193,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/ironholds/simpler",
+"link": null,
 "text": null
 },
 "download": null,

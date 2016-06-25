@@ -32,8 +32,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="text-cleaning.html">
-<link rel="next" href="building-your-first-app.html">
+<link rel="prev" href="exporting-data.html">
+<link rel="next" href="data-manipulation.html">
 
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -88,7 +88,6 @@ code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* Com
 code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 </style>
 
-<link rel="stylesheet" href="style.css" type="text/css" />
 </head>
 
 <body>
@@ -100,9 +99,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
       <nav role="navigation">
 
 <ul class="summary">
-<li><a href="https://github.com/ironholds/simpler">Starting Out with R and Shiny</a></li>
-
-<li class="divider"></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preamble</a></li>
 <li class="part"><span><b>Introduction to R</b></span></li>
 <li class="chapter" data-level="1" data-path="background.html"><a href="background.html"><i class="fa fa-check"></i><b>1</b> Background</a><ul>
@@ -138,9 +134,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="16" data-path="code-style.html"><a href="code-style.html"><i class="fa fa-check"></i><b>16</b> Code style</a></li>
 <li class="chapter" data-level="17" data-path="version-control.html"><a href="version-control.html"><i class="fa fa-check"></i><b>17</b> Version control</a></li>
 <li class="chapter" data-level="18" data-path="testing-and-staging.html"><a href="testing-and-staging.html"><i class="fa fa-check"></i><b>18</b> Testing and staging</a></li>
-<li class="divider"></li>
-<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
-
 </ul>
 
       </nav>
@@ -158,20 +151,38 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="dates-and-times" class="section level1">
-<h1><span class="header-section-number">Chapter 10</span> Dates and times</h1>
+<div id="reshaping-data" class="section level1">
+<h1><span class="header-section-number">Chapter 7</span> Reshaping data</h1>
+<p>So we’ve got our data read in. From a database, from an Excel file, from a CSV - wherever it came from, we have it. Then what?</p>
+<p>The answer is usually data cleaning. People tend to act as if analysis is 50% studious statistical testing and 50% visualisation and reporting, but this is a damned dirty lie. In practice, it’s 80% cleaning the data so it will work, 20% statistics, and a further 20% visualisation - summing to over 100 because you didn’t realise <em>quite</em> how much of a pain the cleaning would be.</p>
+<p>One essential part of that cleaning is or reshaping, the actual structure of your data. Sometimes as researchers we are lucky enough to have data that looks exactly like what we want. Every row is a single observation. Every column contains one, and just one, thing we care about. This is referred to as <em>tidy data</em> (a concept you can read more about <a href="http://vita.had.co.nz/papers/tidy-data.html">here</a>).</p>
+<p>We’ll use the original patient dataset as an example. Let’s take a look at it:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">patient_data &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="dt">file =</span> <span class="st">&quot;https://www.ironholds.org/resources/misc/patient_data.csv&quot;</span>)
+<span class="kw">head</span>(patient_data)</code></pre></div>
+<p>There are a few ways in which this data is ‘untidy’. First-off, the facility and facility <em>location</em> are in the same column - we might want to have them as different fields. Second, we’ve got multiple types of data (patient admissions, and patient releases) in different columns. This is good for some operations, like calculating percentages, but can be a tremendous pain with others. We may need to tidy the data, perform operations on it, untidy it for others, and then back again.</p>
+<p>So we want to be able to split a column, merge patient admissions and patient releases into one key-value structure, and learn how to un-merge it just in case we have to. We can do all of these with the <code>tidyr</code> package.</p>
+<p>First: column-splitting. We’ve got that <code>facility</code> field, containing both the facility name and location, and we want two columns (<code>facility_name</code> and <code>facility_location</code>). For that we can use the <code>separate</code> function from <code>tidyr</code>, which does just that: separates the contents of a specified column, based on a user-defined separator, into multiple new columns (with user-specified names). Let’s use it now:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(patient_data)
 
+patient_data &lt;-<span class="st"> </span><span class="kw">separate</span>(<span class="dt">data =</span> patient_data, <span class="dt">col =</span> facility, <span class="dt">into =</span> <span class="kw">c</span>(<span class="st">&quot;facility_name&quot;</span>, <span class="st">&quot;facility_location&quot;</span>),
+                         <span class="dt">sep =</span> <span class="st">&quot;, &quot;</span>)
+
+<span class="kw">head</span>(patient_data)</code></pre></div>
+<p>We’ve split <code>facility</code> into <code>facility_name</code> and <code>facility_location</code>. Pretty neat! Still leaves us with what to do about the multiple value columns, though. The answer comes in the form of <code>gather</code>, another tidyr function, which takes a data frame, the names to give the key and value columns, and columns to treat as <code>id</code> columns that aren’t touched. It then splits the rest:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(patient_data)
+
+patient_data &lt;-<span class="st"> </span><span class="kw">gather</span>(<span class="dt">data =</span> data, <span class="dt">key =</span> <span class="st">&quot;type&quot;</span>, <span class="dt">value =</span> <span class="st">&quot;count&quot;</span>)
+
+<span class="kw">head</span>(patient_data)</code></pre></div>
+<p>If we want to reverse that operation, we can use <code>spread</code>:</p>
 </div>
-
-
-
             </section>
 
           </div>
         </div>
       </div>
-<a href="text-cleaning.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="building-your-first-app.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
+<a href="exporting-data.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="data-manipulation.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
 
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/lunr.js"></script>
@@ -198,7 +209,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/ironholds/simpler",
+"link": null,
 "text": null
 },
 "download": null,

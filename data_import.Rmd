@@ -89,7 +89,9 @@ There's a lot going on here, so let's break it down:
 
 So now we have our data read into R. It's not quite perfect, though; the `facility_number` vector is meant to be, well, a column of numbers, but according to `str` it's actually a character vector. This offers us an opportunity to explore modifying data frames, and switching between types.
 
-Let's cover both at once. One of the reasons data frames are powerful is that you can access, change and use individual vectors, as well as the data frame as a whole; this is done by calling, instead of `data_frame_name`, `data_frame_name$column_name`. Distinctly from that, it is possible to change the type of an object in R (the process is known as `coercing`), which can be very useful; depending on what you're doing, you might want to store a value as a different type. Coersion is done with the `as` functions; `as.numeric` to turn something into a numeric value, `as.integer` for an integer, and then `as.logical` and `as.character` for those respective types.
+One of the reasons data frames are powerful is that you can access, change and use individual vectors, as well as the data frame as a whole; this is done by calling, instead of `data_frame_name`, `data_frame_name$column_name`.
+
+Distinctly from that, it is possible to change the type of an object in R (the process is known as `coercing`), which can be very useful; depending on what you're doing, you might want to store a value as a different type. Coersion is done with the `as` functions; `as.numeric` to turn something into a numeric value, `as.integer` for an integer, and then `as.logical` and `as.character` for those respective types.
 
 Let's use both techniques now, to clear up that `facility_number` vector:
 
@@ -110,7 +112,19 @@ Classes ‘tbl_df’, ‘tbl’ and 'data.frame':	23578 obs. of  7 variables:
 
 As you can see, `facility_number` is now an integer vector, which lets us (amongst other things) do maths with it if we so choose - tremendously useful.
 
-We can also add new vectors to data frames using a similar technique, and take advantage of a feature of R called "vectorisation". The easiest way to think about it is Excel-related. You have your Excel spreadsheet, and you create a formula in one cell to add up all the values in that row. You want to do that for every row, so you drag the formula down the column and it copies the formula out, ending up with something like:
+Vectors are very powerful in their own right, and a useful object type for when you don't want to be dealing with an entire data frame. They can be created in a couple of ways:
+
+```{r, eval=FALSE}
+# This creates a vector from scratch, using data in the code:
+a_vector <- c(1,2,3,4,5)
+
+# This creates a vector from a data frame column
+patient_data_counts <- patient_data$count
+```
+
+Individual elements of a vector can be accessed using `vectorname[n]`, where `n` is the Nth element. So if you want the fifth element from `some_vector`: `some_vector[5]`.
+
+We can add new vectors to data frames using a technique similar to how we modified them, and take advantage of a feature of R called "vectorisation". The easiest way to think about it is Excel-related. You have your Excel spreadsheet, and you create a formula in one cell to add up all the values in that row. You want to do that for every row, so you drag the formula down the column and it copies the formula out, ending up with something like:
 
 ```
 A1 + A2
@@ -144,7 +158,8 @@ So we now know:
 2. How to examine the structure of an R object;
 2. How do access individual columns of a data frame;
 3. How to modify those columns, and create new ones;
-4. How vectorisation works.
+4. How vectors work;
+5. How vectorisation works.
 
 Let's move on to everyone's favourite business data format: Microsoft Excel!
 
@@ -228,6 +243,31 @@ So now we've learned how to read in Excel files. We've also learned:
 
 ## Other files
 
+There are a few other file types you might encounter. One of the most common is *tab*-separated value files (TSVs); another, less common, is fixed-width files, where there's an arbitrary amount of space between elements on each row to make sure every entry is the same width.
+
 # Reading data from databases
 
 # Exporting data
+A related topic to data import - albeit, one you won't have to use quite yet - is data export. It's pretty common to need to save the results of whatever work you're doing, either so you can pick it up later, hand it off to other people, or use it in other processes.
+
+There are a couple of ways to do that. If you're saving simple, tabular data - data frames, say - we can use the `readr` package again. As well as `read_csv` and `read_tsv`, there's also `write_csv` and `write_tsv`. :
+
+```{r, eval=FALSE}
+patient_data <- read_csv(file = "https://www.ironholds.org/resources/misc/patient_data.csv")
+
+write_csv(x = patient_data, file = "patient_data.csv")
+```
+
+You should now have a file called "patient_data.csv" in whatever directory you're working from. It's properly formatted and can be read back into R, or into Excel, or into whatever tool you choose.
+
+Obviously, non-tabular objects (such as lists) can't be saved into a CSV: how would R, or any other program, know what to do with them? This can present a problem when trying to share work with others, or save it for your own reuse.
+
+Luckily, R has its own data format, `.RData` files, which can store representations of any R object you want and then be loaded seamlessly back into R (the limitation is it probably won't work with other languages or software). These files can also contain however many objects you want, of many different types. They're created with the `save` function:
+
+```{r, eval=FALSE}
+a_list <- list(a = 12, b = 6)
+a_vector <- c(1, 2, 3, 4)
+save(a_list, a_vector, file = "an_rdata_file.RData")
+```
+
+You should now have `an_rdata_file.Rdata` saved to disk. It can be read in with the `load` function, which will restore the objects with whatever names they had when they were saved.

@@ -32,8 +32,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="dates-and-times.html">
-<link rel="next" href="user-interface-design.html">
+<link rel="prev" href="index.html">
+<link rel="next" href="getting-set-up.html">
 
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -88,7 +88,6 @@ code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* Com
 code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 </style>
 
-<link rel="stylesheet" href="style.css" type="text/css" />
 </head>
 
 <body>
@@ -100,9 +99,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
       <nav role="navigation">
 
 <ul class="summary">
-<li><a href="https://github.com/ironholds/simpler">Starting Out with R and Shiny</a></li>
-
-<li class="divider"></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preamble</a></li>
 <li class="part"><span><b>Introduction to R</b></span></li>
 <li class="chapter" data-level="1" data-path="background.html"><a href="background.html"><i class="fa fa-check"></i><b>1</b> Background</a><ul>
@@ -138,9 +134,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="16" data-path="code-style.html"><a href="code-style.html"><i class="fa fa-check"></i><b>16</b> Code style</a></li>
 <li class="chapter" data-level="17" data-path="version-control.html"><a href="version-control.html"><i class="fa fa-check"></i><b>17</b> Version control</a></li>
 <li class="chapter" data-level="18" data-path="testing-and-staging.html"><a href="testing-and-staging.html"><i class="fa fa-check"></i><b>18</b> Testing and staging</a></li>
-<li class="divider"></li>
-<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
-
 </ul>
 
       </nav>
@@ -158,16 +151,43 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="building-your-first-app" class="section level1">
-<h1><span class="header-section-number">Chapter 11</span> Building your first app</h1>
+<div id="background" class="section level1">
+<h1><span class="header-section-number">Chapter 1</span> Background</h1>
+<div id="a-brief-history-of-splines" class="section level2">
+<h2><span class="header-section-number">1.1</span> A brief history of splines</h2>
+<p>The R programming language started off at the University of Auckland, where two statistics professors - Ross Ihaka and Robert Gentleman - found themselves somewhat perturbed by the state of statistical programming. There were a lot of statistical languages and environments out there, but most of the ones they had access to were commercial, requiring you to pay to use them.</p>
+<p>In the end they decided to write something themselves, and they called it R (first because it’s the first letter in both of their names and second, I hypothesise, because after you’ve written an entire programming language with one other person you probably don’t have the energy left to come up with a fancy name). It was initially used just by the two of them in teaching courses at Auckland, and student complaints were the main source of improvements.</p>
+<p>In June 1995, though, everything changed when they released the source code of the language online - and did so under a free license, which let other people reuse the code and crucially <em>modify</em> the code. People began submitting their own improvements, new features, and bug fixes, and the language grew and grew. By 2012 it was the most commonly used data science language - a status it continues to maintain to this day.<a href="http://www.kdnuggets.com/2015/05/poll-r-rapidminer-python-big-data-spark.html">ref</a></p>
+</div>
+<div id="why-r-succeeds" class="section level2">
+<h2><span class="header-section-number">1.2</span> Why R succeeds</h2>
+<p>R didn’t become popular in a vacuum; there are a lot of other solutions for data analysis out there, some commercial (SAS, SPSS) and some open source (MATLAB, Python, Julia). Despite that, R consistently outstrips them in popularity, and there are a few reasons for that.</p>
+<p><strong><em>R was written by statisticians</em></strong>. A lot of programming languages (including statistical ones) are written, unsurprisingly, by programmers - and this is great from a software engineering standpoint. R, however, was written by statisticians, and while this means the language looks slightly strange compared to more “proper” programming languages, it means that it’s designed from the ground up to handle the things that statisticians and scientists need.</p>
+<p>The primary data formats are tabular, just like the results from scientific experiments tend to be; the language has not only arithmetic support, but also significance tests, general modelling functions and matrix mathematics built in.</p>
+<p><strong><em>R was written by a community</em></strong>. As well as the base language, which is the work of many hands, there’s also an entire ecosystem of add-ons (which we’ll cover later). Put simply: if there’s something statistical you need to do, and it isn’t in R itself, it’s almost <em>certainly</em> in an add-on - one that you can obtain, use and include in your work completely free of charge.</p>
+<p><strong><em>R can do pretty much everything</em>.</strong> It’s primarily a statistical language, but it’s not <em>just</em> a statistical language. You can do data analysis in it, sure. You can also visualise the results of that analysis in a thousand different ways. Or write reports based on it that turn out as LaTeX, PDFs, HTML, Markdown. or build dynamic, web-hosted visualisations and dashboards and interactive platforms to display your work. Heck, you can even build websites in it; I did just to see if I could, and it took 40 lines of code. Although in that specific case, while you <em>could</em> use R, I would strongly recommend you <em>don’t</em>.</p>
+<p>The point, though, is that while R is primarily about statistics, it’s a language that covers pretty much every step of handling data, from reading it in and cleaning it up to showing your results to the world.</p>
+<p><strong><em>R can interact with pretty much everything</em></strong>. That’s a <em>slight</em> exaggeration, but only slight. Suppose someone gives you code written in C? R can interact with that. FORTRAN? Yep. C++? Absolutely! And while we’re at it, you can link R into Python, JavaScript, Java, Scala, and a whole host of other languages. This means that on the off-chance you encounter something you really need to do that isn’t in R, you can integrate it in pretty easily.</p>
+<p>There are a lot of other fascinating and wonderful features (some of which we’ll cover later on!) but those are the main ones, and why after writing thousands upon thousands of lines of R in the last few years, I’m still so in love with it.</p>
+</div>
+<div id="the-r-community" class="section level2">
+<h2><span class="header-section-number">1.3</span> The R community</h2>
+<p>One of the things I touched on above - as a reason R is such a powerful and popular environment - is the community. A big benefit is the expertise that community has: for example, the R add-on for neural networks was written by Brian Ripley, a British statistician who quite literally wrote the book on neural networks, and having the person who <em>invented</em> the methodology implement it gives you a pretty strong claim to the implementation being reliable.</p>
+<p>But another benefit is simply that, while there are dragons in some corners, the community generally consists of people who love expanding what the language can do and how friendly to new users it is - and they practise what they preach! And there are a lot of R programmers, and a lot of places to get help, support, suggestions and pointers. Some venues worth keeping in mind, in case you run into a problem and need some assistance, are:</p>
+<ol style="list-style-type: decimal">
+<li><a href="http://stackoverflow.com/questions/tagged/r">R on StackOverflow</a>;</li>
+<li><a href="https://www.r-project.org/mail.html">R’s official mailing lists</a>, and;</li>
+<li>the <a href="http://webchat.freenode.net/?channels=#R">R IRC channel</a>.</li>
+</ol>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="dates-and-times.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="user-interface-design.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="getting-set-up.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
 
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/lunr.js"></script>
@@ -194,7 +214,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/ironholds/simpler",
+"link": null,
 "text": null
 },
 "download": null,

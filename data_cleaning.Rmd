@@ -2,7 +2,50 @@
 
 # Reshaping data
 
+So we've got our data read in. From a database, from an Excel file, from a CSV - wherever it came from, we have it. Then what?
+
+The answer is usually data cleaning. People tend to act as if analysis is 50% studious statistical testing and 50% visualisation and reporting, but this is a damned dirty lie. In practice, it's 80% cleaning the data so it will work, 20% statistics, and a further 20% visualisation - summing to over 100 because you didn't realise *quite* how much of a pain the cleaning would be.
+
+One essential part of that cleaning is or reshaping, the actual structure of your data. Sometimes as researchers we are lucky enough to have data that looks exactly like what we want. Every row is a single observation. Every column contains one, and just one, thing we care about. This is referred to as *tidy data* (a concept you can read more about [here](http://vita.had.co.nz/papers/tidy-data.html)).
+
+We'll use the original patient dataset as an example. Let's take a look at it:
+
+```{r, eval=FALSE}
+patient_data <- read_csv(file = "https://www.ironholds.org/resources/misc/patient_data.csv")
+head(patient_data)
+
+```
+
+There are a few ways in which this data is 'untidy'. First-off, the facility and facility *location* are in the same column - we might want to have them as different fields. Second, we've got multiple types of data (patient admissions, and patient releases) in different columns. This is good for some operations, like calculating percentages, but can be a tremendous pain with others. We may need to tidy the data, perform operations on it, untidy it for others, and then back again.
+
+So we want to be able to split a column, merge patient admissions and patient releases into one key-value structure, and learn how to un-merge it just in case we have to. We can do all of these with the `tidyr` package.
+
+First: column-splitting. We've got that `facility` field, containing both the facility name and location, and we want two columns (`facility_name` and `facility_location`). For that we can use the `separate` function from `tidyr`, which does just that: separates the contents of a specified column, based on a user-defined separator, into multiple new columns (with user-specified names). Let's use it now:
+
+```{r, eval=FALSE}
+head(patient_data)
+
+patient_data <- separate(data = patient_data, col = facility, into = c("facility_name", "facility_location"),
+                         sep = ", ")
+
+head(patient_data)
+```
+
+We've split `facility` into `facility_name` and `facility_location`. Pretty neat! Still leaves us with what to do about the multiple value columns, though. The answer comes in the form of `gather`, another tidyr function, which takes a data frame, the names to give the key and value columns, and columns to treat as `id` columns that aren't touched. It then splits the rest:
+
+```{r, eval=FALSE}
+head(patient_data)
+
+patient_data <- gather(data = data, key = "type", value = "count")
+
+head(patient_data)
+```
+
+If we want to reverse that operation, we can use `spread`:
+
+
 # Data manipulation
+
 
 # Text-cleaning
 

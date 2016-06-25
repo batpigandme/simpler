@@ -32,8 +32,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="background.html">
-<link rel="next" href="tutorial-format.html">
+<link rel="prev" href="data-manipulation.html">
+<link rel="next" href="dates-and-times.html">
 
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -88,7 +88,6 @@ code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* Com
 code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 </style>
 
-<link rel="stylesheet" href="style.css" type="text/css" />
 </head>
 
 <body>
@@ -100,9 +99,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
       <nav role="navigation">
 
 <ul class="summary">
-<li><a href="https://github.com/ironholds/simpler">Starting Out with R and Shiny</a></li>
-
-<li class="divider"></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preamble</a></li>
 <li class="part"><span><b>Introduction to R</b></span></li>
 <li class="chapter" data-level="1" data-path="background.html"><a href="background.html"><i class="fa fa-check"></i><b>1</b> Background</a><ul>
@@ -138,9 +134,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="16" data-path="code-style.html"><a href="code-style.html"><i class="fa fa-check"></i><b>16</b> Code style</a></li>
 <li class="chapter" data-level="17" data-path="version-control.html"><a href="version-control.html"><i class="fa fa-check"></i><b>17</b> Version control</a></li>
 <li class="chapter" data-level="18" data-path="testing-and-staging.html"><a href="testing-and-staging.html"><i class="fa fa-check"></i><b>18</b> Testing and staging</a></li>
-<li class="divider"></li>
-<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
-
 </ul>
 
       </nav>
@@ -158,48 +151,16 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="getting-set-up" class="section level1">
-<h1><span class="header-section-number">Chapter 2</span> Getting set up</h1>
-<div id="installation" class="section level2">
-<h2><span class="header-section-number">2.1</span> Installation</h2>
-<p>To get started with R, you’re going to need…well, R!</p>
-<p>If you’re on Windows you can get R <a href="https://cran.r-project.org/bin/windows/base/">here</a>; if you’re on a mac, you can download it <a href="https://cran.r-project.org/bin/macosx/">here</a>. For Linux users (specifically Ubuntu users, or people on other, Debian-based distributions) open the terminal and type:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sudo apt-get -y install r-base</code></pre></div>
-<p>This requires the password to your computer’s administrator account; if you don’t have it, you’ll need to get the system administrator to install R.</p>
-<p>Once you’ve got R, you’ll also need RStudio - an Integrated Development Environment (IDE) for R that we’ll be covering shortly. RStudio can be obtained <a href="https://www.rstudio.com/products/rstudio/download/">here</a>.</p>
-<p>After that, you’ll need a few R packages (more on those later) that are used in this tutorial. Open RStudio, now that you’ve installed it, and go to the window in the bottom left marked “console”. Type:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">&quot;readr&quot;</span>,
-                 <span class="st">&quot;dplyr&quot;</span>,
-                 <span class="st">&quot;tidyr&quot;</span>,
-                 <span class="st">&quot;readxl&quot;</span>,
-                 <span class="st">&quot;shinydashboard&quot;</span>,
-                 <span class="st">&quot;magrittr&quot;</span>)</code></pre></div>
-<p>(Don’t worry about what this means right now; we’ll get to it later)</p>
+<div id="text-cleaning" class="section level1">
+<h1><span class="header-section-number">Chapter 9</span> Text-cleaning</h1>
 </div>
-<div id="using-rstudio" class="section level2">
-<h2><span class="header-section-number">2.2</span> Using RStudio</h2>
-<p>You should now have RStudio; that’s going to be your primary interface for writing R in. Let’s briefly step through the important bits of the program that you should be paying attention to.</p>
-<p>When you open it up there should be three different panes, nestled inside the program, looking something like this:</p>
-<div class="figure">
-<img src="rstudio_main.png" alt="" />
-
-</div>
-<p>Let’s step through each of them in turn. Going clockwise, we first have the <em>console</em>: this is a window into which you can type R commands, and see the output - we’ll be using that a lot. Next over, we’ve got a pane with two tabs; “Environment” (the default) and “History”. “Environment” contains a listing of everything you create during your R tinkering, while “History” provides, well, a history, of the commands you’ve typed into the console: that way if you need to re-run something, you can find it easily.</p>
-<p>And, last but not least down in the bottom left, we have “Files” (which shows your filesystem, so you can find R scripts you’ve already saved or datasets you want to read in) , “Plots”, which will contain any visualisations you generate so that you can prototype them, “Packages”, which lists all the R add-ons on your system (and which are loaded), and “Help”, which shows any documentation you request.</p>
-<p>In practice, another tab will open up when you have an R script open, where the top of “console” is now, and this will contain whatever file(s) you’re editing. For now, though, let’s focus on the console.</p>
-
-</div>
-</div>
-
-
-
             </section>
 
           </div>
         </div>
       </div>
-<a href="background.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="tutorial-format.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
+<a href="data-manipulation.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="dates-and-times.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
 
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/lunr.js"></script>
@@ -226,7 +187,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/ironholds/simpler",
+"link": null,
 "text": null
 },
 "download": null,
