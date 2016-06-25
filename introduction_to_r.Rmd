@@ -81,3 +81,18 @@ Let's step through each of them in turn. Going clockwise, we first have the *con
 And, last but not least down in the bottom left, we have "Files" (which shows your filesystem, so you can find R scripts you've already saved or datasets you want to read in) , "Plots", which will contain any visualisations you generate so that you can prototype them, "Packages", which lists all the R add-ons on your system (and which are loaded), and "Help", which shows any documentation you request.
 
 In practice, another tab will open up when you have an R script open, where the top of "console" is now, and this will contain whatever file(s) you're editing. For now, though, let's focus on the console.
+
+## Tutorial format
+
+From hereonin we're going to be focusing on using R, rather than the history, community and everything else. One approach to teaching a programming language is to step through the different rules in how the language is constructed, what the different keywords are, any strange quirks it has, and all the rest - and this can be really helpful for people who are *already* programmers.
+
+That isn't guaranteed, though, and so the rest of this book is divided up into individual, practical applications of the language, combined with explanations of what's going on in each piece so that you can learn the structure of the language through doing.
+
+So, going forward, you'll see something that looks like the following; I'll introduce a concept, or a step in analysing data, and talk about why it's important. And then, after a colon, because I flagrantly abuse both the colon and semicolon:
+
+```{r, eval=FALSE}
+There'll be a chunk of code, in a shaded box just like this one,
+which will achieve the step I was talking about
+```
+
+After that will be an explanation of that chunk of code, and what each bit is doing and how everything in it works. If you're the sort of person who instead wants to jump into the nitty-gritty of the language, I recommend Hadley Wickham's *[Advanced R Programming](http://adv-r.had.co.nz/Data-structures.html)* (specifically the data structures section) to get a handle for the general workings of R, and then coming back here to learn the applications.

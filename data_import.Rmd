@@ -1,21 +1,4 @@
-# (PART) Data Import and Export {-}
-
-# Tutorial format
-
-From hereonin we're going to be focusing on using R, rather than the history, community and everything else. One approach to teaching a programming language is to step through the different rules in how the language is constructed, what the different keywords are, any strange quirks it has, and all the rest - and this can be really helpful for people who are *already* programmers.
-
-That isn't guaranteed, though, and so the rest of this book is divided up into individual, practical applications of the language, combined with explanations of what's going on in each piece so that you can learn the structure of the language through doing.
-
-So, going forward, you'll see something that looks like the following; I'll introduce a concept, or a step in analysing data, and talk about why it's important. And then, after a colon, because I flagrantly abuse both the colon and semicolon:
-
-```{r, eval=FALSE}
-There'll be a chunk of code, in a shaded box just like this one,
-which will achieve the step I was talking about
-```
-
-After that will be an explanation of that chunk of code, and what each bit is doing and how everything in it works. If you're the sort of person who instead wants to jump into the nitty-gritty of the language, I recommend Hadley Wickham's *[Advanced R Programming](http://adv-r.had.co.nz/Data-structures.html)* (specifically the data structures section) to get a handle for the general workings of R, and then coming back here to learn the applications.
-
-# Reading data from files
+# Data Import and Export
 
 Obviously the first step in data analysis is getting the data, so let's start there! Datasets come in lots of different formats, so we'll cover the ones you most commonly see in a business context, namely:
 
@@ -23,7 +6,7 @@ Obviously the first step in data analysis is getting the data, so let's start th
 2. Microsoft Excel spreadsheets;
 3. MySQL and similar databases.
 
-## CSV & TSV
+## Importing from CSVs
 
 CSVs and TSVs are the most common file format for data, and the good news there is that as a consequence, R has a whole host of tools for reading them in. Let's open by loading one of them: the `readr` add-on I had you install earlier:
 
@@ -163,7 +146,7 @@ So we now know:
 
 Let's move on to everyone's favourite business data format: Microsoft Excel!
 
-## Excel
+## Importing Excel spreadsheets
 
 Microsoft Excel is widely used in a business context, and correspondingly the data it outputs (`.xls` and `.xlsx` files) are widely distributed. We should learn how to read them into R, which is a big step in shifting away from Excel-based workflows and ensures that you can consume data from more traditional sources without running into format incompatibilities.
 
@@ -245,7 +228,7 @@ So now we've learned how to read in Excel files. We've also learned:
 
 There are a few other file types you might encounter. One of the most common is *tab*-separated value files (TSVs); another, less common, is fixed-width files, where there's an arbitrary amount of space between elements on each row to make sure every entry is the same width.
 
-# Reading data from databases
+# Database import
 
 # Exporting data
 A related topic to data import - albeit, one you won't have to use quite yet - is data export. It's pretty common to need to save the results of whatever work you're doing, either so you can pick it up later, hand it off to other people, or use it in other processes.
