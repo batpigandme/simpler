@@ -228,9 +228,9 @@ So now we've learned how to read in Excel files. We've also learned:
 
 There are a few other file types you might encounter. One of the most common is *tab*-separated value files (TSVs); another, less common, is fixed-width files, where there's an arbitrary amount of space between elements on each row to make sure every entry is the same width.
 
-# Database import
+## Database import
 
-# Exporting data
+## Exporting data
 A related topic to data import - albeit, one you won't have to use quite yet - is data export. It's pretty common to need to save the results of whatever work you're doing, either so you can pick it up later, hand it off to other people, or use it in other processes.
 
 There are a couple of ways to do that. If you're saving simple, tabular data - data frames, say - we can use the `readr` package again. As well as `read_csv` and `read_tsv`, there's also `write_csv` and `write_tsv`. :
