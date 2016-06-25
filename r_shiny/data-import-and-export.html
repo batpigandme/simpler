@@ -309,6 +309,77 @@ all_sheets &lt;-<span class="st"> </span><span class="kw">lapply</span>(<span cl
 </div>
 <div id="database-import" class="section level2">
 <h2><span class="header-section-number">3.4</span> Database import</h2>
+<p>To connect to a MySQL database, we’ll use the <code>RMySQL</code> package (as you may be noticing, R package developers <em>love</em> putting the letter R in their package names). As the name suggests, it integrates R with MySQL, providing code that lets you connect to a MySQL database and read data from it, turning that data into a data frame along the way.</p>
+<p>This process actually has quite a few steps: you need to:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Connect to a database</span>
+database_connection &lt;-<span class="st"> </span><span class="kw">dbConnect</span>(RMySQL::<span class="kw">MySQL</span>(), <span class="dt">host =</span> <span class="st">&quot;ensembldb.ensembl.org&quot;</span>, <span class="dt">user =</span> <span class="st">&quot;anonymous&quot;</span>,
+                                 <span class="dt">table =</span> <span class="ot">NULL</span>)
+
+<span class="co"># Send a query</span>
+response &lt;-<span class="st"> </span><span class="kw">dbSendQuery</span>(database_connection, <span class="st">&quot;SHOW DATABASES&quot;</span>)
+
+<span class="co"># Fetch the results of that query</span>
+results &lt;-<span class="st"> </span><span class="kw">dbFetch</span>(response)
+
+<span class="co"># Clear the results on the server end</span>
+<span class="kw">dbClearResult</span>(response)
+
+<span class="co"># Close the connection</span>
+<span class="kw">dbDisconnect</span>(database_connection)
+
+<span class="kw">head</span>(results)
+                  Database
+<span class="dv">1</span>       information_schema
+<span class="dv">2</span> aedes_aegypti_core_48_1b
+<span class="dv">3</span> aedes_aegypti_core_49_1b
+<span class="dv">4</span> aedes_aegypti_core_50_1c
+<span class="dv">5</span> aedes_aegypti_core_51_1c
+<span class="dv">6</span> aedes_aegypti_core_52_1d</code></pre></div>
+<p>That’s complicated, and also a total pain if you have to do it more than once - that’s a lot of code to write out every time, when all you’re really likely to be modifying is the query, or maybe table, for that particular host.</p>
+<p>The good news is that programmers are fundamentally lazy creatures, and so have worked out a way around this: “a pile of code that I keep having to repeat with only minor changes” is exactly what a function is. So now we’re going to learn how to create a function - one with two parameters, <code>database</code> and <code>query</code>, which will handle all of the commands we used above, just modifying <code>database</code> and <code>query</code> to whatever the user calling the function specifies.</p>
+<p>Defining a function, in some ways, looks a lot like defining any other object: you assign the output of a command to a name, it’s just that in this case the “output” is a chunk of code:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">times_two &lt;-<span class="st"> </span>function(x){
+  output &lt;-<span class="st"> </span>x *<span class="st"> </span><span class="dv">2</span>
+  <span class="kw">return</span>(output)
+}
+
+<span class="kw">times_two</span>(<span class="dt">x =</span> <span class="dv">10</span>)
+[<span class="dv">1</span>] <span class="dv">20</span></code></pre></div>
+<p>There are only two new things here: the bit in curly braces is the <code>body</code> of the function - the code that the function contains, that is executed when you call the function. The <code>return</code> statement at the end, which is also new, simply tells the function “and here is the object you give back to the user when you are done”.</p>
+<p>So for database connecting, we need to wrap all the code above in a function that accepts <code>db</code> and <code>query</code> as arguments, and returns the results of the database query. Simple enough:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">query_database &lt;-<span class="st"> </span>function(db, query){
+  
+  <span class="co"># Make a connection</span>
+  database_connection &lt;-<span class="st"> </span><span class="kw">dbConnect</span>(RMySQL::<span class="kw">MySQL</span>(), <span class="dt">host =</span> <span class="st">&quot;ensembldb.ensembl.org&quot;</span>, <span class="dt">user =</span> <span class="st">&quot;anonymous&quot;</span>,
+                                   <span class="dt">db =</span> db)
+
+  <span class="co"># Send a query</span>
+  response &lt;-<span class="st"> </span><span class="kw">dbSendQuery</span>(database_connection, query)
+  
+  <span class="co"># Fetch the results of that query</span>
+  results &lt;-<span class="st"> </span><span class="kw">dbFetch</span>(response)
+  
+  <span class="co"># Clear the results on the server end</span>
+  <span class="kw">dbClearResult</span>(response)
+  
+  <span class="co"># Close the connection</span>
+  <span class="kw">dbDisconnect</span>(database_connection)
+  
+  <span class="co"># Return the results!</span>
+  <span class="kw">return</span>(results)
+}
+
+tables &lt;-<span class="st"> </span><span class="kw">query_database</span>(<span class="dt">db =</span> <span class="st">&quot;aedes_aegypti_core_51_1c&quot;</span>, <span class="dt">query =</span> <span class="st">&quot;SHOW TABLES&quot;</span>)
+<span class="kw">head</span>(tables)
+
+  Tables_in_aedes_aegypti_core_51_1c
+<span class="dv">1</span>                         alt_allele
+<span class="dv">2</span>                           analysis
+<span class="dv">3</span>               analysis_description
+<span class="dv">4</span>                           assembly
+<span class="dv">5</span>                 assembly_exception
+<span class="dv">6</span>                        attrib_type</code></pre></div>
+<p>And we can keep reusing <code>query_database</code> with whatever database (or query!) we want.</p>
 </div>
 <div id="exporting-data" class="section level2">
 <h2><span class="header-section-number">3.5</span> Exporting data</h2>

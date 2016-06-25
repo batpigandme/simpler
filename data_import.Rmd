@@ -230,6 +230,95 @@ There are a few other file types you might encounter. One of the most common is 
 
 ## Database import
 
+To connect to a MySQL database, we'll use the `RMySQL` package (as you may be noticing, R package developers *love* putting the letter R in their package names). As the name suggests, it integrates R with MySQL, providing code that lets you connect to a MySQL database and read data from it, turning that data into a data frame along the way.
+
+This process actually has quite a few steps: you need to:
+
+```{r, eval=FALSE}
+# Connect to a database
+database_connection <- dbConnect(RMySQL::MySQL(), host = "ensembldb.ensembl.org", user = "anonymous",
+                                 table = NULL)
+
+# Send a query
+response <- dbSendQuery(database_connection, "SHOW DATABASES")
+
+# Fetch the results of that query
+results <- dbFetch(response)
+
+# Clear the results on the server end
+dbClearResult(response)
+
+# Close the connection
+dbDisconnect(database_connection)
+
+head(results)
+                  Database
+1       information_schema
+2 aedes_aegypti_core_48_1b
+3 aedes_aegypti_core_49_1b
+4 aedes_aegypti_core_50_1c
+5 aedes_aegypti_core_51_1c
+6 aedes_aegypti_core_52_1d
+```
+
+That's complicated, and also a total pain if you have to do it more than once - that's a lot of code to write out every time, when all you're really likely to be modifying is the query, or maybe table, for that particular host.
+
+The good news is that programmers are fundamentally lazy creatures, and so have worked out a way around this: "a pile of code that I keep having to repeat with only minor changes" is exactly what a function is. So now we're going to learn how to create a function - one with two parameters, `database` and `query`, which will handle all of the commands we used above, just modifying `database` and `query` to whatever the user calling the function specifies.
+
+Defining a function, in some ways, looks a lot like defining any other object: you assign the output of a command to a name, it's just that in this case the "output" is a chunk of code:
+
+```{r, eval=FALSE}
+times_two <- function(x){
+  output <- x * 2
+  return(output)
+}
+
+times_two(x = 10)
+[1] 20
+```
+
+There are only two new things here: the bit in curly braces is the `body` of the function - the code that the function contains, that is executed when you call the function. The `return` statement at the end, which is also new, simply tells the function "and here is the object you give back to the user when you are done".
+
+So for database connecting, we need to wrap all the code above in a function that accepts `db` and `query` as arguments, and returns the results of the database query. Simple enough:
+
+```{r, eval=FALSE}
+
+query_database <- function(db, query){
+  
+  # Make a connection
+  database_connection <- dbConnect(RMySQL::MySQL(), host = "ensembldb.ensembl.org", user = "anonymous",
+                                   db = db)
+
+  # Send a query
+  response <- dbSendQuery(database_connection, query)
+  
+  # Fetch the results of that query
+  results <- dbFetch(response)
+  
+  # Clear the results on the server end
+  dbClearResult(response)
+  
+  # Close the connection
+  dbDisconnect(database_connection)
+  
+  # Return the results!
+  return(results)
+}
+
+tables <- query_database(db = "aedes_aegypti_core_51_1c", query = "SHOW TABLES")
+head(tables)
+
+  Tables_in_aedes_aegypti_core_51_1c
+1                         alt_allele
+2                           analysis
+3               analysis_description
+4                           assembly
+5                 assembly_exception
+6                        attrib_type
+```
+
+And we can keep reusing `query_database` with whatever database (or query!) we want.
+
 ## Exporting data
 A related topic to data import - albeit, one you won't have to use quite yet - is data export. It's pretty common to need to save the results of whatever work you're doing, either so you can pick it up later, hand it off to other people, or use it in other processes.
 
