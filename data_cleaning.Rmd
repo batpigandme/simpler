@@ -14,6 +14,13 @@ We'll use the original patient dataset as an example. Let's take a look at it:
 patient_data <- read_csv(file = "https://www.ironholds.org/resources/misc/patient_data.csv")
 head(patient_data)
 
+  year facility_number                  facility type_of_control age_group admitted released
+1 2009          010735 ALAMEDA HOSPITAL, ALAMEDA        District     10-19       62        2
+2 2009          010735 ALAMEDA HOSPITAL, ALAMEDA        District     20-29      124       63
+3 2009          010735 ALAMEDA HOSPITAL, ALAMEDA        District     30-39      140       67
+4 2009          010735 ALAMEDA HOSPITAL, ALAMEDA        District     40-49      243      122
+5 2009          010735 ALAMEDA HOSPITAL, ALAMEDA        District     50-59      411      172
+6 2009          010735 ALAMEDA HOSPITAL, ALAMEDA        District     60-69      415      343
 ```
 
 There are a few ways in which this data is 'untidy'. First-off, the facility and facility *location* are in the same column - we might want to have them as different fields. Second, we've got multiple types of data (patient admissions, and patient releases) in different columns. This is good for some operations, like calculating percentages, but can be a tremendous pain with others. We may need to tidy the data, perform operations on it, untidy it for others, and then back again.
@@ -23,26 +30,59 @@ So we want to be able to split a column, merge patient admissions and patient re
 First: column-splitting. We've got that `facility` field, containing both the facility name and location, and we want two columns (`facility_name` and `facility_location`). For that we can use the `separate` function from `tidyr`, which does just that: separates the contents of a specified column, based on a user-defined separator, into multiple new columns (with user-specified names). Let's use it now:
 
 ```{r, eval=FALSE}
-head(patient_data)
+library(tidyr)
 
 patient_data <- separate(data = patient_data, col = facility, into = c("facility_name", "facility_location"),
                          sep = ", ")
 
 head(patient_data)
+
+   year facility_number    facility_name facility_location type_of_control age_group admitted released
+  <int>           <chr>            <chr>             <chr>           <chr>     <chr>    <int>    <int>
+1  2009          010735 ALAMEDA HOSPITAL           ALAMEDA        District     10-19       62        2
+2  2009          010735 ALAMEDA HOSPITAL           ALAMEDA        District     20-29      124       63
+3  2009          010735 ALAMEDA HOSPITAL           ALAMEDA        District     30-39      140       67
+4  2009          010735 ALAMEDA HOSPITAL           ALAMEDA        District     40-49      243      122
+5  2009          010735 ALAMEDA HOSPITAL           ALAMEDA        District     50-59      411      172
+6  2009          010735 ALAMEDA HOSPITAL           ALAMEDA        District     60-69      415      343
 ```
 
 We've split `facility` into `facility_name` and `facility_location`. Pretty neat! Still leaves us with what to do about the multiple value columns, though. The answer comes in the form of `gather`, another tidyr function, which takes a data frame, the names to give the key and value columns, and columns to treat as `id` columns that aren't touched. It then splits the rest:
 
 ```{r, eval=FALSE}
-head(patient_data)
 
-patient_data <- gather(data = data, key = "type", value = "count")
+patient_data <- gather(data = patient_data, key = "type", value = "count", admitted, released)
 
 head(patient_data)
+   year facility_number    facility_name facility_location type_of_control age_group     type count
+  <int>           <chr>            <chr>             <chr>           <chr>     <chr>    <chr> <int>
+1  2009          010735 ALAMEDA HOSPITAL           ALAMEDA        District     10-19 admitted    62
+2  2009          010735 ALAMEDA HOSPITAL           ALAMEDA        District     20-29 admitted   124
+3  2009          010735 ALAMEDA HOSPITAL           ALAMEDA        District     30-39 admitted   140
+4  2009          010735 ALAMEDA HOSPITAL           ALAMEDA        District     40-49 admitted   243
+5  2009          010735 ALAMEDA HOSPITAL           ALAMEDA        District     50-59 admitted   411
+6  2009          010735 ALAMEDA HOSPITAL           ALAMEDA        District     60-69 admitted   415
 ```
 
 If we want to reverse that operation, we can use `spread`:
 
+```{r, eval=FALSE}
+
+patient_data <- spread(data = patient_data, key = type, value = count)
+
+head(patient_data)
+
+   year facility_number    facility_name facility_location type_of_control age_group admitted released
+  <int>           <chr>            <chr>             <chr>           <chr>     <chr>    <int>    <int>
+1  2009          010735 ALAMEDA HOSPITAL           ALAMEDA        District     10-19       62        2
+2  2009          010735 ALAMEDA HOSPITAL           ALAMEDA        District     20-29      124       63
+3  2009          010735 ALAMEDA HOSPITAL           ALAMEDA        District     30-39      140       67
+4  2009          010735 ALAMEDA HOSPITAL           ALAMEDA        District     40-49      243      122
+5  2009          010735 ALAMEDA HOSPITAL           ALAMEDA        District     50-59      411      172
+6  2009          010735 ALAMEDA HOSPITAL           ALAMEDA        District     60-69      415      343
+```
+
+...and at that point, we're right back where we started!
 
 # Data manipulation
 
