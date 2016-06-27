@@ -134,4 +134,4 @@ head(facility_admission_average)
 6  2014          350.0652
 ```
 
-And just like that we've gone from raw data to averaged hospital admissions, by year, for a particular age group - although we probably should have rounded the results. I'm not sure if you can admit half a patient; certainly without a rather grim prognosis and, in the event that they survive, medical bills that cost an arm and a leg.
+And just like that we've gone from raw data to averaged hospital admissions, by year, for a particular age group - although we probably should have rounded the results. I'm not sure if you can admit half a patient; certainly not without a rather grim prognosis and, in the event that they survive, medical bills that cost an arm and a leg.
