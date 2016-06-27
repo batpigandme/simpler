@@ -1,5 +1,5 @@
 book_filename: "simpler"
 chapter_name: ""
-rmd_files: ["index.Rmd", "introduction_to_r.Rmd", "data_import.Rmd",
+rmd_files: ["index.Rmd", "introduction_to_r.Rmd", "exploration.Rmd", "data_import.Rmd",
             "data_cleaning.Rmd", "shiny.Rmd", "advanced.Rmd"]
 output_dir: "r_shiny"

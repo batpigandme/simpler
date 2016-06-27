@@ -107,7 +107,7 @@ patient_data_counts <- patient_data$count
 
 Individual elements of a vector can be accessed using `vectorname[n]`, where `n` is the Nth element. So if you want the fifth element from `some_vector`: `some_vector[5]`.
 
-We can add new vectors to data frames using a technique similar to how we modified them, and take advantage of a feature of R called "vectorisation". The easiest way to think about it is Excel-related. You have your Excel spreadsheet, and you create a formula in one cell to add up all the values in that row. You want to do that for every row, so you drag the formula down the column and it copies the formula out, ending up with something like:
+We can add new vectors to data frames using a technique that is similar to the one we used to modify them. We can also take advantage of a feature of R called "vectorisation", which is most-easily thought about with an Excel analogy. You have your Excel spreadsheet, and you create a formula in one cell to add up all the values in that row. You want to do that for every row, so you drag the formula down the column and it copies the formula out, ending up with something like:
 
 ```
 A1 + A2
@@ -150,7 +150,7 @@ Let's move on to everyone's favourite business data format: Microsoft Excel!
 
 Microsoft Excel is widely used in a business context, and correspondingly the data it outputs (`.xls` and `.xlsx` files) are widely distributed. We should learn how to read them into R, which is a big step in shifting away from Excel-based workflows and ensures that you can consume data from more traditional sources without running into format incompatibilities.
 
-For this we'll need another R package, `readxl`, which does just that - reads in Excel files. Let's load it and read in a file that the package ships with (which we can find with the `system.file` function):
+For this we'll need another R package, `readxl`, which does just that - reads in Excel files. Let's load it and read in a file that the package comes with (which we can find with the `system.file` function):
 
 ```{r, eval=FALSE}
 library(readxl)
@@ -166,13 +166,13 @@ head(excel_data)
 6          5.4         3.9          1.7         0.4  setosa
 ```
 
-It's another data frame - as expected, since excel spreadsheets are tabular just like CSV files are. One important note - Excel spreadsheets can contain multiple sheets, *each* of them a table. How do we handle that?
+It's another data frame - as expected, since Excel spreadsheets are tabular just like CSV files are. One important note - Excel spreadsheets can contain multiple sheets, *each* of them a table. How do we handle that?
 
 If you look at the documentation for `read_excel`, you'll see a `sheet` argument, which you can use to specify which sheet to read in. The `excel_sheets` function, meanwhile, gets you how many sheets an Excel file has. So we can combine them to work out how many sheets we're looking at, and then read in that many.
 
 But what happens when you have to write code that reads in a variety of different files, some with different numbers of sheets? How do we write code that doesn't mind how many sheets there are? How do we store the results of that code?
 
-A few new concepts and pieces of R, for this question. First-off is how we're going to store the results. We're looking at an unknown number of sheets, which means an unknown number of data frames. Luckily, data frames can be stored as components of a single object, just like vectors are components of data frames. That means instead of having an unknown number of objects, we just have one.
+A few new concepts and pieces of R, for these questions. First-off is how we're going to store the results. We're looking at an unknown number of sheets, which means an unknown number of data frames. Luckily, data frames can be stored as components of a single object, just like vectors are components of data frames. That means instead of having an unknown number of objects, we just have one.
 
 For that kind of storage, we're going to introduce a new object type in R: `lists`. Lists can have any length you want, and contain pretty much any object you want, too, which makes them extremely powerful. You can construct and use them with, or without names.
 

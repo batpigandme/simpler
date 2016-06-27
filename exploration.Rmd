@@ -1,0 +1,11 @@
+# Exploratory Data Analysis
+
+So you've got your dataset and read it in. Great! But is it what you expect it to be?
+
+A key stage in data processing and analysis is Exploratory Data Analysis, or EDA. This is where you're tinkering with the data not with a specific goal in mind, but simply to ensure that it's what you're looking for, that it's formatted nicely enough for further analysis, and to understand what kinds of analysis you can actually do with it.
+
+This part of the guide will cover EDA, with the goal of teaching you some convenient shorthands to identify when data is corrupt or badly formatted. What precisely to do about that is covered in the next part, which is about [data cleaning and manipulation](cleaning-and-manipulating-data.html).
+
+## Dataset metadata
+
+## Individual values
