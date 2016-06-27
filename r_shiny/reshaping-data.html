@@ -32,7 +32,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="data-import-and-export.html">
+<link rel="prev" href="dates-and-times.html">
 <link rel="next" href="data-manipulation.html">
 
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
@@ -119,10 +119,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="3.5" data-path="data-import-and-export.html"><a href="data-import-and-export.html#exporting-data"><i class="fa fa-check"></i><b>3.5</b> Exporting data</a></li>
 </ul></li>
 <li class="part"><span><b>Cleaning Data</b></span></li>
-<li class="chapter" data-level="4" data-path="reshaping-data.html"><a href="reshaping-data.html"><i class="fa fa-check"></i><b>4</b> Reshaping data</a></li>
-<li class="chapter" data-level="5" data-path="data-manipulation.html"><a href="data-manipulation.html"><i class="fa fa-check"></i><b>5</b> Data manipulation</a></li>
-<li class="chapter" data-level="6" data-path="text-cleaning.html"><a href="text-cleaning.html"><i class="fa fa-check"></i><b>6</b> Text-cleaning</a></li>
-<li class="chapter" data-level="7" data-path="dates-and-times.html"><a href="dates-and-times.html"><i class="fa fa-check"></i><b>7</b> Dates and times</a></li>
+<li class="chapter" data-level="4" data-path="text-cleaning.html"><a href="text-cleaning.html"><i class="fa fa-check"></i><b>4</b> Text-cleaning</a></li>
+<li class="chapter" data-level="5" data-path="dates-and-times.html"><a href="dates-and-times.html"><i class="fa fa-check"></i><b>5</b> Dates and times</a></li>
+<li class="chapter" data-level="6" data-path="reshaping-data.html"><a href="reshaping-data.html"><i class="fa fa-check"></i><b>6</b> Reshaping data</a></li>
+<li class="chapter" data-level="7" data-path="data-manipulation.html"><a href="data-manipulation.html"><i class="fa fa-check"></i><b>7</b> Data manipulation</a></li>
 <li class="part"><span><b>Shiny</b></span></li>
 <li class="chapter" data-level="8" data-path="building-your-first-app.html"><a href="building-your-first-app.html"><i class="fa fa-check"></i><b>8</b> Building your first app</a></li>
 <li class="chapter" data-level="9" data-path="user-interface-design.html"><a href="user-interface-design.html"><i class="fa fa-check"></i><b>9</b> User Interface design</a></li>
@@ -151,10 +151,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
             <section class="normal" id="section-">
 <div id="reshaping-data" class="section level1">
-<h1><span class="header-section-number">4</span> Reshaping data</h1>
-<p>So we’ve got our data read in. From a database, from an Excel file, from a CSV - wherever it came from, we have it. Then what?</p>
-<p>The answer is usually data cleaning. People tend to act as if analysis is 50% studious statistical testing and 50% visualisation and reporting, but this is a damned dirty lie. In practice, it’s 80% cleaning the data so it will work, 20% statistics, and a further 20% visualisation - summing to over 100 because you didn’t realise <em>quite</em> how much of a pain the cleaning would be.</p>
-<p>One essential part of that cleaning is or reshaping, the actual structure of your data. Sometimes as researchers we are lucky enough to have data that looks exactly like what we want. Every row is a single observation. Every column contains one, and just one, thing we care about. This is referred to as <em>tidy data</em> (a concept you can read more about <a href="http://vita.had.co.nz/papers/tidy-data.html">here</a>).</p>
+<h1><span class="header-section-number">6</span> Reshaping data</h1>
+<p>One essential part of data cleaning is reshaping the actual structure of your data. Sometimes as researchers we are lucky enough to have data that looks exactly like what we want. Every row is a single observation. Every column contains one, and just one, thing we care about. This is referred to as <em>tidy data</em> (a concept you can read more about <a href="http://vita.had.co.nz/papers/tidy-data.html">here</a>).</p>
 <p>We’ll use the original patient dataset as an example. Let’s take a look at it:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">patient_data &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="dt">file =</span> <span class="st">&quot;https://www.ironholds.org/resources/misc/patient_data.csv&quot;</span>)
 <span class="kw">head</span>(patient_data)
@@ -171,10 +169,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>First: column-splitting. We’ve got that <code>facility</code> field, containing both the facility name and location, and we want two columns (<code>facility_name</code> and <code>facility_location</code>). For that we can use the <code>separate</code> function from <code>tidyr</code>, which does just that: separates the contents of a specified column, based on a user-defined separator, into multiple new columns (with user-specified names). Let’s use it now:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyr)
 
-patient_data &lt;-<span class="st"> </span><span class="kw">separate</span>(<span class="dt">data =</span> patient_data, <span class="dt">col =</span> facility, <span class="dt">into =</span> <span class="kw">c</span>(<span class="st">&quot;facility_name&quot;</span>, <span class="st">&quot;facility_location&quot;</span>),
-                         <span class="dt">sep =</span> <span class="st">&quot;, &quot;</span>)
+split_data &lt;-<span class="st"> </span><span class="kw">separate</span>(<span class="dt">data =</span> patient_data, <span class="dt">col =</span> facility, <span class="dt">into =</span> <span class="kw">c</span>(<span class="st">&quot;facility_name&quot;</span>, <span class="st">&quot;facility_location&quot;</span>),
+                       <span class="dt">sep =</span> <span class="st">&quot;, &quot;</span>)
 
-<span class="kw">head</span>(patient_data)
+<span class="kw">head</span>(split_data)
 
    year facility_number    facility_name facility_location type_of_control age_group admitted released
   &lt;int&gt;<span class="st">           </span><span class="er">&lt;</span>chr&gt;<span class="st">            </span><span class="er">&lt;</span>chr&gt;<span class="st">             </span><span class="er">&lt;</span>chr&gt;<span class="st">           </span><span class="er">&lt;</span>chr&gt;<span class="st">     </span><span class="er">&lt;</span>chr&gt;<span class="st">    </span><span class="er">&lt;</span>int&gt;<span class="st">    </span><span class="er">&lt;</span>int&gt;
@@ -185,9 +183,9 @@ patient_data &lt;-<span class="st"> </span><span class="kw">separate</span>(<spa
 <span class="dv">5</span>  <span class="dv">2009</span>          <span class="dv">010735</span> ALAMEDA HOSPITAL           ALAMEDA        District     <span class="dv">50-59</span>      <span class="dv">411</span>      <span class="dv">172</span>
 <span class="dv">6</span>  <span class="dv">2009</span>          <span class="dv">010735</span> ALAMEDA HOSPITAL           ALAMEDA        District     <span class="dv">60-69</span>      <span class="dv">415</span>      <span class="dv">343</span></code></pre></div>
 <p>We’ve split <code>facility</code> into <code>facility_name</code> and <code>facility_location</code>. Pretty neat! Still leaves us with what to do about the multiple value columns, though. The answer comes in the form of <code>gather</code>, another tidyr function, which takes a data frame, the names to give the key and value columns, and columns to treat as <code>id</code> columns that aren’t touched. It then splits the rest:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">patient_data &lt;-<span class="st"> </span><span class="kw">gather</span>(<span class="dt">data =</span> patient_data, <span class="dt">key =</span> <span class="st">&quot;type&quot;</span>, <span class="dt">value =</span> <span class="st">&quot;count&quot;</span>, admitted, released)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gathered_data &lt;-<span class="st"> </span><span class="kw">gather</span>(<span class="dt">data =</span> split_data, <span class="dt">key =</span> <span class="st">&quot;type&quot;</span>, <span class="dt">value =</span> <span class="st">&quot;count&quot;</span>, admitted, released)
 
-<span class="kw">head</span>(patient_data)
+<span class="kw">head</span>(gathered_data)
    year facility_number    facility_name facility_location type_of_control age_group     type count
   &lt;int&gt;<span class="st">           </span><span class="er">&lt;</span>chr&gt;<span class="st">            </span><span class="er">&lt;</span>chr&gt;<span class="st">             </span><span class="er">&lt;</span>chr&gt;<span class="st">           </span><span class="er">&lt;</span>chr&gt;<span class="st">     </span><span class="er">&lt;</span>chr&gt;<span class="st">    </span><span class="er">&lt;</span>chr&gt;<span class="st"> </span><span class="er">&lt;</span>int&gt;
 <span class="dv">1</span>  <span class="dv">2009</span>          <span class="dv">010735</span> ALAMEDA HOSPITAL           ALAMEDA        District     <span class="dv">10-19</span> admitted    <span class="dv">62</span>
@@ -197,9 +195,9 @@ patient_data &lt;-<span class="st"> </span><span class="kw">separate</span>(<spa
 <span class="dv">5</span>  <span class="dv">2009</span>          <span class="dv">010735</span> ALAMEDA HOSPITAL           ALAMEDA        District     <span class="dv">50-59</span> admitted   <span class="dv">411</span>
 <span class="dv">6</span>  <span class="dv">2009</span>          <span class="dv">010735</span> ALAMEDA HOSPITAL           ALAMEDA        District     <span class="dv">60-69</span> admitted   <span class="dv">415</span></code></pre></div>
 <p>If we want to reverse that operation, we can use <code>spread</code>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">patient_data &lt;-<span class="st"> </span><span class="kw">spread</span>(<span class="dt">data =</span> patient_data, <span class="dt">key =</span> type, <span class="dt">value =</span> count)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">spread_data &lt;-<span class="st"> </span><span class="kw">spread</span>(<span class="dt">data =</span> gathered_data, <span class="dt">key =</span> type, <span class="dt">value =</span> count)
 
-<span class="kw">head</span>(patient_data)
+<span class="kw">head</span>(spread_data)
 
    year facility_number    facility_name facility_location type_of_control age_group admitted released
   &lt;int&gt;<span class="st">           </span><span class="er">&lt;</span>chr&gt;<span class="st">            </span><span class="er">&lt;</span>chr&gt;<span class="st">             </span><span class="er">&lt;</span>chr&gt;<span class="st">           </span><span class="er">&lt;</span>chr&gt;<span class="st">     </span><span class="er">&lt;</span>chr&gt;<span class="st">    </span><span class="er">&lt;</span>int&gt;<span class="st">    </span><span class="er">&lt;</span>int&gt;
@@ -209,14 +207,14 @@ patient_data &lt;-<span class="st"> </span><span class="kw">separate</span>(<spa
 <span class="dv">4</span>  <span class="dv">2009</span>          <span class="dv">010735</span> ALAMEDA HOSPITAL           ALAMEDA        District     <span class="dv">40-49</span>      <span class="dv">243</span>      <span class="dv">122</span>
 <span class="dv">5</span>  <span class="dv">2009</span>          <span class="dv">010735</span> ALAMEDA HOSPITAL           ALAMEDA        District     <span class="dv">50-59</span>      <span class="dv">411</span>      <span class="dv">172</span>
 <span class="dv">6</span>  <span class="dv">2009</span>          <span class="dv">010735</span> ALAMEDA HOSPITAL           ALAMEDA        District     <span class="dv">60-69</span>      <span class="dv">415</span>      <span class="dv">343</span></code></pre></div>
-<p>…and at that point, we’re right back where we started!</p>
+<p>…and at that point, we’re right back where we started.</p>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="data-import-and-export.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="dates-and-times.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 <a href="data-manipulation.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
 
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

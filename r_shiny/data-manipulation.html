@@ -33,7 +33,7 @@
   
   
 <link rel="prev" href="reshaping-data.html">
-<link rel="next" href="text-cleaning.html">
+<link rel="next" href="building-your-first-app.html">
 
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -119,10 +119,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="3.5" data-path="data-import-and-export.html"><a href="data-import-and-export.html#exporting-data"><i class="fa fa-check"></i><b>3.5</b> Exporting data</a></li>
 </ul></li>
 <li class="part"><span><b>Cleaning Data</b></span></li>
-<li class="chapter" data-level="4" data-path="reshaping-data.html"><a href="reshaping-data.html"><i class="fa fa-check"></i><b>4</b> Reshaping data</a></li>
-<li class="chapter" data-level="5" data-path="data-manipulation.html"><a href="data-manipulation.html"><i class="fa fa-check"></i><b>5</b> Data manipulation</a></li>
-<li class="chapter" data-level="6" data-path="text-cleaning.html"><a href="text-cleaning.html"><i class="fa fa-check"></i><b>6</b> Text-cleaning</a></li>
-<li class="chapter" data-level="7" data-path="dates-and-times.html"><a href="dates-and-times.html"><i class="fa fa-check"></i><b>7</b> Dates and times</a></li>
+<li class="chapter" data-level="4" data-path="text-cleaning.html"><a href="text-cleaning.html"><i class="fa fa-check"></i><b>4</b> Text-cleaning</a></li>
+<li class="chapter" data-level="5" data-path="dates-and-times.html"><a href="dates-and-times.html"><i class="fa fa-check"></i><b>5</b> Dates and times</a></li>
+<li class="chapter" data-level="6" data-path="reshaping-data.html"><a href="reshaping-data.html"><i class="fa fa-check"></i><b>6</b> Reshaping data</a></li>
+<li class="chapter" data-level="7" data-path="data-manipulation.html"><a href="data-manipulation.html"><i class="fa fa-check"></i><b>7</b> Data manipulation</a></li>
 <li class="part"><span><b>Shiny</b></span></li>
 <li class="chapter" data-level="8" data-path="building-your-first-app.html"><a href="building-your-first-app.html"><i class="fa fa-check"></i><b>8</b> Building your first app</a></li>
 <li class="chapter" data-level="9" data-path="user-interface-design.html"><a href="user-interface-design.html"><i class="fa fa-check"></i><b>9</b> User Interface design</a></li>
@@ -151,15 +151,49 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
             <section class="normal" id="section-">
 <div id="data-manipulation" class="section level1">
-<h1><span class="header-section-number">5</span> Data manipulation</h1>
+<h1><span class="header-section-number">7</span> Data manipulation</h1>
+<p>Beyond tidying data, another common need is to aggregate it. Raw data, split by as many variables as possible, gives us the widest possible amount of information, but that doesn’t mean it’s easy to visualise (<code>patient_data</code> has 23,578 observations, for example. Nobody wants a 23,000 point graphic) or understand.</p>
+<p>Data manipulation is the practice of reshaping, aggregating or splitting data to make it easier to use for a particular task. If you’re exploring data, that might look like aggregating it at a very high level to get a general feel for what things look like. If you’re visualising it, that might look like calculating particular metrics for entire groups of observations, and getting a data frame out at the end you can turn into a graph. In these cases, and a wide range of other cases, the answer is another R package: <code>dplyr</code>.</p>
+<p><code>dplyr</code> provides a “grammar” of data manipulation: a set of functions that can be strung together into almost a sentence that describes what’s being done to the data. For example, if we wanted to summarise, for each facility, the number of admitted patients in the 10-19 age group, we would <code>filter</code> the dataset to 10-19, <code>group</code> the entries by facility name, and <code>summarize</code> the dataset to get the mean.</p>
+<p>This language-like construct is aided by a new operator that we’ll introduce: <code>%&gt;%</code>, or the “pipe” operator. Normally, R consists of a series of statements with assignment operations in them:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">start_data &lt;-<span class="st"> &quot;foo&quot;</span>
+result_of_first_step &lt;-<span class="st"> </span><span class="kw">do_thing</span>(start_data)
+result_of_second_step &lt;-<span class="st"> </span><span class="kw">do_second_thing</span>(result_of_first_step)
+final_result &lt;-<span class="st"> </span><span class="kw">do_third_thing</span>(result_of_second_step)</code></pre></div>
+<p>The pipe operator lets us “chain” operations together. If you put pipe operatiors between function calls, it will automatically pass the result of the first call into the second, and second to the third, and so on until it runs out of pipe operators (and function calls) and returns the result. This means instead of assigning things 3 times for 3 operations, we assign things..once:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">start_data &lt;-<span class="st"> &quot;foo&quot;</span>
+final_result &lt;-<span class="st"> </span><span class="kw">do_thing</span>(start_data) %&gt;%
+<span class="st">                  </span>do_second_thing %&gt;%
+<span class="st">                  </span>do_third_thing</code></pre></div>
+<p>The code is much cleaner and much easier to read, and when you add the “language”-like aspect of dplyr and tidyr in, it becomes almost a sentence. Let’s demonstrate by taking the patient data dataset, and then working out the average number of 10-19 year olds admitted to facilities a year:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">facility_admission_average &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="dt">file =</span> <span class="st">&quot;https://www.ironholds.org/resources/misc/patient_data.csv&quot;</span>) %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(age_group ==<span class="st"> &quot;10-19&quot;</span>) %&gt;%
+<span class="st">  </span><span class="kw">group_by</span>(year) %&gt;%
+<span class="st">  </span><span class="kw">summarise</span>(<span class="dt">admission_average =</span> <span class="kw">mean</span>(admitted))
+
+<span class="kw">head</span>(facility_admission_average)
+
+   year admission_average
+  &lt;int&gt;<span class="st">             </span><span class="er">&lt;</span>dbl&gt;
+<span class="dv">1</span>  <span class="dv">2009</span>          <span class="fl">418.5859</span>
+<span class="dv">2</span>  <span class="dv">2010</span>          <span class="fl">407.1007</span>
+<span class="dv">3</span>  <span class="dv">2011</span>          <span class="fl">390.5659</span>
+<span class="dv">4</span>  <span class="dv">2012</span>          <span class="fl">378.8952</span>
+<span class="dv">5</span>  <span class="dv">2013</span>          <span class="fl">356.8860</span>
+<span class="dv">6</span>  <span class="dv">2014</span>          <span class="fl">350.0652</span></code></pre></div>
+<p>And just like that we’ve gone from raw data to averaged hospital admissions, by year, for a particular age group - although we probably should have rounded the results. I’m not sure if you can admit half a patient. Certainly not without a rather grim prognosis.</p>
+
 </div>
+
+
+
             </section>
 
           </div>
         </div>
       </div>
 <a href="reshaping-data.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="text-cleaning.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
+<a href="building-your-first-app.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
 
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/lunr.js"></script>

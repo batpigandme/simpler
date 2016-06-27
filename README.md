@@ -12,12 +12,4 @@ It contains:
 5. Shiny as a data visualisation platform;
 6. Miscellaneous more-advanced tips and tricks on running Shiny in a reliable manner.
 
-If you're interested in using or republishing it yourself, the source code can be found [here](https://github.com/Ironholds/simpler); simply download it, navigate to the directory,
-and run:
-
-```{r,eval=FALSE}
-devtools::install_github('jbryer/Rgitbook')
-library(Rgitbook)
-buildGitbook()
-openGitbook()
-```
+If you're interested in using or republishing it yourself, the source code can be found [here](https://github.com/Ironholds/simpler); simply download it, navigate to the r_shiny directory, and you'll find a perfectly web-formatted booklike structure!

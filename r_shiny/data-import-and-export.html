@@ -33,7 +33,7 @@
   
   
 <link rel="prev" href="getting-set-up.html">
-<link rel="next" href="reshaping-data.html">
+<link rel="next" href="text-cleaning.html">
 
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -119,10 +119,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="3.5" data-path="data-import-and-export.html"><a href="data-import-and-export.html#exporting-data"><i class="fa fa-check"></i><b>3.5</b> Exporting data</a></li>
 </ul></li>
 <li class="part"><span><b>Cleaning Data</b></span></li>
-<li class="chapter" data-level="4" data-path="reshaping-data.html"><a href="reshaping-data.html"><i class="fa fa-check"></i><b>4</b> Reshaping data</a></li>
-<li class="chapter" data-level="5" data-path="data-manipulation.html"><a href="data-manipulation.html"><i class="fa fa-check"></i><b>5</b> Data manipulation</a></li>
-<li class="chapter" data-level="6" data-path="text-cleaning.html"><a href="text-cleaning.html"><i class="fa fa-check"></i><b>6</b> Text-cleaning</a></li>
-<li class="chapter" data-level="7" data-path="dates-and-times.html"><a href="dates-and-times.html"><i class="fa fa-check"></i><b>7</b> Dates and times</a></li>
+<li class="chapter" data-level="4" data-path="text-cleaning.html"><a href="text-cleaning.html"><i class="fa fa-check"></i><b>4</b> Text-cleaning</a></li>
+<li class="chapter" data-level="5" data-path="dates-and-times.html"><a href="dates-and-times.html"><i class="fa fa-check"></i><b>5</b> Dates and times</a></li>
+<li class="chapter" data-level="6" data-path="reshaping-data.html"><a href="reshaping-data.html"><i class="fa fa-check"></i><b>6</b> Reshaping data</a></li>
+<li class="chapter" data-level="7" data-path="data-manipulation.html"><a href="data-manipulation.html"><i class="fa fa-check"></i><b>7</b> Data manipulation</a></li>
 <li class="part"><span><b>Shiny</b></span></li>
 <li class="chapter" data-level="8" data-path="building-your-first-app.html"><a href="building-your-first-app.html"><i class="fa fa-check"></i><b>8</b> Building your first app</a></li>
 <li class="chapter" data-level="9" data-path="user-interface-design.html"><a href="user-interface-design.html"><i class="fa fa-check"></i><b>9</b> User Interface design</a></li>
@@ -346,7 +346,7 @@ results &lt;-<span class="st"> </span><span class="kw">dbFetch</span>(response)
 <span class="kw">times_two</span>(<span class="dt">x =</span> <span class="dv">10</span>)
 [<span class="dv">1</span>] <span class="dv">20</span></code></pre></div>
 <p>There are only two new things here: the bit in curly braces is the <code>body</code> of the function - the code that the function contains, that is executed when you call the function. The <code>return</code> statement at the end, which is also new, simply tells the function “and here is the object you give back to the user when you are done”.</p>
-<p>So for database connecting, we need to wrap all the code above in a function that accepts <code>db</code> and <code>query</code> as arguments, and returns the results of the database query. Simple enough:</p>
+<p>So for database connecting, we need to wrap all the code we used in the database example into a function that accepts <code>db</code> and <code>query</code> as arguments, and returns the results of the database query. Simple enough:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">query_database &lt;-<span class="st"> </span>function(db, query){
   
   <span class="co"># Make a connection</span>
@@ -401,13 +401,15 @@ a_vector &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv
 
 
 
+<p>The answer is usually data cleaning. People tend to act as if analysis is 50% studious statistical testing and 50% visualisation and reporting, but this is a damned dirty lie. In practice, it’s 80% cleaning the data so it will work, 20% statistics, and a further 20% visualisation - summing to over 100 because you didn’t realise <em>quite</em> how much of a pain the cleaning would be.</p>
+</div>
             </section>
 
           </div>
         </div>
       </div>
 <a href="getting-set-up.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="reshaping-data.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
+<a href="text-cleaning.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
 
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/lunr.js"></script>

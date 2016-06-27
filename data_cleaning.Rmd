@@ -1,12 +1,16 @@
 # (PART) Cleaning Data {-}
 
-# Reshaping data
-
 So we've got our data read in. From a database, from an Excel file, from a CSV - wherever it came from, we have it. Then what?
 
 The answer is usually data cleaning. People tend to act as if analysis is 50% studious statistical testing and 50% visualisation and reporting, but this is a damned dirty lie. In practice, it's 80% cleaning the data so it will work, 20% statistics, and a further 20% visualisation - summing to over 100 because you didn't realise *quite* how much of a pain the cleaning would be.
 
-One essential part of that cleaning is or reshaping, the actual structure of your data. Sometimes as researchers we are lucky enough to have data that looks exactly like what we want. Every row is a single observation. Every column contains one, and just one, thing we care about. This is referred to as *tidy data* (a concept you can read more about [here](http://vita.had.co.nz/papers/tidy-data.html)).
+# Text-cleaning
+
+# Dates and times
+
+# Reshaping data
+
+One essential part of data cleaning is reshaping the actual structure of your data. Sometimes as researchers we are lucky enough to have data that looks exactly like what we want. Every row is a single observation. Every column contains one, and just one, thing we care about. This is referred to as *tidy data* (a concept you can read more about [here](http://vita.had.co.nz/papers/tidy-data.html)).
 
 We'll use the original patient dataset as an example. Let's take a look at it:
 
@@ -32,10 +36,10 @@ First: column-splitting. We've got that `facility` field, containing both the fa
 ```{r, eval=FALSE}
 library(tidyr)
 
-patient_data <- separate(data = patient_data, col = facility, into = c("facility_name", "facility_location"),
-                         sep = ", ")
+split_data <- separate(data = patient_data, col = facility, into = c("facility_name", "facility_location"),
+                       sep = ", ")
 
-head(patient_data)
+head(split_data)
 
    year facility_number    facility_name facility_location type_of_control age_group admitted released
   <int>           <chr>            <chr>             <chr>           <chr>     <chr>    <int>    <int>
@@ -51,9 +55,9 @@ We've split `facility` into `facility_name` and `facility_location`. Pretty neat
 
 ```{r, eval=FALSE}
 
-patient_data <- gather(data = patient_data, key = "type", value = "count", admitted, released)
+gathered_data <- gather(data = split_data, key = "type", value = "count", admitted, released)
 
-head(patient_data)
+head(gathered_data)
    year facility_number    facility_name facility_location type_of_control age_group     type count
   <int>           <chr>            <chr>             <chr>           <chr>     <chr>    <chr> <int>
 1  2009          010735 ALAMEDA HOSPITAL           ALAMEDA        District     10-19 admitted    62
@@ -68,9 +72,9 @@ If we want to reverse that operation, we can use `spread`:
 
 ```{r, eval=FALSE}
 
-patient_data <- spread(data = patient_data, key = type, value = count)
+spread_data <- spread(data = gathered_data, key = type, value = count)
 
-head(patient_data)
+head(spread_data)
 
    year facility_number    facility_name facility_location type_of_control age_group admitted released
   <int>           <chr>            <chr>             <chr>           <chr>     <chr>    <int>    <int>
@@ -82,11 +86,52 @@ head(patient_data)
 6  2009          010735 ALAMEDA HOSPITAL           ALAMEDA        District     60-69      415      343
 ```
 
-...and at that point, we're right back where we started!
+...and at that point, we're right back where we started.
 
 # Data manipulation
 
+Beyond tidying data, another common need is to aggregate it. Raw data, split by as many variables as possible, gives us the widest possible amount of information, but that doesn't mean it's easy to visualise (`patient_data` has 23,578 observations, for example. Nobody wants a 23,000 point graphic) or understand.
 
-# Text-cleaning
+Data manipulation is the practice of reshaping, aggregating or splitting data to make it easier to use for a particular task. If you're exploring data, that might look like aggregating it at a very high level to get a general feel for what things look like. If you're visualising it, that might look like calculating particular metrics for entire groups of observations, and getting a data frame out at the end you can turn into a graph. In these cases, and a wide range of other cases, the answer is another R package: `dplyr`.
 
-# Dates and times
+`dplyr` provides a "grammar" of data manipulation: a set of functions that can be strung together into almost a sentence that describes what's being done to the data. For example, if we wanted to summarise, for each facility, the number of admitted patients in the 10-19 age group, we would `filter` the dataset to 10-19, `group` the entries by facility name, and `summarize` the dataset to get the mean.
+
+This language-like construct is aided by a new operator that we'll introduce: `%>%`, or the "pipe" operator. Normally, R consists of a series of statements with assignment operations in them:
+
+```{r, eval=FALSE}
+start_data <- "foo"
+result_of_first_step <- do_thing(start_data)
+result_of_second_step <- do_second_thing(result_of_first_step)
+final_result <- do_third_thing(result_of_second_step)
+```
+
+The pipe operator lets us "chain" operations together. If you put pipe operatiors between function calls, it will automatically pass the result of the first call into the second, and second to the third, and so on until it runs out of pipe operators (and function calls) and returns the result. This means instead of assigning things 3 times for 3 operations, we assign things..once:
+
+```{r, eval=FALSE}
+start_data <- "foo"
+final_result <- do_thing(start_data) %>%
+                  do_second_thing %>%
+                  do_third_thing
+```
+
+The code is much cleaner and much easier to read, and when you add the "language"-like aspect of dplyr and tidyr in, it becomes almost a sentence. Let's demonstrate by taking the patient data dataset, and then working out the average number of 10-19 year olds admitted to facilities a year:
+
+```{r, eval=FALSE}
+facility_admission_average <- read_csv(file = "https://www.ironholds.org/resources/misc/patient_data.csv") %>%
+  filter(age_group == "10-19") %>%
+  group_by(year) %>%
+  summarise(admission_average = mean(admitted))
+
+head(facility_admission_average)
+
+   year admission_average
+  <int>             <dbl>
+1  2009          418.5859
+2  2010          407.1007
+3  2011          390.5659
+4  2012          378.8952
+5  2013          356.8860
+6  2014          350.0652
+```
+
+And just like that we've gone from raw data to averaged hospital admissions, by year, for a particular age group - although we probably should have rounded the results. I'm not sure if you can admit half a patient. Certainly not without a rather grim prognosis.

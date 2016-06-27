@@ -279,7 +279,7 @@ times_two(x = 10)
 
 There are only two new things here: the bit in curly braces is the `body` of the function - the code that the function contains, that is executed when you call the function. The `return` statement at the end, which is also new, simply tells the function "and here is the object you give back to the user when you are done".
 
-So for database connecting, we need to wrap all the code above in a function that accepts `db` and `query` as arguments, and returns the results of the database query. Simple enough:
+So for database connecting, we need to wrap all the code we used in the database example into a function that accepts `db` and `query` as arguments, and returns the results of the database query. Simple enough:
 
 ```{r, eval=FALSE}
 
