@@ -269,7 +269,12 @@ patient_data$facility &lt;-<span class="st"> </span><span class="kw">str_to_titl
 <span class="dv">4</span>  <span class="dv">2009</span>          <span class="dv">010735</span> Alameda Hospital, Alameda        District     <span class="dv">40-49</span>      <span class="dv">243</span>      <span class="dv">122</span>
 <span class="dv">5</span>  <span class="dv">2009</span>          <span class="dv">010735</span> Alameda Hospital, Alameda        District     <span class="dv">50-59</span>      <span class="dv">411</span>      <span class="dv">172</span>
 <span class="dv">6</span>  <span class="dv">2009</span>          <span class="dv">010735</span> Alameda Hospital, Alameda        District     <span class="dv">60-69</span>      <span class="dv">415</span>      <span class="dv">343</span></code></pre></div>
-<p>Much cleaner! We can also use <code>stringr</code> to clean up some of the strangeness we saw in the exploratory data analysis - the extraneous spaces that appear in some (otherwise identical) strings, with <code>str_trim</code>:</p>
+<p>Much cleaner! And <code>stringr</code> has a lot of other functions we can apply, too, including:</p>
+<ol style="list-style-type: decimal">
+<li><code>str_trim</code> for getting rid of extraneous whitespace (<code>&quot;foo&quot;</code> and <code>&quot;foo &quot;</code> are the same thing, but R doesn’t know that);</li>
+<li><code>str_order</code>, for sorting a vector of strings;</li>
+<li>Applying regular expressions to identify matches (<code>str_match</code>), replace matches (<code>str_replace</code>) or extract them (<code>str_extract</code>). Regular expressions are discussed <a href="https://cran.r-project.org/web/packages/stringr/vignettes/stringr.html">here</a> and pretty complex, so may require further reading to dig into and understand.</li>
+</ol>
 </div>
 <div id="dates-and-times" class="section level2">
 <h2><span class="header-section-number">4.4</span> Dates and times</h2>

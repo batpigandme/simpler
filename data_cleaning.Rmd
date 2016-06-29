@@ -136,7 +136,6 @@ And just like that we've gone from raw data to averaged hospital admissions, by 
 
 Dad jokes aside, when you combine `tidyr`, `dplyr` and the pipe operator, you can write long pieces of data cleaning and manipulation code that just flow naturally: they're practically (gasp) human-readable! Both of those packages can do a lot more, and if you're interested in a more dedicated exploration of their features, I thoroughly recommend Bradley Boehmke's [data wrangling guide](https://rpubs.com/bradleyboehmke/data_wrangling).
 
-
 ## Text-cleaning
 
 Numbers are easy, because numbers are, well, just numbers. Text is a lot harder, because text tends to be the result of human input, and humans introduce typos. The result can throw off your data analysis - you might be dealing with information about two groups of patients, "admitted" and "released", but the data could very well also include "ADMITTED", and "relesad" (which is, to be fair, really sad).
@@ -162,6 +161,10 @@ patient_data$facility <- str_to_title(patient_data$facility)
 6  2009          010735 Alameda Hospital, Alameda        District     60-69      415      343
 ```
 
-Much cleaner! We can also use `stringr` to clean up some of the strangeness we saw in the exploratory data analysis - the extraneous spaces that appear in some (otherwise identical) strings, with `str_trim`:
+Much cleaner! And `stringr` has a lot of other functions we can apply, too, including:
+
+1. `str_trim` for getting rid of extraneous whitespace (`"foo"` and `"foo "` are the same thing, but R doesn't know that);
+2. `str_order`, for sorting a vector of strings;
+3. Applying regular expressions to identify matches (`str_match`), replace matches (`str_replace`) or extract them (`str_extract`). Regular expressions are discussed [here](https://cran.r-project.org/web/packages/stringr/vignettes/stringr.html) and pretty complex, so may require further reading to dig into and understand.
 
 ## Dates and times
