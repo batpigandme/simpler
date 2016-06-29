@@ -8,8 +8,5 @@
 ["user-interface-design.html", "6 User Interface design", " 6 User Interface design "],
 ["custom-inputs-and-outputs.html", "7 Custom inputs and outputs", " 7 Custom inputs and outputs "],
 ["reactive-expressions.html", "8 Reactive expressions", " 8 Reactive expressions "],
-["shiny-dashboarding.html", "9 Shiny dashboarding", " 9 Shiny dashboarding "],
-["code-style.html", "10 Code style", " 10 Code style "],
-["version-control.html", "11 Version control", " 11 Version control "],
-["testing-and-staging.html", "12 Testing and staging", " 12 Testing and staging "]
+["shiny-dashboarding.html", "9 Shiny dashboarding", " 9 Shiny dashboarding "]
 ]

@@ -168,3 +168,5 @@ Much cleaner! And `stringr` has a lot of other functions we can apply, too, incl
 3. Applying regular expressions to identify matches (`str_match`), replace matches (`str_replace`) or extract them (`str_extract`). Regular expressions are discussed [here](https://cran.r-project.org/web/packages/stringr/vignettes/stringr.html) and pretty complex, so may require further reading to dig into and understand.
 
 ## Dates and times
+
+
