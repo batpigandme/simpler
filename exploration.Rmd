@@ -8,4 +8,164 @@ This part of the guide will cover EDA, with the goal of teaching you some conven
 
 ## Dataset metadata
 
-## Individual values
+How many observations and variables are there? *Which* variables are they? How is the dataset structured? Being able to answer these questions is essential for identifying if you're missing information, if the information is invalid, or how to write R analysing the data you've got, and all of them can be answered with metadata.
+
+We've already seen the `str` function, which presents a summary of the structure of an object; individual elements of that summary can also be grabbed on a one-off basis, which is useful when you just need a specific thing and not the visual overload of "everything about this dataset ever". `ncol` and `nrow` get the number of columns and rows from a data frame (and `length` gets the size of a vector, or list), while `class` gets the object type:
+
+```{r, eval=FALSE}
+patient_data <- read_csv(file = "https://www.ironholds.org/resources/misc/patient_data.csv")
+
+str(patient_data)
+
+Classes ‘tbl_df’, ‘tbl’ and 'data.frame':	23578 obs. of  7 variables:
+ $ year           : int  2009 2009 2009 2009 2009 2009 2009 2009 2009 2009 ...
+ $ facility_number: chr  "010735" "010735" "010735" "010735" ...
+ $ facility       : chr  "ALAMEDA HOSPITAL, ALAMEDA" "ALAMEDA HOSPITAL, ALAMEDA" "ALAMEDA HOSPITAL, ALAMEDA" "ALAMEDA HOSPITAL, ALAMEDA" ...
+ $ type_of_control: chr  "District" "District" "District" "District" ...
+ $ age_group      : chr  "10-19" "20-29" "30-39" "40-49" ...
+ $ admitted       : int  62 124 140 243 411 415 486 961 7743 788 ...
+ $ released       : int  2 63 67 122 172 343 7 389 1136 531 ...
+
+nrow(patient_data)
+[1] 23578
+
+ncol(patient_data)
+[1] 7
+
+length(patient_data$year)
+[1] 23578
+
+class(patient_data)
+[1] "tbl_df"     "tbl"        "data.frame"
+
+class(patient_data$year)
+[1] "integer"
+```
+
+This is also useful, of course, for things like tests of statistical significance or power; you can easily grab the number of observations you're running your tests over.
+
+We can use `names` to get the column names of a data frame: we can also use it to *change* those names, which is tremendously useful for cleanup when you have an input dataset with inconsistent or incoherent labels:
+
+```{r, eval=FALSE}
+
+names(patient_data)
+[1] "year"            "facility_number" "facility"        "type_of_control" "age_group"       "admitted"        "released"
+
+names(patient_data) <- c("year", "facility_number", "facility", "control", "age_group", "admitted", "released")
+
+str(patient_data)
+
+Classes ‘tbl_df’, ‘tbl’ and 'data.frame':	23578 obs. of  7 variables:
+ $ year           : int  2009 2009 2009 2009 2009 2009 2009 2009 2009 2009 ...
+ $ facility_number: chr  "010735" "010735" "010735" "010735" ...
+ $ facility       : chr  "ALAMEDA HOSPITAL, ALAMEDA" "ALAMEDA HOSPITAL, ALAMEDA" "ALAMEDA HOSPITAL, ALAMEDA" "ALAMEDA HOSPITAL, ALAMEDA" ...
+ $ control        : chr  "District" "District" "District" "District" ...
+ $ age_group      : chr  "10-19" "20-29" "30-39" "40-49" ...
+ $ admitted       : int  62 124 140 243 411 415 486 961 7743 788 ...
+ $ released       : int  2 63 67 122 172 343 7 389 1136 531 ...
+```
+
+Knowing all of these functions, we can get a pretty good sense of how a dataset is structured (making analysis much easier) and if it's missing anything (making passing it back to the person who gave it to you, with a refined list of requirements, *before* you waste time analysing it, easier!)
+
+## Missing and duplicate values
+
+Beyond the dataset as a whole, it's often valuable to look at individual values: specifically, to look at whether any are missing or duplicative. Just because a dataset has as many observations and variables as you expect doesn't mean it's perfect, just that it's not obviously flawed.
+
+In R, missing values are represented by `NA` (Not Applicable), `NaN` (Not a Number) or `NULL` (...null). `NaN` only appears in numeric and integer types, since it's really not news that strings aren't numbers.
+
+Let's take an example vector, and look at various ways of handling NA values:
+
+```{r, eval=FALSE}
+
+example_vector <- c(1, 2, 3, NA, 4, NA, 5)
+
+# is.na() produces a vector of TRUE or FALSE values, where TRUE
+# indicates that the equivalent entry in example_vector is an NA
+is.na(example_vector)
+
+[1] FALSE FALSE FALSE  TRUE FALSE  TRUE FALSE
+
+# We can then subset the example_vector to include these entries,
+# or exclude these entries:
+nas_only <- example_vector[is.na(example_vector)]
+nas_only
+
+[1] NA NA
+
+non_nas <- example_vector[!is.na(example_vector)]
+non_nas
+
+[1] 1 2 3 4 5
+
+# We can also overwrite NAs with "empty" values so they don't get in the way of data processing
+example_vector[is.na(example_vector)] <- 0
+example_vector
+
+[1] 1 2 3 0 4 0 5
+```
+
+This works for NANs (`is.nan`) and NULLs (`is.null`) too; we can identify them, exclude them (or everything else), and overwrite them with a value of our choice.
+
+So we can handle missing values. What about duplicates? For that we turn to `duplicated`:
+
+```{r, eval=FALSE}
+
+example_vector <- c(1, 2, 3, 4, 1)
+duplicated(example_vector)
+
+[1] FALSE FALSE FALSE FALSE  TRUE
+
+# We can perform the same operations (subsetting, overwriting) as with is.na and its sister functions.
+
+example_vector <- example_vector[!duplicated(example_vector)]
+
+example_vector
+[1] 1 2 3 4
+
+# Another thing we can do is both cases is pull out the row or element numbers for duplicated elements,
+# so we can inspect them visually.
+
+which(duplicated(example_vector))
+
+[1] 5
+
+example_vector[5]
+
+[1] 1
+```
+
+All of these functions work on data frames as well as vectors, so you can look for (for example) duplicate rows rather than having to check for duplicates against every single vector inside a dataset, and then subset to just that row using `df[row_number,]` instead of `vector[entry]`.
+
+## Examining values
+
+So we've got around the right number of observations, and we've handled the missing values. Let's dig into the dataset itself!
+
+When you've got a categorical variable, it's valuable to be able to see the unique categories within it (and how the data is distributed between those categories). We can do this with the `unique` and `table` functions, respectively:
+
+```{r, eval=FALSE}
+patient_data <- read_csv(file = "https://www.ironholds.org/resources/misc/patient_data.csv")
+
+unique(patient_data$year)
+
+[1] 2009 2010 2011 2012 2013 2014
+
+table(patient_data$year)
+
+2009 2010 2011 2012 2013 2014 
+4004 3962 3851 3934 3926 3901 
+```
+
+So we can see there are 4004 observations where `year` is 2009, 3962 where `year` is 2010, and so on. We can also use `table` to look at this information for *permutations* of multiple variables:
+
+```{r, eval=FALSE}
+table(patient_data$year, patient_data$age_group)
+       10-19 1-09 20-29 30-39 40-49 50-59 60-69 70-79 80+ Under 1 Unknown
+  2009   425  265   436   432   434   434   434   425 415     280      24
+  2010   417  260   433   427   430   430   429   418 407     281      30
+  2011   410  256   421   417   418   414   416   403 390     272      34
+  2012   420  243   435   430   430   427   428   417 399     275      30
+  2013   421  235   431   430   429   429   427   420 404     276      24
+  2014   414  233   430   427   425   424   423   419 400     276      30
+```
+
+With all of this put together, we can take a dataset that's been provided and dig around in it a bit to find (and handle) missing information, examine whether the dataset meets our expectations, and quickly identify if there are deficits *before* we spend a load of energy analysing it.

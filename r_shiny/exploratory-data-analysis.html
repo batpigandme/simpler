@@ -110,7 +110,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="2" data-path="exploratory-data-analysis.html"><a href="exploratory-data-analysis.html"><i class="fa fa-check"></i><b>2</b> Exploratory Data Analysis</a><ul>
 <li class="chapter" data-level="2.1" data-path="exploratory-data-analysis.html"><a href="exploratory-data-analysis.html#dataset-metadata"><i class="fa fa-check"></i><b>2.1</b> Dataset metadata</a></li>
-<li class="chapter" data-level="2.2" data-path="exploratory-data-analysis.html"><a href="exploratory-data-analysis.html#individual-values"><i class="fa fa-check"></i><b>2.2</b> Individual values</a></li>
+<li class="chapter" data-level="2.2" data-path="exploratory-data-analysis.html"><a href="exploratory-data-analysis.html#missing-and-duplicate-values"><i class="fa fa-check"></i><b>2.2</b> Missing and duplicate values</a></li>
+<li class="chapter" data-level="2.3" data-path="exploratory-data-analysis.html"><a href="exploratory-data-analysis.html#examining-values"><i class="fa fa-check"></i><b>2.3</b> Examining values</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="data-import-and-export.html"><a href="data-import-and-export.html"><i class="fa fa-check"></i><b>3</b> Data Import and Export</a><ul>
 <li class="chapter" data-level="3.1" data-path="data-import-and-export.html"><a href="data-import-and-export.html#importing-from-csvs"><i class="fa fa-check"></i><b>3.1</b> Importing from CSVs</a></li>
@@ -159,9 +160,134 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>This part of the guide will cover EDA, with the goal of teaching you some convenient shorthands to identify when data is corrupt or badly formatted. What precisely to do about that is covered in the next part, which is about <a href="cleaning-and-manipulating-data.html">data cleaning and manipulation</a>.</p>
 <div id="dataset-metadata" class="section level2">
 <h2><span class="header-section-number">2.1</span> Dataset metadata</h2>
+<p>How many observations and variables are there? <em>Which</em> variables are they? How is the dataset structured? Being able to answer these questions is essential for identifying if you’re missing information, if the information is invalid, or how to write R analysing the data you’ve got, and all of them can be answered with metadata.</p>
+<p>We’ve already seen the <code>str</code> function, which presents a summary of the structure of an object; individual elements of that summary can also be grabbed on a one-off basis, which is useful when you just need a specific thing and not the visual overload of “everything about this dataset ever”. <code>ncol</code> and <code>nrow</code> get the number of columns and rows from a data frame (and <code>length</code> gets the size of a vector, or list), while <code>class</code> gets the object type:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">patient_data &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="dt">file =</span> <span class="st">&quot;https://www.ironholds.org/resources/misc/patient_data.csv&quot;</span>)
+
+<span class="kw">str</span>(patient_data)
+
+Classes ‘tbl_df’, ‘tbl’ and <span class="st">&#39;data.frame&#39;</span>:<span class="st">   </span><span class="dv">23578</span> obs. of  <span class="dv">7</span> variables:
+<span class="st"> </span><span class="er">$</span><span class="st"> </span>year           :<span class="st"> </span>int  <span class="dv">2009</span> <span class="dv">2009</span> <span class="dv">2009</span> <span class="dv">2009</span> <span class="dv">2009</span> <span class="dv">2009</span> <span class="dv">2009</span> <span class="dv">2009</span> <span class="dv">2009</span> <span class="dv">2009</span> ...
+ $<span class="st"> </span>facility_number:<span class="st"> </span>chr  <span class="st">&quot;010735&quot;</span> <span class="st">&quot;010735&quot;</span> <span class="st">&quot;010735&quot;</span> <span class="st">&quot;010735&quot;</span> ...
+ $<span class="st"> </span>facility       :<span class="st"> </span>chr  <span class="st">&quot;ALAMEDA HOSPITAL, ALAMEDA&quot;</span> <span class="st">&quot;ALAMEDA HOSPITAL, ALAMEDA&quot;</span> <span class="st">&quot;ALAMEDA HOSPITAL, ALAMEDA&quot;</span> <span class="st">&quot;ALAMEDA HOSPITAL, ALAMEDA&quot;</span> ...
+ $<span class="st"> </span>type_of_control:<span class="st"> </span>chr  <span class="st">&quot;District&quot;</span> <span class="st">&quot;District&quot;</span> <span class="st">&quot;District&quot;</span> <span class="st">&quot;District&quot;</span> ...
+ $<span class="st"> </span>age_group      :<span class="st"> </span>chr  <span class="st">&quot;10-19&quot;</span> <span class="st">&quot;20-29&quot;</span> <span class="st">&quot;30-39&quot;</span> <span class="st">&quot;40-49&quot;</span> ...
+ $<span class="st"> </span>admitted       :<span class="st"> </span>int  <span class="dv">62</span> <span class="dv">124</span> <span class="dv">140</span> <span class="dv">243</span> <span class="dv">411</span> <span class="dv">415</span> <span class="dv">486</span> <span class="dv">961</span> <span class="dv">7743</span> <span class="dv">788</span> ...
+ $<span class="st"> </span>released       :<span class="st"> </span>int  <span class="dv">2</span> <span class="dv">63</span> <span class="dv">67</span> <span class="dv">122</span> <span class="dv">172</span> <span class="dv">343</span> <span class="dv">7</span> <span class="dv">389</span> <span class="dv">1136</span> <span class="dv">531</span> ...
+
+<span class="kw">nrow</span>(patient_data)
+[<span class="dv">1</span>] <span class="dv">23578</span>
+
+<span class="kw">ncol</span>(patient_data)
+[<span class="dv">1</span>] <span class="dv">7</span>
+
+<span class="kw">length</span>(patient_data$year)
+[<span class="dv">1</span>] <span class="dv">23578</span>
+
+<span class="kw">class</span>(patient_data)
+[<span class="dv">1</span>] <span class="st">&quot;tbl_df&quot;</span>     <span class="st">&quot;tbl&quot;</span>        <span class="st">&quot;data.frame&quot;</span>
+
+<span class="kw">class</span>(patient_data$year)
+[<span class="dv">1</span>] <span class="st">&quot;integer&quot;</span></code></pre></div>
+<p>This is also useful, of course, for things like tests of statistical significance or power; you can easily grab the number of observations you’re running your tests over.</p>
+<p>We can use <code>names</code> to get the column names of a data frame: we can also use it to <em>change</em> those names, which is tremendously useful for cleanup when you have an input dataset with inconsistent or incoherent labels:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">names</span>(patient_data)
+[<span class="dv">1</span>] <span class="st">&quot;year&quot;</span>            <span class="st">&quot;facility_number&quot;</span> <span class="st">&quot;facility&quot;</span>        <span class="st">&quot;type_of_control&quot;</span> <span class="st">&quot;age_group&quot;</span>       <span class="st">&quot;admitted&quot;</span>        <span class="st">&quot;released&quot;</span>
+
+<span class="kw">names</span>(patient_data) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;year&quot;</span>, <span class="st">&quot;facility_number&quot;</span>, <span class="st">&quot;facility&quot;</span>, <span class="st">&quot;control&quot;</span>, <span class="st">&quot;age_group&quot;</span>, <span class="st">&quot;admitted&quot;</span>, <span class="st">&quot;released&quot;</span>)
+
+<span class="kw">str</span>(patient_data)
+
+Classes ‘tbl_df’, ‘tbl’ and <span class="st">&#39;data.frame&#39;</span>:<span class="st">   </span><span class="dv">23578</span> obs. of  <span class="dv">7</span> variables:
+<span class="st"> </span><span class="er">$</span><span class="st"> </span>year           :<span class="st"> </span>int  <span class="dv">2009</span> <span class="dv">2009</span> <span class="dv">2009</span> <span class="dv">2009</span> <span class="dv">2009</span> <span class="dv">2009</span> <span class="dv">2009</span> <span class="dv">2009</span> <span class="dv">2009</span> <span class="dv">2009</span> ...
+ $<span class="st"> </span>facility_number:<span class="st"> </span>chr  <span class="st">&quot;010735&quot;</span> <span class="st">&quot;010735&quot;</span> <span class="st">&quot;010735&quot;</span> <span class="st">&quot;010735&quot;</span> ...
+ $<span class="st"> </span>facility       :<span class="st"> </span>chr  <span class="st">&quot;ALAMEDA HOSPITAL, ALAMEDA&quot;</span> <span class="st">&quot;ALAMEDA HOSPITAL, ALAMEDA&quot;</span> <span class="st">&quot;ALAMEDA HOSPITAL, ALAMEDA&quot;</span> <span class="st">&quot;ALAMEDA HOSPITAL, ALAMEDA&quot;</span> ...
+ $<span class="st"> </span>control        :<span class="st"> </span>chr  <span class="st">&quot;District&quot;</span> <span class="st">&quot;District&quot;</span> <span class="st">&quot;District&quot;</span> <span class="st">&quot;District&quot;</span> ...
+ $<span class="st"> </span>age_group      :<span class="st"> </span>chr  <span class="st">&quot;10-19&quot;</span> <span class="st">&quot;20-29&quot;</span> <span class="st">&quot;30-39&quot;</span> <span class="st">&quot;40-49&quot;</span> ...
+ $<span class="st"> </span>admitted       :<span class="st"> </span>int  <span class="dv">62</span> <span class="dv">124</span> <span class="dv">140</span> <span class="dv">243</span> <span class="dv">411</span> <span class="dv">415</span> <span class="dv">486</span> <span class="dv">961</span> <span class="dv">7743</span> <span class="dv">788</span> ...
+ $<span class="st"> </span>released       :<span class="st"> </span>int  <span class="dv">2</span> <span class="dv">63</span> <span class="dv">67</span> <span class="dv">122</span> <span class="dv">172</span> <span class="dv">343</span> <span class="dv">7</span> <span class="dv">389</span> <span class="dv">1136</span> <span class="dv">531</span> ...</code></pre></div>
+<p>Knowing all of these functions, we can get a pretty good sense of how a dataset is structured (making analysis much easier) and if it’s missing anything (making passing it back to the person who gave it to you, with a refined list of requirements, <em>before</em> you waste time analysing it, easier!)</p>
 </div>
-<div id="individual-values" class="section level2">
-<h2><span class="header-section-number">2.2</span> Individual values</h2>
+<div id="missing-and-duplicate-values" class="section level2">
+<h2><span class="header-section-number">2.2</span> Missing and duplicate values</h2>
+<p>Beyond the dataset as a whole, it’s often valuable to look at individual values: specifically, to look at whether any are missing or duplicative. Just because a dataset has as many observations and variables as you expect doesn’t mean it’s perfect, just that it’s not obviously flawed.</p>
+<p>In R, missing values are represented by <code>NA</code> (Not Applicable), <code>NaN</code> (Not a Number) or <code>NULL</code> (…null). <code>NaN</code> only appears in numeric and integer types, since it’s really not news that strings aren’t numbers.</p>
+<p>Let’s take an example vector, and look at various ways of handling NA values:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">example_vector &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="ot">NA</span>, <span class="dv">4</span>, <span class="ot">NA</span>, <span class="dv">5</span>)
+
+<span class="co"># is.na() produces a vector of TRUE or FALSE values, where TRUE</span>
+<span class="co"># indicates that the equivalent entry in example_vector is an NA</span>
+<span class="kw">is.na</span>(example_vector)
+
+[<span class="dv">1</span>] <span class="ot">FALSE</span> <span class="ot">FALSE</span> <span class="ot">FALSE</span>  <span class="ot">TRUE</span> <span class="ot">FALSE</span>  <span class="ot">TRUE</span> <span class="ot">FALSE</span>
+
+<span class="co"># We can then subset the example_vector to include these entries,</span>
+<span class="co"># or exclude these entries:</span>
+nas_only &lt;-<span class="st"> </span>example_vector[<span class="kw">is.na</span>(example_vector)]
+nas_only
+
+[<span class="dv">1</span>] <span class="ot">NA</span> <span class="ot">NA</span>
+
+non_nas &lt;-<span class="st"> </span>example_vector[!<span class="kw">is.na</span>(example_vector)]
+non_nas
+
+[<span class="dv">1</span>] <span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span> <span class="dv">4</span> <span class="dv">5</span>
+
+<span class="co"># We can also overwrite NAs with &quot;empty&quot; values so they don&#39;t get in the way of data processing</span>
+example_vector[<span class="kw">is.na</span>(example_vector)] &lt;-<span class="st"> </span><span class="dv">0</span>
+example_vector
+
+[<span class="dv">1</span>] <span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span> <span class="dv">0</span> <span class="dv">4</span> <span class="dv">0</span> <span class="dv">5</span></code></pre></div>
+<p>This works for NANs (<code>is.nan</code>) and NULLs (<code>is.null</code>) too; we can identify them, exclude them (or everything else), and overwrite them with a value of our choice.</p>
+<p>So we can handle missing values. What about duplicates? For that we turn to <code>duplicated</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">example_vector &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">1</span>)
+<span class="kw">duplicated</span>(example_vector)
+
+[<span class="dv">1</span>] <span class="ot">FALSE</span> <span class="ot">FALSE</span> <span class="ot">FALSE</span> <span class="ot">FALSE</span>  <span class="ot">TRUE</span>
+
+<span class="co"># We can perform the same operations (subsetting, overwriting) as with is.na and its sister functions.</span>
+
+example_vector &lt;-<span class="st"> </span>example_vector[!<span class="kw">duplicated</span>(example_vector)]
+
+example_vector
+[<span class="dv">1</span>] <span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span> <span class="dv">4</span>
+
+<span class="co"># Another thing we can do is both cases is pull out the row or element numbers for duplicated elements,</span>
+<span class="co"># so we can inspect them visually.</span>
+
+<span class="kw">which</span>(<span class="kw">duplicated</span>(example_vector))
+
+[<span class="dv">1</span>] <span class="dv">5</span>
+
+example_vector[<span class="dv">5</span>]
+
+[<span class="dv">1</span>] <span class="dv">1</span></code></pre></div>
+<p>All of these functions work on data frames as well as vectors, so you can look for (for example) duplicate rows rather than having to check for duplicates against every single vector inside a dataset, and then subset to just that row using <code>df[row_number,]</code> instead of <code>vector[entry]</code>.</p>
+</div>
+<div id="examining-values" class="section level2">
+<h2><span class="header-section-number">2.3</span> Examining values</h2>
+<p>So we’ve got around the right number of observations, and we’ve handled the missing values. Let’s dig into the dataset itself!</p>
+<p>When you’ve got a categorical variable, it’s valuable to be able to see the unique categories within it (and how the data is distributed between those categories). We can do this with the <code>unique</code> and <code>table</code> functions, respectively:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">patient_data &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="dt">file =</span> <span class="st">&quot;https://www.ironholds.org/resources/misc/patient_data.csv&quot;</span>)
+
+<span class="kw">unique</span>(patient_data$year)
+
+[<span class="dv">1</span>] <span class="dv">2009</span> <span class="dv">2010</span> <span class="dv">2011</span> <span class="dv">2012</span> <span class="dv">2013</span> <span class="dv">2014</span>
+
+<span class="kw">table</span>(patient_data$year)
+
+<span class="dv">2009</span> <span class="dv">2010</span> <span class="dv">2011</span> <span class="dv">2012</span> <span class="dv">2013</span> <span class="dv">2014</span> 
+<span class="dv">4004</span> <span class="dv">3962</span> <span class="dv">3851</span> <span class="dv">3934</span> <span class="dv">3926</span> <span class="dv">3901</span> </code></pre></div>
+<p>So we can see there are 4004 observations where <code>year</code> is 2009, 3962 where <code>year</code> is 2010, and so on. We can also use <code>table</code> to look at this information for <em>permutations</em> of multiple variables:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">table</span>(patient_data$year, patient_data$age_group)
+       <span class="dv">10-19</span> <span class="dv">1-09</span> <span class="dv">20-29</span> <span class="dv">30-39</span> <span class="dv">40-49</span> <span class="dv">50-59</span> <span class="dv">60-69</span> <span class="dv">70-79</span> <span class="dv">80</span>+<span class="st"> </span>Under <span class="dv">1</span> Unknown
+  <span class="dv">2009</span>   <span class="dv">425</span>  <span class="dv">265</span>   <span class="dv">436</span>   <span class="dv">432</span>   <span class="dv">434</span>   <span class="dv">434</span>   <span class="dv">434</span>   <span class="dv">425</span> <span class="dv">415</span>     <span class="dv">280</span>      <span class="dv">24</span>
+  <span class="dv">2010</span>   <span class="dv">417</span>  <span class="dv">260</span>   <span class="dv">433</span>   <span class="dv">427</span>   <span class="dv">430</span>   <span class="dv">430</span>   <span class="dv">429</span>   <span class="dv">418</span> <span class="dv">407</span>     <span class="dv">281</span>      <span class="dv">30</span>
+  <span class="dv">2011</span>   <span class="dv">410</span>  <span class="dv">256</span>   <span class="dv">421</span>   <span class="dv">417</span>   <span class="dv">418</span>   <span class="dv">414</span>   <span class="dv">416</span>   <span class="dv">403</span> <span class="dv">390</span>     <span class="dv">272</span>      <span class="dv">34</span>
+  <span class="dv">2012</span>   <span class="dv">420</span>  <span class="dv">243</span>   <span class="dv">435</span>   <span class="dv">430</span>   <span class="dv">430</span>   <span class="dv">427</span>   <span class="dv">428</span>   <span class="dv">417</span> <span class="dv">399</span>     <span class="dv">275</span>      <span class="dv">30</span>
+  <span class="dv">2013</span>   <span class="dv">421</span>  <span class="dv">235</span>   <span class="dv">431</span>   <span class="dv">430</span>   <span class="dv">429</span>   <span class="dv">429</span>   <span class="dv">427</span>   <span class="dv">420</span> <span class="dv">404</span>     <span class="dv">276</span>      <span class="dv">24</span>
+  <span class="dv">2014</span>   <span class="dv">414</span>  <span class="dv">233</span>   <span class="dv">430</span>   <span class="dv">427</span>   <span class="dv">425</span>   <span class="dv">424</span>   <span class="dv">423</span>   <span class="dv">419</span> <span class="dv">400</span>     <span class="dv">276</span>      <span class="dv">30</span></code></pre></div>
+<p>With all of this put together, we can take a dataset that’s been provided and dig around in it a bit to find (and handle) missing information, examine whether the dataset meets our expectations, and quickly identify if there are deficits <em>before</em> we spend a load of energy analysing it.</p>
 
 </div>
 </div>
