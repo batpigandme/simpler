@@ -6,7 +6,7 @@ The answer is usually data cleaning. People tend to act as if analysis is 50% st
 
 ## Reshaping data
 
-One essential part of data cleaning is reshaping the actual structure of your data. Sometimes as researchers we are lucky enough to have data that looks exactly like what we want. Every row is a single observation. Every column contains one, and just one, thing we care about. This is referred to as *tidy data* (a concept you can read more about [here](http://vita.had.co.nz/papers/tidy-data.html)).
+One essential part of cleaning is *reshaping* your data's structure. Sometimes as researchers we are lucky enough to have data that looks exactly like what we want. Every row is a single observation. Every column contains one, and just one, thing we care about. This is referred to as *tidy data* (a concept you can read more about [here](http://vita.had.co.nz/papers/tidy-data.html)).
 
 We'll use the original patient dataset as an example. Let's take a look at it:
 

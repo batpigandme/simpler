@@ -274,21 +274,21 @@ excel_data &lt;-<span class="st"> </span><span class="kw">read_excel</span>(<spa
 <p>It’s another data frame - as expected, since Excel spreadsheets are tabular just like CSV files are. One important note - Excel spreadsheets can contain multiple sheets, <em>each</em> of them a table. How do we handle that?</p>
 <p>If you look at the documentation for <code>read_excel</code>, you’ll see a <code>sheet</code> argument, which you can use to specify which sheet to read in. The <code>excel_sheets</code> function, meanwhile, gets you how many sheets an Excel file has. So we can combine them to work out how many sheets we’re looking at, and then read in that many.</p>
 <p>But what happens when you have to write code that reads in a variety of different files, some with different numbers of sheets? How do we write code that doesn’t mind how many sheets there are? How do we store the results of that code?</p>
-<p>A few new concepts and pieces of R, for these questions. First-off is how we’re going to store the results. We’re looking at an unknown number of sheets, which means an unknown number of data frames. Luckily, data frames can be stored as components of a single object, just like vectors are components of data frames. That means instead of having an unknown number of objects, we just have one.</p>
+<p>A few new concepts and pieces of R, for these questions. First is how we’re going to store the results. We’re looking at an unknown number of sheets, which means an unknown number of data frames. Luckily, data frames can be stored as components of a single object, just like vectors are components of data frames. That means instead of having an unknown number of objects, we just have one.</p>
 <p>For that kind of storage, we’re going to introduce a new object type in R: <code>lists</code>. Lists can have any length you want, and contain pretty much any object you want, too, which makes them extremely powerful. You can construct and use them with, or without names.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># A list without names</span>
 nameless_list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dv">2</span>, <span class="dv">3</span>)
 
 <span class="co"># A list with names</span>
 named_list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">first_object =</span> <span class="dv">2</span>, <span class="dt">second_object =</span> <span class="dv">3</span>)</code></pre></div>
-<p>The difference is how you get objects inside the list, or change those objects: if the list has names, you can use the <code>$</code> character we use with data frame contents. If it doesn’t, you have to use indices - getting the Nth element of the object by pointing to <code>[[N]]</code>. Taking the list examples we created above:</p>
+<p>The difference is in how you get access, or alter, objects inside the list. If the list has names, you can use the <code>$</code> character we use with data frame contents. If it doesn’t, you have to use indices - getting the Nth element of the object by pointing to <code>[[N]]</code>. Taking the list examples we created above:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nameless_list[[<span class="dv">1</span>]]
 [<span class="dv">1</span>] <span class="dv">2</span>
 
 named_list$first_object
 [<span class="dv">1</span>] <span class="dv">2</span></code></pre></div>
-<p>So now we know how to store the results. But how do we get them?</p>
-<p>First, we need to have a way of automatically knowing how many sheets there are. We can do that with another <code>readxl</code> function, <code>excel_sheets</code>, which lists all the sheets in an Excel file:</p>
+<p>(you can actually use indices in named lists, too, but the inverse isn’t true. Plus, why use opaque numbers when you’ve taken the time to give all the elements nice human-friendly labels?)</p>
+<p>So now we know how to store the results. But how do we get them? First, we need to have a way of automatically knowing how many sheets there are. We can do that with another <code>readxl</code> function, <code>excel_sheets</code>, which lists all the sheets in an Excel file:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sheet_names &lt;-<span class="st"> </span><span class="kw">excel_sheets</span>(<span class="dt">path =</span> <span class="kw">system.file</span>(<span class="st">&quot;extdata/datasets.xlsx&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;readxl&quot;</span>))
 sheet_names
 
@@ -312,7 +312,7 @@ all_sheets &lt;-<span class="st"> </span><span class="kw">lapply</span>(<span cl
 </div>
 <div id="database-import" class="section level2">
 <h2><span class="header-section-number">3.4</span> Database import</h2>
-<p>To connect to a MySQL database, we’ll use the <code>RMySQL</code> package (as you may be noticing, R package developers <em>love</em> putting the letter R in their package names). As the name suggests, it integrates R with MySQL, providing code that lets you connect to a MySQL database and read data from it, turning that data into a data frame along the way.</p>
+<p>To connect to a MySQL database, we’ll use the <code>RMySQL</code> package (as you may be noticing, R package developers <em>love</em> putting the letter R in their package names). As the name suggests, it integrates R with MySQL, providing code that lets you connect to a MySQL database and read information from it, turning said information into a data frame along the way.</p>
 <p>This process actually has quite a few steps: you need to:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Connect to a database</span>
 database_connection &lt;-<span class="st"> </span><span class="kw">dbConnect</span>(RMySQL::<span class="kw">MySQL</span>(), <span class="dt">host =</span> <span class="st">&quot;ensembldb.ensembl.org&quot;</span>, <span class="dt">user =</span> <span class="st">&quot;anonymous&quot;</span>,
@@ -391,7 +391,7 @@ tables &lt;-<span class="st"> </span><span class="kw">query_database</span>(<spa
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">patient_data &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="dt">file =</span> <span class="st">&quot;https://www.ironholds.org/resources/misc/patient_data.csv&quot;</span>)
 
 <span class="kw">write_csv</span>(<span class="dt">x =</span> patient_data, <span class="dt">file =</span> <span class="st">&quot;patient_data.csv&quot;</span>)</code></pre></div>
-<p>You should now have a file called “patient_data.csv” in whatever directory you’re working from. It’s properly formatted and can be read back into R, or into Excel, or into whatever tool you choose.</p>
+<p>You should now have a file called “patient_data.csv” in whatever directory you’re working from (which you can find out with the <code>wd</code> function). It’s properly formatted and can be read back into R, or into Excel, or into whatever tool you choose.</p>
 <p>Obviously, non-tabular objects (such as lists) can’t be saved into a CSV: how would R, or any other program, know what to do with them? This can present a problem when trying to share work with others, or save it for your own reuse.</p>
 <p>Luckily, R has its own data format, <code>.RData</code> files, which can store representations of any R object you want and then be loaded seamlessly back into R (the limitation is it probably won’t work with other languages or software). These files can also contain however many objects you want, of many different types. They’re created with the <code>save</code> function:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">a_list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">a =</span> <span class="dv">12</span>, <span class="dt">b =</span> <span class="dv">6</span>)
