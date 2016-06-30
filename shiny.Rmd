@@ -1,11 +1,11 @@
-# (PART) Shiny {-}
+# Shiny
 
-# Building your first app
+## Building your first app
 
-# User Interface design
+## User Interface design
 
-# Custom inputs and outputs
+## Custom inputs and outputs
 
-# Reactive expressions
+## Reactive expressions
 
-# Shiny dashboarding
+## Shiny dashboarding
