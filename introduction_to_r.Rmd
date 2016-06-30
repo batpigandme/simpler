@@ -18,8 +18,9 @@ The primary data formats are tabular, just like the results from scientific expe
 
 ***R was written by a community***. As well as the base language, which is the work of many hands, there's also an entire ecosystem of add-ons (which we'll cover later). Put simply: if there's something statistical you need to do, and it isn't in R itself, it's almost *certainly* in an add-on - one that you can obtain, use and include in your work completely free of charge.
 
-***R can do pretty much everything*.** It's primarily a statistical language, but it's not *just* a statistical language. You can do data analysis in it, sure. You can also visualise the results of that analysis in a thousand different ways. Or write reports based on it that turn out as LaTeX, PDFs, HTML, Markdown. or build dynamic, web-hosted visualisations and dashboards and interactive platforms to display your work. 
-Heck, you can even build websites in it; I did just to see if I could, and it took 40 lines of code. Although in that specific case, while you *could* use R, I would strongly recommend you *don't*.
+***R can do pretty much everything*.** It's primarily a statistical language, but it's not *just* a statistical language. You can do data analysis in it, sure. You can also visualise the results of that analysis in a thousand different ways (including dynamic visualisations), write reports based on it that turn out as LaTeX, PDFs, HTML, or Markdown, or build online dashboards and interactive platforms to display your work.
+
+Heck, you can even build websites in it; I did just to see if I could, and it took 40 lines of code. In that specific case, mind, while you *could* use R, I would strongly recommend you *don't*.
 
 The point, though, is that while R is primarily about statistics, it's a language that covers pretty much every step of handling data, from reading it in and cleaning it up to showing your results to the world.
 
@@ -30,7 +31,7 @@ There are a lot of other fascinating and wonderful features (some of which we'll
 
 ## The R community
 
-One of the things I touched on above - as a reason R is such a powerful and popular environment - is the community. A big benefit is the expertise that community has: for example, the R add-on for neural networks was written by Brian Ripley, a British statistician who quite literally wrote the book on neural networks, and having the person who *invented* the methodology implement it gives you a pretty strong claim to the implementation being reliable.
+One of the things I touched on above - as a reason R is such a powerful and popular environment - is the community. A big benefit is the expertise that community has: for example, the R add-on for neural networks was written by Brian Ripley, a British statistician who quite literally wrote the book on neural networks. Having the person who *invented* the methodology implement it gives you a pretty strong claim to the implementation being reliable.
 
 But another benefit is simply that, while there are dragons in some corners, the community generally consists of people who love expanding what the language can do and how friendly to new users it is - and they practise what they preach! And there are a lot of R programmers, and a lot of places to get help, support, suggestions and pointers. Some venues worth keeping in mind, in case you run into a problem and need some assistance, are:
 
@@ -41,7 +42,7 @@ But another benefit is simply that, while there are dragons in some corners, the
 ## R installation
 To get started with R, you're going to need...well, R!
 
-If you're on Windows you can get R [here](https://cran.r-project.org/bin/windows/base/); if you're on a mac, you can download it [here](https://cran.r-project.org/bin/macosx/). For Linux users (specifically Ubuntu users, or people on other, Debian-based distributions) open the terminal and type:
+If you're on Windows you can get R [here](https://cran.r-project.org/bin/windows/base/); if you're on an Apple computer, you can download it [here](https://cran.r-project.org/bin/macosx/). For Linux users (specifically Ubuntu users, or people on other, Debian-based distributions) open the terminal and type:
 
 ```{r, eval=FALSE}
 sudo apt-get -y install r-base
@@ -66,13 +67,13 @@ install.packages("readr",
 
 ## Using RStudio
 
-You should now have RStudio; that's going to be your primary interface for writing R in. Let's briefly step through the important bits of the program that you should be paying attention to.
+You should now have RStudio; that's going to be your primary interface for writing R. Let's briefly step through the important bits of the program that you should be paying attention to.
 
 When you open it up there should be three different panes, nestled inside the program, looking something like this:
 
 ![](rstudio_main.png)
 
-Let's step through each of them in turn. Going clockwise, we first have the *console*: this is a window into which you can type R commands, and see the output - we'll be using that a lot. Next over, we've got a pane with two tabs; "Environment" (the default) and "History". "Environment" contains a listing of everything you create during your R tinkering, while "History" provides, well, a history, of the commands you've typed into the console: that way if you need to re-run something, you can find it easily.
+Let's step through each of them in turn. Going clockwise, we first have the "console": this is a window into which you can type R commands and see the output - we'll be using that a lot. Next over, we've got a pane with two tabs; "Environment" (the default) and "History". "Environment" contains a listing of everything you create during your R tinkering, while "History" provides, well, a history, of the commands you've typed into the console: that way if you need to re-run something, you can find it easily.
 
 And, last but not least down in the bottom right, we have "Files" (which shows your filesystem, so you can find R scripts you've already saved or datasets you want to read in) , "Plots", which will contain any visualisations you generate so that you can prototype them, "Packages", which lists all the R add-ons on your system (and which are loaded), and "Help", which shows any documentation you request.
 
@@ -80,7 +81,7 @@ In practice, another tab will open up when you have an R script open, where the 
 
 ## Tutorial format
 
-From hereonin we're going to be focusing on using R, rather than the history, community and everything else. One approach to teaching a programming language is to step through the different rules in how the language is constructed, what the different keywords are, any strange quirks it has, and all the rest - and this can be really helpful for people who are *already* programmers.
+Going forward we're going to be focusing on using R, rather than the history, community and everything else. One approach to teaching a programming language is to step through the different rules in how the language is constructed, what the different keywords are, any strange quirks it has, and all the rest - and this can be really helpful for people who are *already* programmers.
 
 That isn't guaranteed, though, and so the rest of this book is divided up into individual, practical applications of the language, combined with explanations of what's going on in each piece so that you can learn the structure of the language through doing.
 
@@ -91,6 +92,6 @@ There'll be a chunk of code, in a shaded box just like this one,
 which will achieve the step I was talking about
 ```
 
-After that will be an explanation of that chunk of code, and what each bit is doing and how everything in it works. There are also likely to be lines starting with `#`: these are comments, which aren't treated as code and run, but instead let you document what the code is doing within your R program.
+After that will be an explanation of that chunk of code, and what each bit is doing and how everything in it works. There are also likely to be lines starting with #: these are comments, which are ignored by R when code is run. This is useful because it lets you document what the code is doing within your R program.
 
 If you're the sort of person who instead wants to jump into the nitty-gritty of the language, I recommend reading Hadley Wickham's *[Advanced R Programming](http://adv-r.had.co.nz/Data-structures.html)* (specifically the data structures section) to get a handle for the general workings of R, and then coming back here to learn the applications.

@@ -8,7 +8,7 @@ This part of the guide will cover EDA, with the goal of teaching you some conven
 
 ## Dataset metadata
 
-How many observations and variables are there? *Which* variables are they? How is the dataset structured? Being able to answer these questions is essential for identifying if you're missing information, if the information is invalid, or how to write R analysing the data you've got, and all of them can be answered with metadata.
+How many observations and variables are there? *Which* variables are they? How is the dataset structured? Being able to answer these questions is essential for identifying whether you're missing information, if the information is invalid, or how to write R analysing the data you've got, and all of them can be answered with metadata (information about the data).
 
 We've already seen the `str` function, which presents a summary of the structure of an object; individual elements of that summary can also be grabbed on a one-off basis, which is useful when you just need a specific thing and not the visual overload of "everything about this dataset ever". `ncol` and `nrow` get the number of columns and rows from a data frame (and `length` gets the size of a vector, or list), while `class` gets the object type:
 

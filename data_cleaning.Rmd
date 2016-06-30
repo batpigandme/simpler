@@ -1,8 +1,8 @@
 # Cleaning and manipulating data
 
-So we've got our data read in. From a database, from an Excel file, from a CSV - wherever it came from, we have it. Then what?
+So we've imported our data. From a database, from an Excel file, from a CSV - wherever it came from, we have it. We've even looked through it to see if there's any interesting nastiness. Then what?
 
-The answer is usually data cleaning. People tend to act as if analysis is 50% studious statistical testing and 50% visualisation and reporting, but this is a damned dirty lie. In practice, it's 80% cleaning the data so it will work, 20% statistics, and a further 20% visualisation - summing to over 100 because you didn't realise *quite* how much of a pain the cleaning would be.
+The answer is usually data cleaning. Exploratory analysis is great for getting the low-hanging fruit in imperfect data, and for understanding where the thornier problems lie, but we then have to clean *up* those thorny problems. That's where manipulating and cleaning data comes in.
 
 ## Reshaping data
 
@@ -86,7 +86,7 @@ head(spread_data)
 
 ## Data manipulation
 
-Beyond tidying data, another common need is to aggregate it. Raw data, split by as many variables as possible, gives us the widest possible amount of information, but that doesn't mean it's easy to visualise (`patient_data` has 23,578 observations, for example. Nobody wants a 23,000 point graphic) or understand.
+Beyond tidying data, another common need is to aggregate it. Raw data, split by as many variables as possible, gives us the widest possible amount of information, but that doesn't mean it's easy to visualise or understand (`patient_data` has 23,578 observations, for example. Nobody wants a 23,000 point graphic).
 
 Data manipulation is the practice of reshaping, aggregating or splitting data to make it easier to use for a particular task. If you're exploring data, that might look like aggregating it at a very high level to get a general feel for what things look like. If you're visualising it, that might look like calculating particular metrics for entire groups of observations, and getting a data frame out at the end you can turn into a graph. In these cases, and a wide range of other cases, the answer is another R package: `dplyr`.
 
@@ -169,4 +169,26 @@ Much cleaner! And `stringr` has a lot of other functions we can apply, too, incl
 
 ## Dates and times
 
+Although it's not relevant for *this* dataset, dates and times commonly crop up as vector types in R. They're important - if you have longitudinal data, you rely on dates or date-times to segment your data. Time-series data, even moreso!
 
+While base R has some functions for handling dates and times, they're not particularly user-friendly and are mostly useful in emergencies. Still, sometimes you have an emergency, so let's go through them.
+
+The big one is `strptime`, which lets you turn arbitrary(ish) dates and times, formatted as a string, into a proper date or datetime object. All it needs is a string, and a format for that string, and it goes off and does its thing. That format can feature full or abbreviated month names, or month numbers, or 12-hour time, or 24-hour time - anything. Check out the documentation at `?strptime` to see the full list.
+
+Let's demonstrate with the most awkward possible date-time I can imagine, and take it from a string to a date-time to just a date.
+
+```{r, eval=FALSE}
+# 7 March 2016, at 9pm, 32 minutes and 51 seconds
+awkward_datetime <- "16-Mar/07:09-32-51 pm"
+datetime <- strptime(x = awkward_datetime, format = "%y-%b/%d:%I-%M-%S %p")
+str(datetime)
+
+POSIXlt[1:1], format: "2016-03-07 21:32:51"
+  
+# That's a date/time (POSIXlt and/or POSIXct). To turn it into a date...
+  
+date <- as.Date(datetime)
+str(date)
+
+Date[1:1], format: "2016-03-07"
+```

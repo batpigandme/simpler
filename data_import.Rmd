@@ -30,7 +30,7 @@ Let's break down what's going on in that code, going from right to left. First w
 
 So what we have is a call to run `read_csv`, with the "file" argument being that URL - so it's reading a CSV from that URL! The argument, as the name `file` suggests, doesn't have to be a URL; it can also be a file on your local computer.
 
-Then we shift left and run into `<-`. That's R's *assignment operator*; it assigns the results of whatever code is on the right of the operator, to a name on the left of it (in this case, `patient_data`). So the code, in plain English, is "read in the CSV at this URL and assign the contents of it to the name `patient_data`". If the file was a TSV, the process would look exactly the same; you'd just use `read_tsv` instead of `read_csv`.
+Then we shift left and run into `<-`. That's R's *assignment operator*; it assigns the results of whatever code is on the right of the operator, to a name on the left of it (in this case, `patient_data`). So the code, in plain English, is "read in the CSV at this URL and assign the contents of it to the name `patient_data`". If the file were a TSV, the process would look exactly the same; you'd just use `read_tsv` instead of `read_csv`.
 
 We call the result (the output of code, tied to a name) an *object*. You can see the contents of an object just by typing its name into the console, but that shows the entire thing, and this dataset is rather large; instead, let's use the `head` function, which just shows the top few rows (the head of the data):
 
@@ -47,7 +47,7 @@ head(patient_data)
 6 2009          010735 ALAMEDA HOSPITAL, ALAMEDA        District     60-69      415      343
 ```
 
-As you can see, it's tabular, just like the CSV - columns of values, rows of observations, and row numbers (from 1 to 6). What you're looking at is a "data frame", the most common type of object in R: it's designed to hold tabular data, since tabular data is what most statisticians and data scientists rely on.
+As you can see, it's tabular, just like the CSV - columns of values, rows of observations and row numbers (from 1 to 6). What you're looking at is a "data frame", the most common type of object in R: it's designed to hold tabular data, since tabular data is what most statisticians and data scientists rely on.
 
 We can get a more detailed look at it with the `str` function (which means "structure" and does exactly what it says on the tin):
 
@@ -66,15 +66,15 @@ Classes ‘tbl_df’, ‘tbl’ and 'data.frame':	23578 obs. of  7 variables:
 
 There's a lot going on here, so let's break it down:
 
-1. First, "classes"; this is analogous to the object type. We don't have to dig into exactly how the system works (although feel free to ask me about it via email or do further research); the important thing to note is that one of the classes is `data.frame`, identifying this as, well, a data frame!
+1. First, "classes"; this is analogous to the object type. We don't have to dig into exactly how the system works (although feel free to ask me about it or do further research on your own); the important thing to note is that one of the classes is `data.frame`, identifying this as, well, a data frame!
 2. We then have "23578 obs. of 7 variables"; there are 23,578 rows, and 7 columns (which, in R, are known as `vectors` - more on those later). You can get these bits of information distinctly, through the `nrow` and `ncol` functions.
-3. We then have a sort of flipped version of the `head` output - showing each vector, from the first to the last, down. There are the vector names (`year`, `facility_number`, `facility`), examples of the entries in those columns, and then these little strings "int" and "chr". These represents the "type" of the column - the kind of data it can contain. `int` vectors contain whole numbers; `chr` (or "character") vectors contain strings. Other common types to see are `logical` (or `logi`), which contains true and false values, and `numeric`/`num` columns, which contain non-whole numbers.
+3. We then have a sort of flipped version of the `head` output - showing each vector, from the first to the last, down. There are the vector names (`year`, `facility_number`, `facility`), examples of the entries in those columns, and then these little strings "int" and "chr". These represents the "type" of the column - the kind of data it can contain. `int` vectors contain whole numbers (integers); `chr` (or "character") vectors contain strings. Other common types to see are `logical` (or `logi`), which contains true and false values, and `numeric`/`num` columns, which contain non-whole numbers.
 
 So now we have our data read into R. It's not quite perfect, though; the `facility_number` vector is meant to be, well, a column of numbers, but according to `str` it's actually a character vector. This offers us an opportunity to explore modifying data frames, and switching between types.
 
 One of the reasons data frames are powerful is that you can access, change and use individual vectors, as well as the data frame as a whole; this is done by calling, instead of `data_frame_name`, `data_frame_name$column_name`.
 
-Distinctly from that, it is possible to change the type of an object in R (the process is known as `coercing`), which can be very useful; depending on what you're doing, you might want to store a value as a different type. Coersion is done with the `as` functions; `as.numeric` to turn something into a numeric value, `as.integer` for an integer, and then `as.logical` and `as.character` for those respective types.
+In addition, it is possible to change the type of an object in R (the process is known as `coercing`), which can be very useful; depending on what you're doing, you might want to store a value as a different type. Coersion is done with the `as` functions; `as.numeric` to turn something into a numeric value, `as.integer` for an integer, and then `as.logical` and `as.character` for those respective types.
 
 Let's use both techniques now, to clear up that `facility_number` vector:
 
@@ -185,7 +185,7 @@ nameless_list <- list(2, 3)
 named_list <- list(first_object = 2, second_object = 3)
 ```
 
-The difference is in how you get access, or alter, objects inside the list. If the list has names, you can use the `$` character we use with data frame contents. If it doesn't, you have to use indices - getting the Nth element of the object by pointing to `[[N]]`. Taking the list examples we created above:
+The difference is in how you access, or alter, objects inside the list. If the list has names, you can use the `$` character we use with data frame contents. If it doesn't, you have to use indices - getting the Nth element of the object by pointing to `[[N]]`. Taking the list examples we created above:
 
 ```{r, eval=FALSE}
 nameless_list[[1]]
