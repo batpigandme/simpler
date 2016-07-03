@@ -131,7 +131,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="5.2" data-path="shiny.html"><a href="shiny.html#user-interface-design"><i class="fa fa-check"></i><b>5.2</b> User Interface design</a></li>
 <li class="chapter" data-level="5.3" data-path="shiny.html"><a href="shiny.html#custom-inputs-and-outputs"><i class="fa fa-check"></i><b>5.3</b> Custom inputs and outputs</a></li>
 <li class="chapter" data-level="5.4" data-path="shiny.html"><a href="shiny.html#reactive-expressions"><i class="fa fa-check"></i><b>5.4</b> Reactive expressions</a></li>
-<li class="chapter" data-level="5.5" data-path="shiny.html"><a href="shiny.html#shiny-dashboarding"><i class="fa fa-check"></i><b>5.5</b> Shiny dashboarding</a></li>
 </ul></li>
 </ul>
 
@@ -152,20 +151,92 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
             <section class="normal" id="section-">
 <div id="shiny" class="section level1">
 <h1><span class="header-section-number">5</span> Shiny</h1>
+<p>It’s now time to dig into Shiny - a system to build (amongst of things) web dashboards in R. By the end of this tutorial you’ll hopefully have everything you need to build them yourselves.</p>
 <div id="building-your-first-app" class="section level2">
 <h2><span class="header-section-number">5.1</span> Building your first app</h2>
+<p>We can see a very simple shiny dashboard here.</p>
+<p>Let’s look at the code behind it:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(shinydashboard)
+<span class="kw">library</span>(shiny)
+
+ui &lt;-<span class="st"> </span><span class="kw">dashboardPage</span>(
+  <span class="kw">dashboardHeader</span>(<span class="dt">title =</span> <span class="st">&quot;A simple dashboard&quot;</span>),
+  <span class="kw">dashboardSidebar</span>(),
+  <span class="kw">dashboardBody</span>(
+    <span class="kw">fluidRow</span>(
+      <span class="kw">box</span>(<span class="kw">plotOutput</span>(<span class="st">&quot;first_plot&quot;</span>, <span class="dt">height =</span> <span class="dv">250</span>)),
+
+      <span class="kw">box</span>(
+        <span class="dt">title =</span> <span class="st">&quot;Controls&quot;</span>,
+        <span class="kw">sliderInput</span>(<span class="st">&quot;slider&quot;</span>, <span class="st">&quot;Number of observations:&quot;</span>, <span class="dv">1</span>, <span class="dv">100</span>, <span class="dv">50</span>)
+      )
+    )
+  )
+)
+
+server &lt;-<span class="st"> </span>function(input, output) {
+  histdata &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">500</span>)
+
+  output$first_plot &lt;-<span class="st"> </span><span class="kw">renderPlot</span>({
+    data &lt;-<span class="st"> </span>histdata[<span class="kw">sample</span>(input$slider)]
+    <span class="kw">hist</span>(data)
+  })
+}
+
+<span class="kw">shinyApp</span>(ui, server)</code></pre></div>
+<p>So let’s break down what’s happening. We have two main components: <code>ui</code> and <code>server</code>. <code>ui</code> contains, well, the user interface: the title of the page, how the page is formatted, what it contains (in this case, a box of plot output, which is the histogram, and a box of controls - the slider you see).</p>
+<p><code>ui</code> objects have three mandatory components. The first is <code>dashboardHeader</code>, the title bar. The second is <code>dashboardSidebar</code>, the, well, sidebar: when you have multiple tabs, it’s where you’ll identify each tab and how to represent it. Finally, we have <code>dashboardBody</code>, which contains the code to actually display plots or other dashboard elements, and control how those elements <em>should</em> be displayed.</p>
+<p><code>server</code> contains the actual number-crunching and dashboard generation. It’s a function that takes two arguments, <code>input</code> and <code>output</code>: <code>input</code> contains the values of any user-facing controls, while <code>output</code> is used to store rendered plots or text elements or whatever you’re displaying. We can see how this comes together in our example: <code>ui</code> has a <code>plotOutput</code> named “first_plot”, and a <code>sliderInput</code> called “slider”. <code>server</code> uses the slider input (at <code>input$slider</code>) to generate a plot (at <code>output$first_plot</code>), and the result is a nice controllable visualisation displayed for the world to see.</p>
 </div>
 <div id="user-interface-design" class="section level2">
 <h2><span class="header-section-number">5.2</span> User Interface design</h2>
+<p>One of the nice things about Shiny dashboards is that you can tweak their UIs to make them distinctive and fit into a more general colour scheme. A simple example, obviously, is modifying the <code>title</code> in <code>dashboardHeader</code>, but we can also change the overall skin and theme by adding <code>skin = [name_of_skin]</code> to <code>dashboardPage</code>: options are “blue”, “black”, “purple”, “green”, “red” and “yellow”. Let’s try it now:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(shinydashboard)
+<span class="kw">library</span>(shiny)
+
+ui &lt;-<span class="st"> </span><span class="kw">dashboardPage</span>(
+  <span class="dt">skin =</span> <span class="st">&quot;yellow&quot;</span>,
+  <span class="kw">dashboardHeader</span>(<span class="dt">title =</span> <span class="st">&quot;A simple dashboard with a custom title&quot;</span>),
+  <span class="kw">dashboardSidebar</span>(),
+  <span class="kw">dashboardBody</span>(
+    <span class="kw">fluidRow</span>(
+      <span class="kw">box</span>(<span class="kw">plotOutput</span>(<span class="st">&quot;first_plot&quot;</span>, <span class="dt">height =</span> <span class="dv">250</span>)),
+
+      <span class="kw">box</span>(
+        <span class="dt">title =</span> <span class="st">&quot;Controls&quot;</span>,
+        <span class="kw">sliderInput</span>(<span class="st">&quot;slider&quot;</span>, <span class="st">&quot;Number of observations:&quot;</span>, <span class="dv">1</span>, <span class="dv">100</span>, <span class="dv">50</span>)
+      )
+    )
+  )
+)
+
+server &lt;-<span class="st"> </span>function(input, output) {
+  histdata &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">500</span>)
+
+  output$first_plot &lt;-<span class="st"> </span><span class="kw">renderPlot</span>({
+    data &lt;-<span class="st"> </span>histdata[<span class="kw">sample</span>(input$slider)]
+    <span class="kw">hist</span>(data)
+  })
+}
+
+<span class="kw">shinyApp</span>(ui, server)</code></pre></div>
+<p>I’ll be honest and say that “congealed cheez-whiz orange” isn’t my ideal colour, but there are other options to pick from. Beyond that, if you want to make big or small tweaks (and you’re interested in UI and website design) you can include custom CSS, as demonstrated <a href="https://rstudio.github.io/shinydashboard/appearance.html">here</a>.</p>
 </div>
 <div id="custom-inputs-and-outputs" class="section level2">
 <h2><span class="header-section-number">5.3</span> Custom inputs and outputs</h2>
+<p>So we’ve got our basic dashboard, and we’ve tinkered with it to give it a nice title and maybe a custom theme. Next we should probably give it real data, and experiment with customising the input and output (and adding multiple tabs.</p>
+<p>Let’s start with integrating the patient data, since we’re familiar with that, and build a dashboard that:</p>
+<ol style="list-style-type: decimal">
+<li>Reads in the patient data;</li>
+<li>Generates two histograms, one for admissions and one for releases, in different tabs;</li>
+<li>Lets a user select different years (and adjusts the dashboard accordingly).</li>
+</ol>
+<p>We already know how to read in the patient data, so that’s easy; we’ll just put that in the <code>server</code> function definition. It’ll run once when the dashboard is launched, and then just sit there waiting to be used.</p>
+<p>Defining multiple tabs is the next bit. As mentioned, this is controlled through both <code>dashboardSidebar</code> and <code>dashboardBody</code>: the sidebar says “there is a tab, and it’s called X”, the body says “and the contents of X are…”. So we can define multiple tabs (which we’ll call <code>admitted_hist</code> and <code>released_hist</code> for simplicity) with:</p>
+<pre><code></code></pre>
 </div>
 <div id="reactive-expressions" class="section level2">
 <h2><span class="header-section-number">5.4</span> Reactive expressions</h2>
-</div>
-<div id="shiny-dashboarding" class="section level2">
-<h2><span class="header-section-number">5.5</span> Shiny dashboarding</h2>
 
 <div id="refs" class="references">
 

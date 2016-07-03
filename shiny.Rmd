@@ -1,11 +1,106 @@
 # Shiny
 
+It's now time to dig into Shiny - a system to build (amongst of things) web dashboards in R. By the end of this tutorial you'll hopefully have everything you need to build them yourselves.
+
 ## Building your first app
+
+We can see a very simple shiny dashboard here.
+
+Let's look at the code behind it:
+
+```{r, eval=FALSE}
+library(shinydashboard)
+library(shiny)
+
+ui <- dashboardPage(
+  dashboardHeader(title = "A simple dashboard"),
+  dashboardSidebar(),
+  dashboardBody(
+    fluidRow(
+      box(plotOutput("first_plot", height = 250)),
+
+      box(
+        title = "Controls",
+        sliderInput("slider", "Number of observations:", 1, 100, 50)
+      )
+    )
+  )
+)
+
+server <- function(input, output) {
+  histdata <- rnorm(500)
+
+  output$first_plot <- renderPlot({
+    data <- histdata[sample(input$slider)]
+    hist(data)
+  })
+}
+
+shinyApp(ui, server)
+```
+
+So let's break down what's happening. We have two main components: `ui` and `server`. `ui` contains, well, the user interface: the title of the page, how the page is formatted, what it contains (in this case, a box of plot output, which is the histogram, and a box of controls - the slider you see).
+
+`ui` objects have three mandatory components. The first is `dashboardHeader`, the title bar. The second is `dashboardSidebar`, the, well, sidebar: when you have multiple tabs, it's where you'll identify each tab and how to represent it. Finally, we have `dashboardBody`, which contains the code to actually display plots or other dashboard elements, and control how those elements *should* be displayed.
+
+`server` contains the actual number-crunching and dashboard generation. It's a function that takes two arguments, `input` and `output`: `input` contains the values of any user-facing controls, while `output` is used to store rendered plots or text elements or whatever you're displaying. We can see how this comes together in our example: `ui` has a `plotOutput` named "first\_plot", and a `sliderInput` called "slider". `server` uses the slider input (at `input$slider`) to generate a plot (at `output$first_plot`), and the result is a nice controllable visualisation displayed for the world to see.
 
 ## User Interface design
 
+One of the nice things about Shiny dashboards is that you can tweak their UIs to make them distinctive and fit into a more general colour scheme. A simple example, obviously, is modifying the `title` in `dashboardHeader`, but we can also change the overall skin and theme by adding `skin = [name_of_skin]` to `dashboardPage`: options are "blue", "black", "purple", "green", "red" and "yellow". Let's try it now:
+
+```{r, eval=FALSE}
+library(shinydashboard)
+library(shiny)
+
+ui <- dashboardPage(
+  skin = "yellow",
+  dashboardHeader(title = "A simple dashboard with a custom title"),
+  dashboardSidebar(),
+  dashboardBody(
+    fluidRow(
+      box(plotOutput("first_plot", height = 250)),
+
+      box(
+        title = "Controls",
+        sliderInput("slider", "Number of observations:", 1, 100, 50)
+      )
+    )
+  )
+)
+
+server <- function(input, output) {
+  histdata <- rnorm(500)
+
+  output$first_plot <- renderPlot({
+    data <- histdata[sample(input$slider)]
+    hist(data)
+  })
+}
+
+shinyApp(ui, server)
+```
+
+I'll be honest and say that "congealed cheez-whiz orange" isn't my ideal colour, but there are other options to pick from. Beyond that, if you want to make big or small tweaks (and you're interested in UI and website design) you can include custom CSS, as demonstrated [here](https://rstudio.github.io/shinydashboard/appearance.html).
+
 ## Custom inputs and outputs
 
-## Reactive expressions
+So we've got our basic dashboard, and we've tinkered with it to give it a nice title and maybe a custom theme. Next we should probably give it real data, and experiment with customising the input and output (and adding multiple tabs.
 
-## Shiny dashboarding
+Let's start with integrating the patient data, since we're familiar with that, and build a dashboard that:
+
+1. Reads in the patient data;
+2. Generates two histograms, one for admissions and one for releases, in different tabs;
+3. Lets a user select different years (and adjusts the dashboard accordingly).
+
+We already know how to read in the patient data, so that's easy; we'll just put that in the `server` function definition. It'll run once when the dashboard is launched, and then just sit there waiting to be used.
+
+Defining multiple tabs is the next bit. As mentioned, this is controlled through both `dashboardSidebar` and `dashboardBody`: the sidebar says "there is a tab, and it's called X", the body says "and the contents of X are...". So we can define multiple tabs (which we'll call `admitted_hist` and `released_hist` for simplicity) with:
+
+
+
+```
+
+```
+
+## Reactive expressions

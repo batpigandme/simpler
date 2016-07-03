@@ -131,7 +131,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="5.2" data-path="shiny.html"><a href="shiny.html#user-interface-design"><i class="fa fa-check"></i><b>5.2</b> User Interface design</a></li>
 <li class="chapter" data-level="5.3" data-path="shiny.html"><a href="shiny.html#custom-inputs-and-outputs"><i class="fa fa-check"></i><b>5.3</b> Custom inputs and outputs</a></li>
 <li class="chapter" data-level="5.4" data-path="shiny.html"><a href="shiny.html#reactive-expressions"><i class="fa fa-check"></i><b>5.4</b> Reactive expressions</a></li>
-<li class="chapter" data-level="5.5" data-path="shiny.html"><a href="shiny.html#shiny-dashboarding"><i class="fa fa-check"></i><b>5.5</b> Shiny dashboarding</a></li>
 </ul></li>
 </ul>
 
@@ -287,11 +286,35 @@ datetime &lt;-<span class="st"> </span><span class="kw">strptime</span>(<span cl
 POSIXlt[<span class="dv">1</span>:<span class="dv">1</span>], format:<span class="st"> &quot;2016-03-07 21:32:51&quot;</span>
   
 <span class="co"># That&#39;s a date/time (POSIXlt and/or POSIXct). To turn it into a date...</span>
-  
 date &lt;-<span class="st"> </span><span class="kw">as.Date</span>(datetime)
 <span class="kw">str</span>(date)
 
 Date[<span class="dv">1</span>:<span class="dv">1</span>], format:<span class="st"> &quot;2016-03-07&quot;</span></code></pre></div>
+<p><code>strptime</code> is very useful because it can handle pretty much anything you throw at it, but most of the time dates tend to be formatted in a fairly similar way: YYYY-MM-DD, or YYYY-MM-DD HH:MM:SS, say. That’s where <code>lubridate</code> comes in: it contains functions which act as convenient shorthands, so you don’t have to remember precisely what all the little keywords are for formatting each time:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(lubridate)
+
+date &lt;-<span class="st"> &quot;01-12-2015&quot;</span>
+date_time &lt;-<span class="st"> &quot;01-12-2015 16:43:12&quot;</span>
+
+<span class="kw">dmy</span>(date)
+[<span class="dv">1</span>] <span class="st">&quot;2015-12-01&quot;</span>
+
+<span class="kw">dmy_hms</span>(date_time)
+[<span class="dv">1</span>] <span class="st">&quot;2015-12-01 16:43:12 UTC&quot;</span></code></pre></div>
+<p>It also has <code>mdy</code>, <code>ydm</code> and <code>ymd</code>-related sets of functions for dates or times that follow one of those formats. But wait, there’s more!</p>
+<p>Sometimes you want dates, or date-times. Sometimes, though, you <em>don’t</em> - you just want information included in them. For example, getting just the year, or second, or quarter.</p>
+<p>This is another area where <code>lubridate</code> can help us out: once you’ve got something formatted and converted into a date or date-time, you can grab chunks of it using functions named after those chunks. With the examples above, for example:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">date_time &lt;-<span class="st"> </span><span class="kw">dmy_hms</span>(<span class="st">&quot;01-12-2015 16:43:12&quot;</span>)
+
+<span class="kw">year</span>(date_time)
+[<span class="dv">1</span>] <span class="dv">2015</span>
+
+<span class="kw">quarter</span>(date_time)
+[<span class="dv">1</span>] <span class="dv">4</span>
+
+<span class="kw">second</span>(date_time)
+[<span class="dv">1</span>] <span class="dv">12</span></code></pre></div>
+<p>And there are functions for every other time element you could want too; month, day, hour, minute, even week or weekday (<code>wday</code>). So lubridate can be tremendously useful when it comes to reformatting date-times, which is going to be vital when we’re trying to visualise data as time series’.</p>
 
 </div>
 </div>

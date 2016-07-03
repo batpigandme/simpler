@@ -186,9 +186,46 @@ str(datetime)
 POSIXlt[1:1], format: "2016-03-07 21:32:51"
   
 # That's a date/time (POSIXlt and/or POSIXct). To turn it into a date...
-  
 date <- as.Date(datetime)
 str(date)
 
 Date[1:1], format: "2016-03-07"
 ```
+
+`strptime` is very useful because it can handle pretty much anything you throw at it, but most of the time dates tend to be formatted in a fairly similar way: YYYY-MM-DD, or YYYY-MM-DD HH:MM:SS, say. That's where `lubridate` comes in: it contains functions which act as convenient shorthands, so you don't have to remember precisely what all the little keywords are for formatting each time:
+
+```{r, eval=FALSE}
+library(lubridate)
+
+date <- "01-12-2015"
+date_time <- "01-12-2015 16:43:12"
+
+dmy(date)
+[1] "2015-12-01"
+
+dmy_hms(date_time)
+[1] "2015-12-01 16:43:12 UTC"
+```
+
+It also has `mdy`, `ydm` and `ymd`-related sets of functions for dates or times that follow one of those formats. But wait, there's more!
+
+Sometimes you want dates, or date-times. Sometimes, though, you *don't* - you just want information included in them. For example, getting just the year, or second, or quarter.
+
+This is another area where `lubridate` can help us out: once you've got something formatted and converted into a date or date-time, you can grab chunks of it using functions named after those chunks. With the examples above, for example:
+
+```{r, eval=FALSE}
+
+date_time <- dmy_hms("01-12-2015 16:43:12")
+
+year(date_time)
+[1] 2015
+
+quarter(date_time)
+[1] 4
+
+second(date_time)
+[1] 12
+```
+
+And there are functions for every other time element you could want too; month, day, hour, minute, even week or weekday (`wday`). So lubridate can be tremendously useful when it comes to reformatting date-times, which is going to be vital when we're trying to visualise data as time series'.
+
