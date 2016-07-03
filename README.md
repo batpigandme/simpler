@@ -1,7 +1,7 @@
 # Starting Out with R and Shiny
 #### Oliver Keyes
 
-This is a book-formatted set of tutorials and lecture notes from a course taught in Springfield, IL on starting out with R, for the purpose of building Shiny apps (particularly Shiny Dashboards!)
+This is a book-formatted set of tutorials and lecture notes from a course taught in Springfield, IL on starting out with R, for the purpose of building Shiny apps (particularly Shiny Dashboards!) You can find a hosted version [here](https://ironholds.org/projects/r_shiny/).
 
 It contains:
 
