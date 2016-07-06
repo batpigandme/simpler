@@ -6,7 +6,7 @@ The R programming language started off at the University of Auckland, where two 
 
 In the end they decided to write something themselves, and they called it R (first because it's the first letter in both of their names and second, I hypothesise, because after you've written an entire programming language with one other person you probably don't have the energy left to come up with a fancy name). It was initially used just by the two of them in teaching courses at Auckland, and student complaints were the main source of improvements.
 
-In June 1995, though, everything changed when they released the source code of the language online - and did so under a free license, which let other people reuse the code and crucially *modify* the code. People began submitting their own improvements, new features, and bug fixes, and the language grew and grew. By 2012 it was the most commonly used data science language - a status it continues to maintain to this day.[ref](http://www.kdnuggets.com/2015/05/poll-r-rapidminer-python-big-data-spark.html)
+In June 1995, though, everything changed when they released the source code of the language online - and did so under a free license, which let other people reuse the code and crucially *modify* the code. People began submitting their own improvements, new features, and bug fixes, and the language grew and grew. By 2012 it was the most commonly used data science language - a status it [continues to maintain to this day](http://www.kdnuggets.com/2015/05/poll-r-rapidminer-python-big-data-spark.html).
 
 ## Why R succeeds
 
@@ -59,7 +59,9 @@ install.packages("readr",
                  "dplyr",
                  "stringr",
                  "tidyr",
+                 "lubridate",
                  "readxl",
+                 "shiny",
                  "shinydashboard")
 ```
 
@@ -90,8 +92,11 @@ So, going forward, you'll see something that looks like the following; I'll intr
 ```{r, eval=FALSE}
 There'll be a chunk of code, in a shaded box just like this one,
 which will achieve the step I was talking about
+
+# Also there may be lines like this. These are comments, which are ignored by R when code is run.
+# They let you document what code is doing within your R program.
 ```
 
-After that will be an explanation of that chunk of code, and what each bit is doing and how everything in it works. There are also likely to be lines starting with #: these are comments, which are ignored by R when code is run. This is useful because it lets you document what the code is doing within your R program.
+After that will be an explanation of that chunk of code, and what each bit is doing and how everything in it works.
 
 If you're the sort of person who instead wants to jump into the nitty-gritty of the language, I recommend reading Hadley Wickham's *[Advanced R Programming](http://adv-r.had.co.nz/Data-structures.html)* (specifically the data structures section) to get a handle for the general workings of R, and then coming back here to learn the applications.

@@ -130,7 +130,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="5.1" data-path="shiny.html"><a href="shiny.html#building-your-first-app"><i class="fa fa-check"></i><b>5.1</b> Building your first app</a></li>
 <li class="chapter" data-level="5.2" data-path="shiny.html"><a href="shiny.html#user-interface-design"><i class="fa fa-check"></i><b>5.2</b> User Interface design</a></li>
 <li class="chapter" data-level="5.3" data-path="shiny.html"><a href="shiny.html#custom-inputs-and-outputs"><i class="fa fa-check"></i><b>5.3</b> Custom inputs and outputs</a></li>
-<li class="chapter" data-level="5.4" data-path="shiny.html"><a href="shiny.html#reactive-expressions"><i class="fa fa-check"></i><b>5.4</b> Reactive expressions</a></li>
+<li class="chapter" data-level="5.4" data-path="shiny.html"><a href="shiny.html#optimising-dashboards"><i class="fa fa-check"></i><b>5.4</b> Optimising dashboards</a></li>
 </ul></li>
 </ul>
 
@@ -154,8 +154,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>It’s now time to dig into Shiny - a system to build (amongst of things) web dashboards in R. By the end of this tutorial you’ll hopefully have everything you need to build them yourselves.</p>
 <div id="building-your-first-app" class="section level2">
 <h2><span class="header-section-number">5.1</span> Building your first app</h2>
-<p>We can see a very simple shiny dashboard here.</p>
-<p>Let’s look at the code behind it:</p>
+<p>This is the code behind a Shiny app. Run it on your machine and see what it looks like!</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(shinydashboard)
 <span class="kw">library</span>(shiny)
 
@@ -184,7 +183,7 @@ server &lt;-<span class="st"> </span>function(input, output) {
 }
 
 <span class="kw">shinyApp</span>(ui, server)</code></pre></div>
-<p>So let’s break down what’s happening. We have two main components: <code>ui</code> and <code>server</code>. <code>ui</code> contains, well, the user interface: the title of the page, how the page is formatted, what it contains (in this case, a box of plot output, which is the histogram, and a box of controls - the slider you see).</p>
+<p>So let’s break down what’s happening in the code. We have two main components: <code>ui</code> and <code>server</code>. <code>ui</code> contains, well, the user interface: the title of the page, how the page is formatted, what it contains (in this case, a box of plot output, which is the histogram, and a box of controls - the slider you see).</p>
 <p><code>ui</code> objects have three mandatory components. The first is <code>dashboardHeader</code>, the title bar. The second is <code>dashboardSidebar</code>, the, well, sidebar: when you have multiple tabs, it’s where you’ll identify each tab and how to represent it. Finally, we have <code>dashboardBody</code>, which contains the code to actually display plots or other dashboard elements, and control how those elements <em>should</em> be displayed.</p>
 <p><code>server</code> contains the actual number-crunching and dashboard generation. It’s a function that takes two arguments, <code>input</code> and <code>output</code>: <code>input</code> contains the values of any user-facing controls, while <code>output</code> is used to store rendered plots or text elements or whatever you’re displaying. We can see how this comes together in our example: <code>ui</code> has a <code>plotOutput</code> named “first_plot”, and a <code>sliderInput</code> called “slider”. <code>server</code> uses the slider input (at <code>input$slider</code>) to generate a plot (at <code>output$first_plot</code>), and the result is a nice controllable visualisation displayed for the world to see.</p>
 </div>
@@ -231,16 +230,187 @@ server &lt;-<span class="st"> </span>function(input, output) {
 <li>Generates two histograms, one for admissions and one for releases, in different tabs;</li>
 <li>Lets a user select different years (and adjusts the dashboard accordingly).</li>
 </ol>
-<p>We already know how to read in the patient data, so that’s easy; we’ll just put that in the <code>server</code> function definition. It’ll run once when the dashboard is launched, and then just sit there waiting to be used.</p>
-<p>Defining multiple tabs is the next bit. As mentioned, this is controlled through both <code>dashboardSidebar</code> and <code>dashboardBody</code>: the sidebar says “there is a tab, and it’s called X”, the body says “and the contents of X are…”. So we can define multiple tabs (which we’ll call <code>admitted_hist</code> and <code>released_hist</code> for simplicity) with:</p>
-<pre><code></code></pre>
-</div>
-<div id="reactive-expressions" class="section level2">
-<h2><span class="header-section-number">5.4</span> Reactive expressions</h2>
+<p>We already know how to read in the patient data, so that’s easy; we’ll just put that in the <code>server</code> function definition. It’ll run once when the dashboard is launched, and then just sit there waiting to be used. After that, though, we have to actually generate the plots.</p>
+<p>For that we use <code>renderPlot</code>, which runs whatever code you put in it and then returns the result (expecting it to be, well, a plot!)</p>
+<p>So for a simple histogram of admissions data, we replace the contents of <code>server</code> with:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">patient_data &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="dt">file =</span> <span class="st">&quot;https://www.ironholds.org/resources/misc/patient_data.csv&quot;</span>)
+output$admissions_plot &lt;-<span class="st"> </span><span class="kw">renderPlot</span>({
+  <span class="kw">hist</span>(patient_data$admitted)
+})</code></pre></div>
+<p>And done. The release plot looks pretty much the same (although we’d presumably call it, say, <code>release_plot</code>).</p>
+<p>(pay attention to the <code>admissions_plot</code> name. That’ll be relevant later)</p>
+<p>Selecting the years is the next bit. As we’ve seen, a slider in the dashboard’s UI can provide a value to be plugged into the calculations that generate the plot; we can also use dropdown selectors, which are more relevant here, with <code>selectInput</code>. So let’s assume the existence of a dropdown - we’ll actually define it slightly later - called <code>admissions_selector</code>, and use that to subset the data we give to the plotting function:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">patient_data &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="dt">file =</span> <span class="st">&quot;https://www.ironholds.org/resources/misc/patient_data.csv&quot;</span>)
+output$admissions_plot &lt;-<span class="st"> </span><span class="kw">renderPlot</span>({
+  admissions_data &lt;-<span class="st"> </span>patient_data[patient_data$year ==<span class="st"> </span>input$admissions_selector,]
+  <span class="kw">hist</span>(admissions_data$admitted)
+})</code></pre></div>
+<p>And there we have it. The use of a slider, or selector, or any other user-inputted information to dynamically adjust the dashboard, is referred to as <em>reactivity</em>: the expressions that do so, <em>reactive expressions</em>. Useful to know for debugging or googling for help!</p>
+<p>Defining multiple tabs is the next bit. As mentioned, this is controlled through both <code>dashboardSidebar</code> and <code>dashboardBody</code>: the sidebar says “there is a tab, and it’s called X”, the body says “and the contents of X are…”. So we can define multiple tabs (which we’ll call <code>admitted_hist</code> and <code>released_hist</code> for simplicity) by replacing <code>dashboardSidebar()</code> with:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dashboardSidebar</span>(
+  <span class="kw">sidebarMenu</span>(
+    <span class="kw">menuItem</span>(<span class="dt">text =</span> <span class="st">&quot;Patient admissions&quot;</span>, <span class="dt">tabName =</span> <span class="st">&quot;admitted_hist&quot;</span>),
+    <span class="kw">menuItem</span>(<span class="dt">text =</span> <span class="st">&quot;Patient releases&quot;</span>, <span class="dt">tabName =</span> <span class="st">&quot;released_hist&quot;</span>)
+  )
+)</code></pre></div>
+<p>So this creates a sidebar, with a menu, featuring two tabs. if you include it in one of the dashboard examples above, you’ll see that the <code>text</code> argument is what’s actually displayed: the <code>tabName</code> lets us match sidebar entries with actual dashboard bodies.</p>
+<p>On that note, let’s make the dashboard bodies, using our initial example. We know that we need two tabs, each with their own sliders and plots, and we also know the names of those sliders and plots. So, adapting the example we had of a Shiny dashboard right at the beginning of the section (but using <code>tabItem</code> instead of <code>fluidRow</code>, because we’re making distinct tabs), the dashboard body looks like:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dashboardBody</span>(
+  <span class="kw">tabItems</span>(
+    <span class="kw">tabItem</span>(<span class="dt">tabName =</span> <span class="st">&quot;admitted_hist&quot;</span>,
+      <span class="kw">box</span>(<span class="kw">plotOutput</span>(<span class="st">&quot;admissions_plot&quot;</span>, <span class="dt">height =</span> <span class="dv">250</span>)),
+      <span class="kw">box</span>(
+          <span class="dt">title =</span> <span class="st">&quot;Controls&quot;</span>,
+          <span class="kw">selectInput</span>(<span class="dt">inputId =</span> <span class="st">&quot;admissions_selector&quot;</span>,
+                      <span class="dt">label =</span> <span class="st">&quot;Year:&quot;</span>,
+                      <span class="dt">choices =</span> <span class="kw">c</span>(<span class="dv">2009</span>, <span class="dv">2010</span>, <span class="dv">2011</span>, <span class="dv">2012</span>, <span class="dv">2013</span>, <span class="dv">2014</span>)
+        )
+      )
+    ),
+    <span class="kw">tabItem</span>(<span class="dt">tabName =</span> <span class="st">&quot;released_hist&quot;</span>,
+      <span class="kw">box</span>(<span class="kw">plotOutput</span>(<span class="st">&quot;released_plot&quot;</span>, <span class="dt">height =</span> <span class="dv">250</span>)),
+      <span class="kw">box</span>(
+          <span class="dt">title =</span> <span class="st">&quot;Controls&quot;</span>,
+          <span class="kw">selectInput</span>(<span class="dt">inputId =</span> <span class="st">&quot;released_selector&quot;</span>,
+                      <span class="dt">label =</span> <span class="st">&quot;Year:&quot;</span>,
+                      <span class="dt">choices =</span> <span class="kw">c</span>(<span class="dv">2009</span>, <span class="dv">2010</span>, <span class="dv">2011</span>, <span class="dv">2012</span>, <span class="dv">2013</span>, <span class="dv">2014</span>)
+        )
+      )
+    )
+  )
+)</code></pre></div>
+<p>And when we put it all together:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(shinydashboard)
+<span class="kw">library</span>(shiny)
+<span class="kw">library</span>(readr)
 
-<div id="refs" class="references">
+<span class="co"># The UI</span>
+ui &lt;-<span class="st"> </span><span class="kw">dashboardPage</span>(
+  <span class="dt">skin =</span> <span class="st">&quot;black&quot;</span>,
+  <span class="kw">dashboardHeader</span>(<span class="dt">title =</span> <span class="st">&quot;Admission and release data&quot;</span>),
+  <span class="kw">dashboardSidebar</span>(
+    <span class="kw">sidebarMenu</span>(
+      <span class="kw">menuItem</span>(<span class="dt">text =</span> <span class="st">&quot;Patient admissions&quot;</span>, <span class="dt">tabName =</span> <span class="st">&quot;admitted_hist&quot;</span>),
+      <span class="kw">menuItem</span>(<span class="dt">text =</span> <span class="st">&quot;Patient releases&quot;</span>, <span class="dt">tabName =</span> <span class="st">&quot;released_hist&quot;</span>)
+    )
+  ),
+  
+  <span class="co"># The body of the UI</span>
+  <span class="kw">dashboardBody</span>(
+    <span class="kw">tabItems</span>(
+      <span class="co"># Admissions tab</span>
+      <span class="kw">tabItem</span>(<span class="dt">tabName =</span> <span class="st">&quot;admitted_hist&quot;</span>,
+        <span class="kw">box</span>(<span class="kw">plotOutput</span>(<span class="st">&quot;admissions_plot&quot;</span>, <span class="dt">height =</span> <span class="dv">250</span>)),
+        <span class="kw">box</span>(
+            <span class="dt">title =</span> <span class="st">&quot;Controls&quot;</span>,
+            <span class="kw">selectInput</span>(<span class="dt">inputId =</span> <span class="st">&quot;admissions_selector&quot;</span>,
+                        <span class="dt">label =</span> <span class="st">&quot;Year:&quot;</span>,
+                        <span class="dt">choices =</span> <span class="kw">c</span>(<span class="dv">2009</span>, <span class="dv">2010</span>, <span class="dv">2011</span>, <span class="dv">2012</span>, <span class="dv">2013</span>, <span class="dv">2014</span>)
+          )
+        )
+      ),
+      <span class="co"># Releases tab</span>
+      <span class="kw">tabItem</span>(<span class="dt">tabName =</span> <span class="st">&quot;released_hist&quot;</span>,
+        <span class="kw">box</span>(<span class="kw">plotOutput</span>(<span class="st">&quot;released_plot&quot;</span>, <span class="dt">height =</span> <span class="dv">250</span>)),
+        <span class="kw">box</span>(
+            <span class="dt">title =</span> <span class="st">&quot;Controls&quot;</span>,
+            <span class="kw">selectInput</span>(<span class="dt">inputId =</span> <span class="st">&quot;released_selector&quot;</span>,
+                        <span class="dt">label =</span> <span class="st">&quot;Year:&quot;</span>,
+                        <span class="dt">choices =</span> <span class="kw">c</span>(<span class="dv">2009</span>, <span class="dv">2010</span>, <span class="dv">2011</span>, <span class="dv">2012</span>, <span class="dv">2013</span>, <span class="dv">2014</span>)
+          )
+        )
+      )
+    )
+  )
+)
 
+<span class="co"># The calculations behind the scenes</span>
+server &lt;-<span class="st"> </span>function(input, output) {
+  
+  <span class="co"># Read in the file</span>
+  patient_data &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="dt">file =</span> <span class="st">&quot;https://www.ironholds.org/resources/misc/patient_data.csv&quot;</span>)
+  
+  <span class="co"># Generate the admissions plot</span>
+  output$admissions_plot &lt;-<span class="st"> </span><span class="kw">renderPlot</span>({
+    admissions_data &lt;-<span class="st"> </span>patient_data[patient_data$year ==<span class="st"> </span>input$admissions_selector,]
+    <span class="kw">hist</span>(admissions_data$admitted)
+  })
+  
+  <span class="co"># Generate the released plot</span>
+  output$released_plot &lt;-<span class="st"> </span><span class="kw">renderPlot</span>({
+    admissions_data &lt;-<span class="st"> </span>patient_data[patient_data$year ==<span class="st"> </span>input$released_selector,]
+    <span class="kw">hist</span>(admissions_data$released)
+  })
+}
+
+<span class="kw">shinyApp</span>(ui, server)</code></pre></div>
+<p>These are very basic plots, and there are certainly prettier ways of visualising and displaying data in Shiny dashboards. If you’re interested in exploring that side of things, I’d recommend checking out:</p>
+<ol style="list-style-type: decimal">
+<li>The Harvard University guide to <a href="http://tutorials.iq.harvard.edu/R/Rgraphics/Rgraphics.html">building pretty, customisable plots with ggplot2</a>;</li>
+<li>The <a href="https://rstudio.github.io/dygraphs/shiny.html">dygraph package</a> for interactive visualisations that can be built into Shiny dashboards;</li>
+<li>Further tutorials on Shiny and various visualisation library integrations with it on the <a href="http://shiny.rstudio.com/articles/">RStudio Shiny index</a></li>
+</ol>
 </div>
+<div id="optimising-dashboards" class="section level2">
+<h2><span class="header-section-number">5.4</span> Optimising dashboards</h2>
+<p>Before we move on to experimenting with tying all of this material on reading, exploration, cleaning and dashboarding together, there are a couple of ways to optimise shiny dashboards which are worth talking about if you intend to use them on more than your laptop.</p>
+<p>The first is about speed; we want dashboards to load quickly for the people using them. One thing about Shiny is that every time a new user opens the dashboard up in their browser, the <code>server</code> function is re-run to make sure that the user is presented with a fresh, squeaky-clean version of the dashboard.</p>
+<p>The problem is that we’re reading data in there. And over the internet, at that! It makes for a noticeable pause in the dashboard showing up, one that will get worse if we end up relying on multiple files or even database queries.</p>
+<p>A partial solution is to move the call to <code>read_csv</code> out of <code>server</code>, so we end up with:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Read in the file</span>
+patient_data &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="dt">file =</span> <span class="st">&quot;https://www.ironholds.org/resources/misc/patient_data.csv&quot;</span>)
+
+server &lt;-<span class="st"> </span>function(input, output) {
+  
+  <span class="co"># Generate the admissions plot</span>
+  output$admissions_plot &lt;-<span class="st"> </span><span class="kw">renderPlot</span>({
+    admissions_data &lt;-<span class="st"> </span>patient_data[patient_data$year ==<span class="st"> </span>input$admissions_selector,]
+    <span class="kw">hist</span>(admissions_data$admitted)
+  })
+  
+  <span class="co"># Generate the released plot</span>
+  output$released_plot &lt;-<span class="st"> </span><span class="kw">renderPlot</span>({
+    admissions_data &lt;-<span class="st"> </span>patient_data[patient_data$year ==<span class="st"> </span>input$released_selector,]
+    <span class="kw">hist</span>(admissions_data$released)
+  })
+}</code></pre></div>
+<p>This solves the problem, but moves us too far in the other direction: now the data is only read in once when the dashboard is spun up. What if your data is changing, because you’re relying on (say) daily-updated data?</p>
+<p>The solution is to have <code>server</code> check to see if the data needs updating, and update it if so, but leave it otherwise. That way it will (once a day, in this example) be slow, for one user, once, but be pretty speedy for everyone else and let us keep the dataset up to date. One way of achieving this is:</p>
+<ol style="list-style-type: decimal">
+<li>When we spin up, note the date and read in the file.</li>
+<li>Every time <code>server</code> is run, have it check the current date against the stored date.</li>
+<li>If the current date is greater, replace the stored date (and stored file) with new copies.</li>
+</ol>
+<p>This looks like:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Read in the file, and store the date</span>
+patient_data &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="dt">file =</span> <span class="st">&quot;https://www.ironholds.org/resources/misc/patient_data.csv&quot;</span>)
+stored_date &lt;-<span class="st"> </span><span class="kw">Sys.Date</span>()
+
+server &lt;-<span class="st"> </span>function(input, output) {
+  
+  <span class="co"># Check the stored date, update the date and file if we need to</span>
+  if(<span class="kw">Sys.Date</span>() &gt;<span class="st"> </span>stored_date){
+    patient_data &lt;&lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="dt">file =</span> <span class="st">&quot;https://www.ironholds.org/resources/misc/patient_data.csv&quot;</span>)
+    stored_date &lt;&lt;-<span class="st"> </span><span class="kw">Sys.Date</span>()
+  }
+  
+  <span class="co"># Generate the admissions plot</span>
+  output$admissions_plot &lt;-<span class="st"> </span><span class="kw">renderPlot</span>({
+    admissions_data &lt;-<span class="st"> </span>patient_data[patient_data$year ==<span class="st"> </span>input$admissions_selector,]
+    <span class="kw">hist</span>(admissions_data$admitted)
+  })
+  
+  <span class="co"># Generate the released plot</span>
+  output$released_plot &lt;-<span class="st"> </span><span class="kw">renderPlot</span>({
+    admissions_data &lt;-<span class="st"> </span>patient_data[patient_data$year ==<span class="st"> </span>input$released_selector,]
+    <span class="kw">hist</span>(admissions_data$released)
+  })
+}</code></pre></div>
+<p><code>&lt;&lt;-</code> is a new operator in this course; what it does is tells R that instead of assigning the result of a calculation inside the ‘scope’ of whatever function the calculation was made in, it should assign the result to the ‘global’ scope - ensuring that the assigned object is not deleted when the function is done, like objects inside functions usually are, and that as a consequence we can refer back to them.</p>
+<p>Our second bit of optimisation is optimising for changing data. This dataset only has data from 2009 to 2014, but at some point that’s going to change, and if we leave hard-coded <code>selectInput</code> choices (<code>c(2009, 2010, ...)</code>) lying around nobody will be able to access the new information.</p>
+<p>Instead, let’s populate the choices based on the data itself. Shifting the file-reading to sit above <code>ui</code>, just for consistency’s sake, we can change <code>choices = c(2009, 2010, 2011, 2012, 2013, 2014)</code> to <code>choices = unique(patient_data$year)</code>. That way it will automatically adjust to the choices that incoming data actually contains.</p>
+<p>That’s it for now. If you’re reading this and part of the course this material was written for, we’re going to tie everything together using an internal dataset shortly. If you’re not, have fun exploring the many other things R (and Shiny!) can do - and feel free to <a href="mailto:ironholds@gmail.com">email me</a> if you have questions, problems or thoughts.</p>
+
 </div>
 </div>
             </section>

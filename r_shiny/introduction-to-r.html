@@ -130,7 +130,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="5.1" data-path="shiny.html"><a href="shiny.html#building-your-first-app"><i class="fa fa-check"></i><b>5.1</b> Building your first app</a></li>
 <li class="chapter" data-level="5.2" data-path="shiny.html"><a href="shiny.html#user-interface-design"><i class="fa fa-check"></i><b>5.2</b> User Interface design</a></li>
 <li class="chapter" data-level="5.3" data-path="shiny.html"><a href="shiny.html#custom-inputs-and-outputs"><i class="fa fa-check"></i><b>5.3</b> Custom inputs and outputs</a></li>
-<li class="chapter" data-level="5.4" data-path="shiny.html"><a href="shiny.html#reactive-expressions"><i class="fa fa-check"></i><b>5.4</b> Reactive expressions</a></li>
+<li class="chapter" data-level="5.4" data-path="shiny.html"><a href="shiny.html#optimising-dashboards"><i class="fa fa-check"></i><b>5.4</b> Optimising dashboards</a></li>
 </ul></li>
 </ul>
 
@@ -155,7 +155,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h2><span class="header-section-number">1.1</span> A brief history of splines</h2>
 <p>The R programming language started off at the University of Auckland, where two statistics professors - Ross Ihaka and Robert Gentleman - found themselves somewhat perturbed by the state of statistical programming. There were a lot of statistical languages and environments out there, but most of the ones they had access to were commercial, requiring you to pay to use them.</p>
 <p>In the end they decided to write something themselves, and they called it R (first because it’s the first letter in both of their names and second, I hypothesise, because after you’ve written an entire programming language with one other person you probably don’t have the energy left to come up with a fancy name). It was initially used just by the two of them in teaching courses at Auckland, and student complaints were the main source of improvements.</p>
-<p>In June 1995, though, everything changed when they released the source code of the language online - and did so under a free license, which let other people reuse the code and crucially <em>modify</em> the code. People began submitting their own improvements, new features, and bug fixes, and the language grew and grew. By 2012 it was the most commonly used data science language - a status it continues to maintain to this day.<a href="http://www.kdnuggets.com/2015/05/poll-r-rapidminer-python-big-data-spark.html">ref</a></p>
+<p>In June 1995, though, everything changed when they released the source code of the language online - and did so under a free license, which let other people reuse the code and crucially <em>modify</em> the code. People began submitting their own improvements, new features, and bug fixes, and the language grew and grew. By 2012 it was the most commonly used data science language - a status it <a href="http://www.kdnuggets.com/2015/05/poll-r-rapidminer-python-big-data-spark.html">continues to maintain to this day</a>.</p>
 </div>
 <div id="why-r-succeeds" class="section level2">
 <h2><span class="header-section-number">1.2</span> Why R succeeds</h2>
@@ -191,7 +191,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
                  <span class="st">&quot;dplyr&quot;</span>,
                  <span class="st">&quot;stringr&quot;</span>,
                  <span class="st">&quot;tidyr&quot;</span>,
+                 <span class="st">&quot;lubridate&quot;</span>,
                  <span class="st">&quot;readxl&quot;</span>,
+                 <span class="st">&quot;shiny&quot;</span>,
                  <span class="st">&quot;shinydashboard&quot;</span>)</code></pre></div>
 <p>(Don’t worry about what this means right now; we’ll get to it later)</p>
 </div>
@@ -213,8 +215,11 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>That isn’t guaranteed, though, and so the rest of this book is divided up into individual, practical applications of the language, combined with explanations of what’s going on in each piece so that you can learn the structure of the language through doing.</p>
 <p>So, going forward, you’ll see something that looks like the following; I’ll introduce a concept, or a step in analysing data, and talk about why it’s important. And then, after a colon, because I flagrantly abuse both the colon and semicolon:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">There<span class="st">&#39;ll be a chunk of code, in a shaded box just like this one,</span>
-<span class="st">which will achieve the step I was talking about</span></code></pre></div>
-<p>After that will be an explanation of that chunk of code, and what each bit is doing and how everything in it works. There are also likely to be lines starting with #: these are comments, which are ignored by R when code is run. This is useful because it lets you document what the code is doing within your R program.</p>
+<span class="st">which will achieve the step I was talking about</span>
+
+<span class="st"># Also there may be lines like this. These are comments, which are ignored by R when code is run.</span>
+<span class="st"># They let you document what code is doing within your R program.</span></code></pre></div>
+<p>After that will be an explanation of that chunk of code, and what each bit is doing and how everything in it works.</p>
 <p>If you’re the sort of person who instead wants to jump into the nitty-gritty of the language, I recommend reading Hadley Wickham’s <em><a href="http://adv-r.had.co.nz/Data-structures.html">Advanced R Programming</a></em> (specifically the data structures section) to get a handle for the general workings of R, and then coming back here to learn the applications.</p>
 
 </div>

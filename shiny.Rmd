@@ -4,9 +4,7 @@ It's now time to dig into Shiny - a system to build (amongst of things) web dash
 
 ## Building your first app
 
-We can see a very simple shiny dashboard here.
-
-Let's look at the code behind it:
+This is the code behind a Shiny app. Run it on your machine and see what it looks like!
 
 ```{r, eval=FALSE}
 library(shinydashboard)
@@ -39,7 +37,7 @@ server <- function(input, output) {
 shinyApp(ui, server)
 ```
 
-So let's break down what's happening. We have two main components: `ui` and `server`. `ui` contains, well, the user interface: the title of the page, how the page is formatted, what it contains (in this case, a box of plot output, which is the histogram, and a box of controls - the slider you see).
+So let's break down what's happening in the code. We have two main components: `ui` and `server`. `ui` contains, well, the user interface: the title of the page, how the page is formatted, what it contains (in this case, a box of plot output, which is the histogram, and a box of controls - the slider you see).
 
 `ui` objects have three mandatory components. The first is `dashboardHeader`, the title bar. The second is `dashboardSidebar`, the, well, sidebar: when you have multiple tabs, it's where you'll identify each tab and how to represent it. Finally, we have `dashboardBody`, which contains the code to actually display plots or other dashboard elements, and control how those elements *should* be displayed.
 
@@ -93,14 +91,226 @@ Let's start with integrating the patient data, since we're familiar with that, a
 2. Generates two histograms, one for admissions and one for releases, in different tabs;
 3. Lets a user select different years (and adjusts the dashboard accordingly).
 
-We already know how to read in the patient data, so that's easy; we'll just put that in the `server` function definition. It'll run once when the dashboard is launched, and then just sit there waiting to be used.
+We already know how to read in the patient data, so that's easy; we'll just put that in the `server` function definition. It'll run once when the dashboard is launched, and then just sit there waiting to be used. After that, though, we have to actually generate the plots.
 
-Defining multiple tabs is the next bit. As mentioned, this is controlled through both `dashboardSidebar` and `dashboardBody`: the sidebar says "there is a tab, and it's called X", the body says "and the contents of X are...". So we can define multiple tabs (which we'll call `admitted_hist` and `released_hist` for simplicity) with:
+For that we use `renderPlot`, which runs whatever code you put in it and then returns the result (expecting it to be, well, a plot!)
 
+So for a simple histogram of admissions data, we replace the contents of `server` with:
 
+```{r, eval=FALSE}
 
+patient_data <- read_csv(file = "https://www.ironholds.org/resources/misc/patient_data.csv")
+output$admissions_plot <- renderPlot({
+  hist(patient_data$admitted)
+})
 ```
 
+And done. The release plot looks pretty much the same (although we'd presumably call it, say, `release_plot`).
+
+(pay attention to the `admissions_plot` name. That'll be relevant later)
+
+Selecting the years is the next bit. As we've seen, a slider in the dashboard's UI can provide a value to be plugged into the calculations that generate the plot; we can also use dropdown selectors, which are more relevant here, with `selectInput`. So let's assume the existence of a dropdown - we'll actually define it slightly later - called `admissions_selector`, and use that to subset the data we give to the plotting function:
+
+```{r, eval=FALSE}
+patient_data <- read_csv(file = "https://www.ironholds.org/resources/misc/patient_data.csv")
+output$admissions_plot <- renderPlot({
+  admissions_data <- patient_data[patient_data$year == input$admissions_selector,]
+  hist(admissions_data$admitted)
+})
 ```
 
-## Reactive expressions
+And there we have it. The use of a slider, or selector, or any other user-inputted information to dynamically adjust the dashboard, is referred to as *reactivity*: the expressions that do so, *reactive expressions*. Useful to know for debugging or googling for help!
+
+Defining multiple tabs is the next bit. As mentioned, this is controlled through both `dashboardSidebar` and `dashboardBody`: the sidebar says "there is a tab, and it's called X", the body says "and the contents of X are...". So we can define multiple tabs (which we'll call `admitted_hist` and `released_hist` for simplicity) by replacing `dashboardSidebar()` with:
+
+```{r, eval=FALSE}
+dashboardSidebar(
+  sidebarMenu(
+    menuItem(text = "Patient admissions", tabName = "admitted_hist"),
+    menuItem(text = "Patient releases", tabName = "released_hist")
+  )
+)
+```
+
+So this creates a sidebar, with a menu, featuring two tabs. if you include it in one of the dashboard examples above, you'll see that the `text` argument is what's actually displayed: the `tabName` lets us match sidebar entries with actual dashboard bodies.
+
+On that note, let's make the dashboard bodies, using our initial example. We know that we need two tabs, each with their own sliders and plots, and we also know the names of those sliders and plots. So, adapting the example we had of a Shiny dashboard right at the beginning of the section (but using `tabItem` instead of `fluidRow`, because we're making distinct tabs), the dashboard body looks like:
+
+```{r, eval=FALSE}
+dashboardBody(
+  tabItems(
+    tabItem(tabName = "admitted_hist",
+      box(plotOutput("admissions_plot", height = 250)),
+      box(
+          title = "Controls",
+          selectInput(inputId = "admissions_selector",
+                      label = "Year:",
+                      choices = c(2009, 2010, 2011, 2012, 2013, 2014)
+        )
+      )
+    ),
+    tabItem(tabName = "released_hist",
+      box(plotOutput("released_plot", height = 250)),
+      box(
+          title = "Controls",
+          selectInput(inputId = "released_selector",
+                      label = "Year:",
+                      choices = c(2009, 2010, 2011, 2012, 2013, 2014)
+        )
+      )
+    )
+  )
+)
+```
+
+And when we put it all together:
+
+```{r, eval=FALSE}
+library(shinydashboard)
+library(shiny)
+library(readr)
+
+# The UI
+ui <- dashboardPage(
+  skin = "black",
+  dashboardHeader(title = "Admission and release data"),
+  dashboardSidebar(
+    sidebarMenu(
+      menuItem(text = "Patient admissions", tabName = "admitted_hist"),
+      menuItem(text = "Patient releases", tabName = "released_hist")
+    )
+  ),
+  
+  # The body of the UI
+  dashboardBody(
+    tabItems(
+      # Admissions tab
+      tabItem(tabName = "admitted_hist",
+        box(plotOutput("admissions_plot", height = 250)),
+        box(
+            title = "Controls",
+            selectInput(inputId = "admissions_selector",
+                        label = "Year:",
+                        choices = c(2009, 2010, 2011, 2012, 2013, 2014)
+          )
+        )
+      ),
+      # Releases tab
+      tabItem(tabName = "released_hist",
+        box(plotOutput("released_plot", height = 250)),
+        box(
+            title = "Controls",
+            selectInput(inputId = "released_selector",
+                        label = "Year:",
+                        choices = c(2009, 2010, 2011, 2012, 2013, 2014)
+          )
+        )
+      )
+    )
+  )
+)
+
+# The calculations behind the scenes
+server <- function(input, output) {
+  
+  # Read in the file
+  patient_data <- read_csv(file = "https://www.ironholds.org/resources/misc/patient_data.csv")
+  
+  # Generate the admissions plot
+  output$admissions_plot <- renderPlot({
+    admissions_data <- patient_data[patient_data$year == input$admissions_selector,]
+    hist(admissions_data$admitted)
+  })
+  
+  # Generate the released plot
+  output$released_plot <- renderPlot({
+    admissions_data <- patient_data[patient_data$year == input$released_selector,]
+    hist(admissions_data$released)
+  })
+}
+
+shinyApp(ui, server)
+```
+
+These are very basic plots, and there are certainly prettier ways of visualising and displaying data in Shiny dashboards. If you're interested in exploring that side of things, I'd recommend checking out:
+
+1. The Harvard University guide to [building pretty, customisable plots with ggplot2](http://tutorials.iq.harvard.edu/R/Rgraphics/Rgraphics.html);
+2. The [dygraph package](https://rstudio.github.io/dygraphs/shiny.html) for interactive visualisations that can be built into Shiny dashboards;
+3. Further tutorials on Shiny and various visualisation library integrations with it on the [RStudio Shiny index](http://shiny.rstudio.com/articles/)
+
+## Optimising dashboards
+
+Before we move on to experimenting with tying all of this material on reading, exploration, cleaning and dashboarding together, there are a couple of ways to optimise shiny dashboards which are worth talking about if you intend to use them on more than your laptop.
+
+The first is about speed; we want dashboards to load quickly for the people using them. One thing about Shiny is that every time a new user opens the dashboard up in their browser, the `server` function is re-run to make sure that the user is presented with a fresh, squeaky-clean version of the dashboard.
+
+The problem is that we're reading data in there. And over the internet, at that! It makes for a noticeable pause in the dashboard showing up, one that will get worse if we end up relying on multiple files or even database queries.
+
+A partial solution is to move the call to `read_csv` out of `server`, so we end up with:
+
+```{r, eval=FALSE}
+
+# Read in the file
+patient_data <- read_csv(file = "https://www.ironholds.org/resources/misc/patient_data.csv")
+
+server <- function(input, output) {
+  
+  # Generate the admissions plot
+  output$admissions_plot <- renderPlot({
+    admissions_data <- patient_data[patient_data$year == input$admissions_selector,]
+    hist(admissions_data$admitted)
+  })
+  
+  # Generate the released plot
+  output$released_plot <- renderPlot({
+    admissions_data <- patient_data[patient_data$year == input$released_selector,]
+    hist(admissions_data$released)
+  })
+}
+```
+
+This solves the problem, but moves us too far in the other direction: now the data is only read in once when the dashboard is spun up. What if your data is changing, because you're relying on (say) daily-updated data?
+
+The solution is to have `server` check to see if the data needs updating, and update it if so, but leave it otherwise. That way it will (once a day, in this example) be slow, for one user, once, but be pretty speedy for everyone else and let us keep the dataset up to date. One way of achieving this is:
+
+1. When we spin up, note the date and read in the file.
+2. Every time `server` is run, have it check the current date against the stored date.
+3. If the current date is greater, replace the stored date (and stored file) with new copies.
+
+This looks like:
+
+```{r, eval=FALSE}
+
+# Read in the file, and store the date
+patient_data <- read_csv(file = "https://www.ironholds.org/resources/misc/patient_data.csv")
+stored_date <- Sys.Date()
+
+server <- function(input, output) {
+  
+  # Check the stored date, update the date and file if we need to
+  if(Sys.Date() > stored_date){
+    patient_data <<- read_csv(file = "https://www.ironholds.org/resources/misc/patient_data.csv")
+    stored_date <<- Sys.Date()
+  }
+  
+  # Generate the admissions plot
+  output$admissions_plot <- renderPlot({
+    admissions_data <- patient_data[patient_data$year == input$admissions_selector,]
+    hist(admissions_data$admitted)
+  })
+  
+  # Generate the released plot
+  output$released_plot <- renderPlot({
+    admissions_data <- patient_data[patient_data$year == input$released_selector,]
+    hist(admissions_data$released)
+  })
+}
+```
+
+`<<-` is a new operator in this course; what it does is tells R that instead of assigning the result of a calculation inside the 'scope' of whatever function the calculation was made in, it should assign the result to the 'global' scope - ensuring that the assigned object is not deleted when the function is done, like objects inside functions usually are, and that as a consequence we can refer back to them.
+
+Our second bit of optimisation is optimising for changing data. This dataset only has data from 2009 to 2014, but at some point that's going to change, and if we leave hard-coded `selectInput` choices (`c(2009, 2010, ...)`) lying around nobody will be able to access the new information.
+
+Instead, let's populate the choices based on the data itself. Shifting the file-reading to sit above `ui`, just for consistency's sake, we can change `choices = c(2009, 2010, 2011, 2012, 2013, 2014)` to `choices = unique(patient_data$year)`. That way it will automatically adjust to the choices that incoming data actually contains.
+
+That's it for now. If you're reading this and part of the course this material was written for, we're going to tie everything together using an internal dataset shortly. If you're not, have fun exploring the many other things R (and Shiny!) can do - and feel free to [email me](mailto:ironholds@gmail.com) if you have questions, problems or thoughts.
