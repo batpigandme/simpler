@@ -88,6 +88,7 @@ code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* Com
 code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 </style>
 
+<link rel="stylesheet" href="style.css" type="text/css" />
 </head>
 
 <body>
@@ -99,6 +100,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
       <nav role="navigation">
 
 <ul class="summary">
+<li><a href="https://github.com/ironholds/simpler">Starting Out with R and Shiny</a></li>
+
+<li class="divider"></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preamble</a></li>
 <li class="chapter" data-level="1" data-path="introduction-to-r.html"><a href="introduction-to-r.html"><i class="fa fa-check"></i><b>1</b> Introduction to R</a><ul>
 <li class="chapter" data-level="1.1" data-path="introduction-to-r.html"><a href="introduction-to-r.html#a-brief-history-of-splines"><i class="fa fa-check"></i><b>1.1</b> A brief history of splines</a></li>
@@ -132,6 +136,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="5.3" data-path="shiny.html"><a href="shiny.html#custom-inputs-and-outputs"><i class="fa fa-check"></i><b>5.3</b> Custom inputs and outputs</a></li>
 <li class="chapter" data-level="5.4" data-path="shiny.html"><a href="shiny.html#optimising-dashboards"><i class="fa fa-check"></i><b>5.4</b> Optimising dashboards</a></li>
 </ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
 </ul>
 
       </nav>
@@ -305,6 +312,7 @@ all_sheets &lt;-<span class="st"> </span><span class="kw">lapply</span>(<span cl
 <div id="other-files" class="section level2">
 <h2><span class="header-section-number">2.3</span> Other files</h2>
 <p>There are a few other file types you might encounter. One of the most common is <em>tab</em>-separated value files (TSVs); another, less common, is fixed-width files, where there’s an arbitrary amount of space between elements on each row to make sure every entry is the same width.</p>
+<p>Good news: <code>readr</code> has functions for them, too! If you want to read in a TSV, <code>read_tsv</code>. If you want to read in a fixed-width file, <code>read_fwf</code>. And for an even wider range of options, the <a href="https://github.com/leeper/rio#package-installation">rio package</a> handles pretty much anything you can throw at it.</p>
 </div>
 <div id="database-import" class="section level2">
 <h2><span class="header-section-number">2.4</span> Database import</h2>
@@ -430,7 +438,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": null,
+"link": "https://github.com/ironholds/simpler",
 "text": null
 },
 "download": null,

@@ -229,6 +229,8 @@ So now we've learned how to read in Excel files. We've also learned:
 
 There are a few other file types you might encounter. One of the most common is *tab*-separated value files (TSVs); another, less common, is fixed-width files, where there's an arbitrary amount of space between elements on each row to make sure every entry is the same width.
 
+Good news: `readr` has functions for them, too! If you want to read in a TSV, `read_tsv`. If you want to read in a fixed-width file, `read_fwf`. And for an even wider range of options, the [rio package](https://github.com/leeper/rio#package-installation) handles pretty much anything you can throw at it.
+
 ## Database import
 
 To connect to a MySQL database, we'll use the `RMySQL` package (as you may be noticing, R package developers *love* putting the letter R in their package names). As the name suggests, it integrates R with MySQL, providing code that lets you connect to a MySQL database and read information from it, turning said information into a data frame along the way.
